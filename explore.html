@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Explore — Travel and Challenge</title>
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/desktop.css">
+<link rel="stylesheet" href="/css/mobile.css">
+<link rel="stylesheet" href="/css/pages/explore.css">
+</head>
+<body>
+<nav id="site-nav" aria-label="Main"></nav>
+<main class="explore">
+  <aside class="panel">
+    <h1>Explore Thailand</h1>
+    <form id="filters" role="search">
+      <div class="form-field"><label for="search">Search</label><input id="search" type="search" placeholder="Temple, market…"></div>
+      <div class="form-field"><label for="province">Province</label><select id="province"><option value="">All provinces</option></select></div>
+      <div class="form-field"><label for="district">District</label><select id="district"><option value="">All districts</option></select></div>
+      <div class="form-field"><label for="category">Category</label><select id="category"><option value="">All categories</option></select></div>
+    </form>
+    <p id="status" role="status" class="muted">Loading…</p>
+    <ul id="list" class="place-list"></ul>
+  </aside>
+  <section class="map-wrap" aria-label="Map">
+    <div id="map"></div>
+    <p id="map-error" class="alert alert-error" hidden></p>
+  </section>
+</main>
+<script type="module" src="/js/app.js"></script>
+<script type="module" src="/js/explore.js"></script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Collection — Travel and Challenge</title>
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/desktop.css">
+<link rel="stylesheet" href="/css/mobile.css">
+<link rel="stylesheet" href="/css/pages/quests.css">
+</head>
+<body>
+<nav id="site-nav" aria-label="Main"></nav>
+<main class="section"><div class="container">
+  <h1>My collection</h1>
+  <p id="status" role="status" class="muted">Loading…</p>
+  <section id="content" hidden>
+    <p><strong>Tokens:</strong> <span id="balance">0</span></p>
+    <h2>Characters</h2>
+    <div id="chars" class="quest-grid"></div>
+    <h2>Reward history</h2>
+    <ul id="history"></ul>
+    <p class="muted">Achievements are not available yet.</p>
+  </section>
+</div></main>
+<script type="module" src="/js/app.js"></script>
+<script type="module" src="/js/collection.js"></script>
+</body>
+</html>

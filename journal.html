@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Journal — Travel and Challenge</title>
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/desktop.css">
+<link rel="stylesheet" href="/css/mobile.css">
+<link rel="stylesheet" href="/css/pages/quests.css">
+<link rel="stylesheet" href="/css/pages/journal.css">
+</head>
+<body>
+<nav id="site-nav" aria-label="Main"></nav>
+<main class="section"><div class="container">
+  <h1>Travel journal</h1>
+  <p class="muted">Entries and photos are private to you.</p>
+  <button class="btn" id="new">New entry</button>
+  <form id="filters" class="filters">
+    <div class="form-field"><label for="f-from">From</label><input id="f-from" type="date"></div>
+    <div class="form-field"><label for="f-to">To</label><input id="f-to" type="date"></div>
+    <div class="form-field"><label for="f-place">Destination</label><select id="f-place"><option value="">All</option></select></div>
+  </form>
+  <p id="status" role="status" class="muted">Loading…</p>
+  <div id="list" class="entries"></div>
+</div></main>
+
+<dialog id="dlg" aria-labelledby="dlg-title">
+  <h2 id="dlg-title">Entry</h2>
+  <div id="dlg-msg" role="alert"></div>
+  <form id="entry-form">
+    <div class="form-field"><label for="title">Title</label><input id="title" maxlength="150" required></div>
+    <div class="form-field"><label for="date">Travel date</label><input id="date" type="date" required></div>
+    <div class="form-field"><label for="mood">Mood (optional)</label><input id="mood" maxlength="30" placeholder="Happy, tired…"></div>
+    <div class="form-field"><label for="body">Notes</label><textarea id="body" rows="5" maxlength="5000"></textarea></div>
+    <div class="form-field"><label for="places">Destinations (Ctrl/Cmd-click for several)</label><select id="places" multiple size="4"></select></div>
+    <div id="existing"></div>
+    <div class="form-field"><label for="files">Add photos (JPG, PNG, WebP, max 5 MB each)</label>
+      <input id="files" type="file" accept="image/jpeg,image/png,image/webp" multiple></div>
+    <div id="captions"></div>
+    <button class="btn" type="submit" id="save">Save</button>
+    <button class="btn btn-ghost" type="button" id="cancel">Cancel</button>
+  </form>
+</dialog>
+<script type="module" src="/js/app.js"></script>
+<script type="module" src="/js/journal-page.js"></script>
+</body>
+</html>

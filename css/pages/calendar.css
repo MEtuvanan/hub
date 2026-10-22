@@ -1,0 +1,13 @@
+.cal-head{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.cal-head h2{margin:0;font-size:1.5rem}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:1rem 0}
+.cal-dow{text-align:center;font-weight:700;font-size:.85rem}
+.cal-day{min-height:48px;padding:4px;border:2px solid #e6dcc9;border-radius:10px;background:#fff;font:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px}
+.cal-day[aria-pressed=true]{border-color:var(--coral);background:#fff1ea}
+.cal-day.empty{visibility:hidden}
+.dots{display:flex;gap:3px}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%}
+.dot-diary{background:var(--leaf)} .dot-quest{background:var(--coral)}
+.cal-thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:.5rem}
+.cal-thumbs img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px}
+@media (min-width:900px){.cal-day{min-height:84px;padding:8px}}

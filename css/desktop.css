@@ -1,0 +1,5 @@
+@media (min-width:900px){
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center}
+  .split.reverse > :first-child{order:2}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+}

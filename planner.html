@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Trip Planner — Travel and Challenge</title>
+<meta name="description" content="Generate a customized Bangkok travel itinerary grounded in real destinations and quests using AI.">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/desktop.css">
+<link rel="stylesheet" href="/css/mobile.css">
+<link rel="stylesheet" href="/css/animations.css">
+<link rel="stylesheet" href="/css/pages/planner.css">
+</head>
+<body>
+<nav id="site-nav" aria-label="Main"></nav>
+
+<header class="planner-hero">
+  <div class="container">
+    <h1>AI Adventure Trip Planner</h1>
+    <p class="lead">Tell us your travel style, and our AI will build an inspiring itinerary grounded in verified Bangkok destinations and quests.</p>
+  </div>
+</header>
+
+<main class="section" style="padding-top: 0;">
+  <div class="container">
+    <section class="planner-form-card" aria-labelledby="form-heading">
+      <h2 id="form-heading">Plan Your Journey</h2>
+      <form id="planner-form">
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="starting-area">Starting Area / Hotel District</label>
+            <input id="starting-area" type="text" placeholder="e.g. Sukhumvit, Siam, Rattanakosin" value="Siam / Central Bangkok" required>
+          </div>
+          
+          <div class="form-field">
+            <label for="trip-days">Duration</label>
+            <select id="trip-days">
+              <option value="1">1 Day Exploration</option>
+              <option value="2">2 Days Weekend Trip</option>
+              <option value="3" selected>3 Days Classic Bangkok</option>
+              <option value="5">5 Days In-depth Adventure</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="travel-style">Travel Style</label>
+            <select id="travel-style">
+              <option value="balanced explorer">Balanced Explorer (Culture & City)</option>
+              <option value="heritage & culture enthusiast">Heritage & History Enthusiast</option>
+              <option value="foodie & local street markets">Foodie & Local Street Life</option>
+              <option value="relaxed nature & scenic walk">Relaxed Parks & River Scenery</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="pace">Pace & Intensity</label>
+            <select id="pace">
+              <option value="relaxed">Relaxed (1 - 2 places/day, ample leisure)</option>
+              <option value="moderate" selected>Moderate (2 - 3 places/day, balanced)</option>
+              <option value="energetic">Energetic (3 - 4 places/day, maximize sights)</option>
+            </select>
+          </div>
+
+          <div class="form-field full-width">
+            <label>Interests & Themes</label>
+            <div class="chip-group">
+              <label class="chip-label"><input type="checkbox" name="interest" value="Sacred Temples" checked> 🛕 Temples & Shrines</label>
+              <label class="chip-label"><input type="checkbox" name="interest" value="Street Food & Markets" checked> 🍜 Street Food & Markets</label>
+              <label class="chip-label"><input type="checkbox" name="interest" value="Museums & Royal Arts" checked> 🏛️ Museums & Royal History</label>
+              <label class="chip-label"><input type="checkbox" name="interest" value="Parks & Riverfront"> 🌳 Nature, Parks & River</label>
+              <label class="chip-label"><input type="checkbox" name="interest" value="Handicrafts & Silk"> 🎨 Handicrafts & Architecture</label>
+            </div>
+          </div>
+
+          <div class="form-field full-width">
+            <label class="chip-label" style="display: inline-flex; align-items: center; gap: 0.5rem; background: transparent; padding: 0;">
+              <input type="checkbox" id="include-quests" checked style="display: inline-block;">
+              <strong>Include challenges & quests along the way for extra token rewards</strong>
+            </label>
+          </div>
+        </div>
+
+        <div style="margin-top: 1.5rem;">
+          <button type="submit" id="btn-generate" class="btn">✨ Generate Adventure Itinerary</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Status / Loading Area -->
+    <div id="planner-status" role="status" aria-live="polite"></div>
+
+    <!-- Output Plan Area -->
+    <section id="plan-output" hidden aria-labelledby="plan-title">
+      <div class="plan-header">
+        <div>
+          <h2 id="plan-title"></h2>
+          <p id="plan-summary" class="lead" style="margin-bottom: 0.5rem;"></p>
+          <div id="plan-meta" class="muted"></div>
+        </div>
+        <div>
+          <button id="btn-save-trip" class="btn btn-small">💾 Save to My Trips</button>
+        </div>
+      </div>
+
+      <div class="split">
+        <div id="days-container"></div>
+        <div>
+          <div class="card">
+            <h3>Route Overview Map</h3>
+            <p class="muted">Verified destinations in this itinerary:</p>
+            <div id="planner-map" class="planner-map-card"></div>
+            <p id="map-error" class="alert alert-error" hidden></p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer><div class="container">© Travel and Challenge</div></footer>
+<script type="module" src="/js/app.js"></script>
+<script type="module" src="/js/planner.js"></script>
+</body>
+</html>

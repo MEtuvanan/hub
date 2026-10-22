@@ -1,0 +1,10 @@
+.entries{display:grid;gap:1rem}
+.entry h2{font-size:1.3rem;margin:0}
+.thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:.5rem;margin:.5rem 0}
+.thumbs figure{margin:0}
+.thumbs img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px}
+.thumbs figcaption{font-size:.85rem}
+.entry-actions{display:flex;gap:.5rem}
+.cap-row{display:flex;gap:.5rem;align-items:center;margin-bottom:.5rem}
+.cap-row input{flex:1;min-height:44px}
+#new{margin:1rem 0}

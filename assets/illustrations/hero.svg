@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-label="Backpacker with a map on green hills">
+<circle cx="320" cy="60" r="34" fill="#ffd54a"/>
+<path d="M0 240 Q100 170 200 230 T400 210 V300 H0Z" fill="#3fae49"/>
+<path d="M0 270 Q120 220 240 265 T400 255 V300 H0Z" fill="#2a7d34"/>
+<rect x="165" y="130" width="50" height="80" rx="14" fill="#ff7a45"/>
+<circle cx="190" cy="108" r="24" fill="#f5c9a0"/>
+<path d="M166 100 Q190 70 214 100Z" fill="#3b2a1e"/>
+<rect x="150" y="145" width="22" height="48" rx="8" fill="#d9571f"/>
+<rect x="215" y="150" width="46" height="34" rx="4" fill="#fff" stroke="#3b2a1e" stroke-width="3"/>
+<path d="M222 160 l10 8 8-10 14 12" stroke="#3fae49" stroke-width="3" fill="none"/>
+</svg>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Travel and Challenge — explore real places, complete quests</title>
+<meta name="description" content="A gamified tourism adventure: discover destinations, complete quests, collect characters and keep your travel memories.">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/desktop.css">
+<link rel="stylesheet" href="/css/mobile.css">
+<link rel="stylesheet" href="/css/animations.css">
+<link rel="stylesheet" href="/css/pages/home.css">
+</head>
+<body>
+<nav id="site-nav" aria-label="Main"></nav>
+<main>
+  <section class="hero">
+    <div class="container split">
+      <div>
+        <h1>Turn every trip into an adventure.</h1>
+        <p class="lead">Discover real destinations, complete local quests, collect characters and keep your memories — starting in Bangkok.</p>
+        <a class="btn" href="/explore">Start exploring</a>
+        <a class="btn btn-ghost" href="/planner">Plan with AI</a>
+      </div>
+      <img class="hero-art float" src="/assets/illustrations/hero.svg" alt="Backpacker with a map on green hills">
+    </div>
+  </section>
+
+  <section class="section green">
+    <div class="container">
+      <h2>How quests work</h2>
+      <ol class="steps">
+        <li>Pick a destination on the map.</li>
+        <li>Start a quest: answer questions, scan a code or take a photo.</li>
+        <li>Earn tokens and unlock collectible characters.</li>
+        <li>Save the moment in your travel journal and calendar.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Featured destinations</h2>
+      <p class="muted" id="featured-status">Destinations will appear here once published.</p>
+      <div class="grid-3" id="featured"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Featured campaigns</h2>
+      <p class="muted" id="campaigns-status">Loading…</p>
+      <div class="grid-3" id="campaigns"></div>
+    </div>
+  </section>
+</main>
+<footer><div class="container">© Travel and Challenge</div></footer>
+<script type="module" src="/js/app.js"></script>
+<script type="module" src="/js/home.js"></script>
+</body>
+</html>

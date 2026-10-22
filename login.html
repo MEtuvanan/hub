@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sign in — Travel and Challenge</title>
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/desktop.css">
+<link rel="stylesheet" href="/css/mobile.css">
+</head>
+<body>
+<nav id="site-nav" aria-label="Main"></nav>
+<main class="section"><div class="container" style="max-width:420px">
+  <div class="card">
+    <h1 style="font-size:2rem" id="title">Sign in</h1>
+    <div id="msg" role="alert"></div>
+    <form id="form" novalidate>
+      <div class="form-field" id="name-field" hidden><label for="name">Display name</label><input id="name" autocomplete="nickname" maxlength="40"></div>
+      <div class="form-field"><label for="email">Email</label><input id="email" type="email" autocomplete="email" required></div>
+      <div class="form-field"><label for="password">Password (min 8 chars)</label><input id="password" type="password" autocomplete="current-password" minlength="8" required></div>
+      <button class="btn" type="submit" id="submit">Sign in</button>
+      <button class="btn btn-ghost" type="button" id="toggle">Create account</button>
+    </form>
+  </div>
+</div></main>
+<script type="module" src="/js/app.js"></script>
+<script type="module" src="/js/login.js"></script>
+</body>
+</html>

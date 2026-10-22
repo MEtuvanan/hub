@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Profile — Travel and Challenge</title>
+<meta name="description" content="View your travel achievements, completed quests, collectible characters, and saved trips.">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/desktop.css">
+<link rel="stylesheet" href="/css/mobile.css">
+<link rel="stylesheet" href="/css/pages/quests.css">
+<link rel="stylesheet" href="/css/pages/profile.css">
+</head>
+<body>
+<nav id="site-nav" aria-label="Main"></nav>
+
+<main class="section">
+  <div class="container">
+    <p id="auth-status" class="muted">Loading profile…</p>
+
+    <div id="profile-content" hidden>
+      <header class="profile-card">
+        <div class="profile-avatar" id="avatar" aria-hidden="true">🎒</div>
+        <div style="flex: 1;">
+          <h1 id="user-name" style="margin-bottom: 0.2rem;">Adventurer</h1>
+          <p id="user-role" class="muted" style="margin-bottom: 0.5rem;"></p>
+          <button class="btn btn-small btn-ghost" id="btn-signout">Sign out</button>
+        </div>
+      </header>
+
+      <section class="profile-stats" aria-label="Explorer Stats">
+        <div class="stat-box">
+          <div class="stat-number" id="stat-tokens">0</div>
+          <div class="stat-label">🪙 Quest Tokens</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number" id="stat-quests">0</div>
+          <div class="stat-label">⚔️ Quests Completed</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number" id="stat-chars">0</div>
+          <div class="stat-label">🧸 Characters Collected</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number" id="stat-diaries">0</div>
+          <div class="stat-label">📖 Journal Entries</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number" id="stat-trips">0</div>
+          <div class="stat-label">🗺️ Saved Trips</div>
+        </div>
+      </section>
+
+      <section style="margin-bottom: 2.5rem;">
+        <h2>🗺️ My Saved AI Trips</h2>
+        <div id="trips-list">
+          <p class="muted">No saved trips yet. <a href="/planner">Plan an adventure with AI &rarr;</a></p>
+        </div>
+      </section>
+
+      <section style="margin-bottom: 2.5rem;">
+        <h2>🏆 Achievements & Badges</h2>
+        <div id="badges-list" class="badge-grid"></div>
+      </section>
+
+      <section style="margin-bottom: 2.5rem;">
+        <h2>⚔️ Completed Quests History</h2>
+        <ul id="completed-quests" style="padding-left: 1.25rem;">
+          <li class="muted">Loading completed quests...</li>
+        </ul>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer><div class="container">© Travel and Challenge</div></footer>
+<script type="module" src="/js/app.js"></script>
+<script type="module" src="/js/profile.js"></script>
+</body>
+</html>

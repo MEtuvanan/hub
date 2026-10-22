@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Admin — Travel and Challenge</title>
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/desktop.css">
+<link rel="stylesheet" href="/css/mobile.css">
+<link rel="stylesheet" href="/css/pages/quests.css">
+<link rel="stylesheet" href="/css/pages/admin.css">
+</head>
+<body>
+<nav id="site-nav" aria-label="Main"></nav>
+<main class="section"><div class="container wide">
+  <h1>Admin dashboard</h1>
+  <p id="gate" role="status" class="muted">Checking permissions…</p>
+  <div id="app" hidden>
+    <div class="tabs" role="tablist" aria-label="Admin sections">
+      <button role="tab" data-tab="stats" aria-selected="true">Overview</button>
+      <button role="tab" data-tab="places" aria-selected="false">Destinations</button>
+      <button role="tab" data-tab="quests" aria-selected="false">Quests</button>
+      <button role="tab" data-tab="campaigns" aria-selected="false">Campaigns</button>
+      <button role="tab" data-tab="audit" aria-selected="false">Audit log</button>
+    </div>
+    <section id="panel" role="tabpanel" aria-live="polite"></section>
+  </div>
+</div></main>
+
+<dialog id="editor" aria-labelledby="ed-title">
+  <h2 id="ed-title"></h2>
+  <div id="ed-msg" role="alert"></div>
+  <form id="ed-form">
+    <div id="ed-body"></div>
+    <button class="btn" type="submit" id="ed-save">Save</button>
+    <button class="btn btn-ghost" type="button" id="ed-cancel">Cancel</button>
+  </form>
+</dialog>
+<script type="module" src="/js/app.js"></script>
+<script type="module" src="/js/admin.js"></script>
+</body>
+</html>
