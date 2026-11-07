@@ -21,6 +21,7 @@ export async function listDiaries({ from, to, placeId } = {}) {
   return placeId ? data.filter(d => d.diary_place_links.some(l => l.place_id === placeId)) : data;
 }
 
+// Photos are private: only short-lived signed URLs are ever used.
 export async function signedUrls(paths) {
   if (!paths.length) return new Map();
   const { data, error } = await supabase.storage.from(BUCKET).createSignedUrls(paths, 3600);
@@ -41,19 +42,19 @@ async function setPlaces(diaryId, placeIds) {
 export async function uploadPhotos(userId, diaryId, items, startPos = 0) {
   const failed = [];
   for (const [i, { file, caption }] of items.entries()) {
+    if (validatePhoto(file)) { failed.push(file.name); continue; }
     const path = `${userId}/${diaryId}/${crypto.randomUUID()}.${EXT[file.type]}`;
     const up = await supabase.storage.from(BUCKET).upload(path, file, { contentType: file.type });
     if (up.error) { failed.push(file.name); continue; }
     const { error } = await supabase.from('diary_photos').insert({
-      diary_id: diaryId, user_id: userId, storage_path: path,
-      caption: caption || null, position: startPos + i,
+      diary_id: diaryId, user_id: userId, storage_path: path, caption: caption || null, position: startPos + i,
     });
     if (error) { await supabase.storage.from(BUCKET).remove([path]); failed.push(file.name); }
   }
   return failed;
 }
 
-export async function saveDiary({ id, userId, title, body, travel_date, mood, placeIds, photos }) {
+export async function saveDiary({ id, userId, title, body, travel_date, mood, placeIds, photos, startPos = 0 }) {
   const row = { title, body: body || null, travel_date, mood: mood || null };
   let diaryId = id;
   if (id) {
@@ -66,19 +67,19 @@ export async function saveDiary({ id, userId, title, body, travel_date, mood, pl
     diaryId = data.id;
   }
   await setPlaces(diaryId, placeIds);
-  const failed = await uploadPhotos(userId, diaryId, photos);
+  const failed = await uploadPhotos(userId, diaryId, photos, startPos);
   return { diaryId, failed };
 }
 
 export async function deletePhoto(photo) {
-  await supabase.storage.from(BUCKET).remove([photo.storage_path]);
   const { error } = await supabase.from('diary_photos').delete().eq('id', photo.id);
   if (error) throw error;
+  await supabase.storage.from(BUCKET).remove([photo.storage_path]);
 }
 
 export async function deleteDiary(diary) {
   const paths = diary.diary_photos.map(p => p.storage_path);
-  if (paths.length) await supabase.storage.from(BUCKET).remove(paths);
   const { error } = await supabase.from('travel_diaries').delete().eq('id', diary.id);
   if (error) throw error;
+  if (paths.length) await supabase.storage.from(BUCKET).remove(paths);
 }

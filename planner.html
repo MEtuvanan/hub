@@ -1,123 +1,124 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AI Trip Planner — Travel and Challenge</title>
-<meta name="description" content="Generate a customized Bangkok travel itinerary grounded in real destinations and quests using AI.">
+<title>AI Trip Planner & Chatbot — Travel and Challenge</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="/css/base.css">
 <link rel="stylesheet" href="/css/desktop.css">
 <link rel="stylesheet" href="/css/mobile.css">
-<link rel="stylesheet" href="/css/animations.css">
 <link rel="stylesheet" href="/css/pages/planner.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 </head>
-<body>
+<body data-protected="true">
 <nav id="site-nav" aria-label="Main"></nav>
 
-<header class="planner-hero">
-  <div class="container">
-    <h1>AI Adventure Trip Planner</h1>
-    <p class="lead">Tell us your travel style, and our AI will build an inspiring itinerary grounded in verified Bangkok destinations and quests.</p>
+<main class="planner-main-section">
+  <!-- Top bar controls (New Chat / Saved Trips Drawer trigger) -->
+  <div class="planner-topbar container">
+    <div class="topbar-left">
+      <button class="topbar-btn" id="btn-new-chat" type="button" title="เริ่มการสนทนาใหม่" hidden>
+        <svg class="ic" width="16" height="16" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-plus"></use></svg> <span>เริ่มแชทใหม่</span>
+      </button>
+    </div>
+    <div class="topbar-right">
+      <button class="topbar-btn" id="btn-open-saved" type="button" title="ดูทริปที่บันทึกไว้">
+        <svg class="ic" width="16" height="16" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-book"></use></svg> <span>ทริปที่บันทึกไว้</span> <span class="badge" id="saved-count">0</span>
+      </button>
+    </div>
   </div>
-</header>
 
-<main class="section" style="padding-top: 0;">
-  <div class="container">
-    <section class="planner-form-card" aria-labelledby="form-heading">
-      <h2 id="form-heading">Plan Your Journey</h2>
-      <form id="planner-form">
-        <div class="form-grid">
-          <div class="form-field">
-            <label for="starting-area">Starting Area / Hotel District</label>
-            <input id="starting-area" type="text" placeholder="e.g. Sukhumvit, Siam, Rattanakosin" value="Siam / Central Bangkok" required>
-          </div>
-          
-          <div class="form-field">
-            <label for="trip-days">Duration</label>
-            <select id="trip-days">
-              <option value="1">1 Day Exploration</option>
-              <option value="2">2 Days Weekend Trip</option>
-              <option value="3" selected>3 Days Classic Bangkok</option>
-              <option value="5">5 Days In-depth Adventure</option>
-            </select>
-          </div>
+  <!-- 1. LANDING VIEW (Centered on screen, ONLY the prompt input & inspiration pills) -->
+  <div class="ai-hero-centered" id="ai-landing-view">
+    <div class="ai-hero-badge">
+      <span class="ai-sparkle-anim"><svg class="ic" width="16" height="16" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-ai"></use></svg></span>
+      <span>Travel &amp; Challenge AI</span>
+    </div>
+    <h1 class="ai-hero-title">สวัสดี! วันนี้อยากไปเที่ยวไหนดี?</h1>
+    <p class="ai-hero-subtitle">
+      ถามข้อมูลสถานที่ท่องเที่ยว เคล็ดลับการเดินทาง หรือสั่งให้ AI ช่วยวางแผนจัดทริปให้คุณได้ทันที
+    </p>
 
-          <div class="form-field">
-            <label for="travel-style">Travel Style</label>
-            <select id="travel-style">
-              <option value="balanced explorer">Balanced Explorer (Culture & City)</option>
-              <option value="heritage & culture enthusiast">Heritage & History Enthusiast</option>
-              <option value="foodie & local street markets">Foodie & Local Street Life</option>
-              <option value="relaxed nature & scenic walk">Relaxed Parks & River Scenery</option>
-            </select>
-          </div>
-
-          <div class="form-field">
-            <label for="pace">Pace & Intensity</label>
-            <select id="pace">
-              <option value="relaxed">Relaxed (1 - 2 places/day, ample leisure)</option>
-              <option value="moderate" selected>Moderate (2 - 3 places/day, balanced)</option>
-              <option value="energetic">Energetic (3 - 4 places/day, maximize sights)</option>
-            </select>
-          </div>
-
-          <div class="form-field full-width">
-            <label>Interests & Themes</label>
-            <div class="chip-group">
-              <label class="chip-label"><input type="checkbox" name="interest" value="Sacred Temples" checked> 🛕 Temples & Shrines</label>
-              <label class="chip-label"><input type="checkbox" name="interest" value="Street Food & Markets" checked> 🍜 Street Food & Markets</label>
-              <label class="chip-label"><input type="checkbox" name="interest" value="Museums & Royal Arts" checked> 🏛️ Museums & Royal History</label>
-              <label class="chip-label"><input type="checkbox" name="interest" value="Parks & Riverfront"> 🌳 Nature, Parks & River</label>
-              <label class="chip-label"><input type="checkbox" name="interest" value="Handicrafts & Silk"> 🎨 Handicrafts & Architecture</label>
-            </div>
-          </div>
-
-          <div class="form-field full-width">
-            <label class="chip-label" style="display: inline-flex; align-items: center; gap: 0.5rem; background: transparent; padding: 0;">
-              <input type="checkbox" id="include-quests" checked style="display: inline-block;">
-              <strong>Include challenges & quests along the way for extra token rewards</strong>
-            </label>
-          </div>
-        </div>
-
-        <div style="margin-top: 1.5rem;">
-          <button type="submit" id="btn-generate" class="btn">✨ Generate Adventure Itinerary</button>
+    <!-- The Single Central Prompt Box -->
+    <div class="ai-central-box">
+      <form id="landing-form" class="ai-prompt-form">
+        <div class="ai-input-container">
+          <textarea id="landing-input" rows="1" placeholder="พิมพ์ถามอะไรก็ได้ เช่น 'จัดทริปเที่ยวเยาวราช 1 วัน', 'วัดพระแก้วเปิดกี่โมง', 'แนะนำคาเฟ่ริมน้ำ'..." autocomplete="off"></textarea>
+          <button class="ai-send-action-btn" id="landing-send-btn" type="submit" aria-label="ส่งข้อความ" title="ส่งข้อความ">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </button>
         </div>
       </form>
-    </section>
 
-    <!-- Status / Loading Area -->
-    <div id="planner-status" role="status" aria-live="polite"></div>
-
-    <!-- Output Plan Area -->
-    <section id="plan-output" hidden aria-labelledby="plan-title">
-      <div class="plan-header">
-        <div>
-          <h2 id="plan-title"></h2>
-          <p id="plan-summary" class="lead" style="margin-bottom: 0.5rem;"></p>
-          <div id="plan-meta" class="muted"></div>
-        </div>
-        <div>
-          <button id="btn-save-trip" class="btn btn-small">💾 Save to My Trips</button>
-        </div>
+      <!-- Quick Inspiration Pills -->
+      <div class="ai-prompt-pills">
+        <span class="pills-label">ลองกดถาม:</span>
+        <button class="pill-btn" type="button" data-prompt="จัดทริปเที่ยว 1 วัน ไหว้พระเกาะรัตนโกสินทร์และของกินอร่อย"><svg class="ic" width="15" height="15" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-map"></use></svg> จัดทริป 1 วัน เกาะรัตนโกสินทร์</button>
+        <button class="pill-btn" type="button" data-prompt="แนะนำของกินสตรีทฟู้ดย่านเยาวราชตอนกลางคืน 5 ร้านเด็ด"><svg class="ic" width="15" height="15" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-store"></use></svg> ของกินเยาวราชกลางคืน</button>
+        <button class="pill-btn" type="button" data-prompt="มีเควสท์ถ่ายรูปและเช็คอินอะไรน่าทำบ้างในกรุงเทพ"><svg class="ic" width="15" height="15" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-camera"></use></svg> จุดถ่ายรูป &amp; เควสท์น่าทำ</button>
+        <button class="pill-btn" type="button" data-prompt="วัดพระแก้วกับวัดโพธิ์ เปิดกี่โมง การแต่งกายและการเดินทาง"><svg class="ic" width="15" height="15" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-building"></use></svg> วัดพระแก้วเปิดกี่โมง แต่งตัวยังไง</button>
       </div>
+    </div>
+  </div>
 
-      <div class="split">
-        <div id="days-container"></div>
-        <div>
-          <div class="card">
-            <h3>Route Overview Map</h3>
-            <p class="muted">Verified destinations in this itinerary:</p>
-            <div id="planner-map" class="planner-map-card"></div>
-            <p id="map-error" class="alert alert-error" hidden></p>
-          </div>
+  <!-- 2. CONVERSATION VIEW (Active Chat Feed + Sticky Input at Bottom) -->
+  <div class="ai-chat-view" id="ai-chat-view" hidden>
+    <div class="chat-messages-scroll" id="chat-messages">
+      <!-- Conversation bubbles dynamically inserted here -->
+    </div>
+
+    <!-- Sticky Bottom Input -->
+    <div class="chat-bottom-input-bar">
+      <form id="chat-form" class="ai-prompt-form">
+        <div class="ai-input-container">
+          <textarea id="chat-input" rows="1" placeholder="พิมพ์ถามเพิ่ม หรือให้ปรับแผนทริปได้เลย..." autocomplete="off"></textarea>
+          <button class="ai-send-action-btn" id="chat-send-btn" type="submit" aria-label="ส่งข้อความ" title="ส่งข้อความ">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </button>
         </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Slide-Over Drawer: Saved Trips -->
+  <div class="saved-trips-drawer" id="saved-trips-drawer" hidden>
+    <div class="drawer-overlay" id="drawer-overlay"></div>
+    <aside class="drawer-content card">
+      <header class="drawer-header">
+        <h3 style="display:flex;align-items:center;gap:0.4rem;"><svg class="ic" width="18" height="18" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-book"></use></svg> ทริปที่บันทึกไว้</h3>
+        <button class="drawer-close-btn" id="btn-close-saved" type="button" aria-label="ปิด"><svg class="ic" width="14" height="14" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-close"></use></svg></button>
+      </header>
+      <div class="drawer-body">
+        <ul id="saved-list" class="saved-trips-list">
+          <li class="muted">กำลังโหลด...</li>
+        </ul>
       </div>
-    </section>
+    </aside>
+  </div>
+
+  <!-- Route Map Modal -->
+  <div class="itinerary-map-modal" id="itinerary-map-modal" hidden>
+    <div class="map-modal-backdrop" id="map-modal-backdrop"></div>
+    <div class="map-modal-card">
+      <div class="map-modal-header">
+        <h3 id="map-modal-title" style="display:flex;align-items:center;gap:0.4rem;"><svg class="ic" width="18" height="18" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-map"></use></svg> แผนที่เส้นทางท่องเที่ยว</h3>
+        <button class="map-modal-close" id="btn-close-map-modal" type="button"><svg class="ic" width="14" height="14" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-close"></use></svg></button>
+      </div>
+      <div id="itinerary-map" class="itinerary-leaflet-map"></div>
+    </div>
   </div>
 </main>
 
-<footer><div class="container">© Travel and Challenge</div></footer>
+<footer id="site-footer"></footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script type="module" src="/js/app.js"></script>
 <script type="module" src="/js/planner.js"></script>
 </body>

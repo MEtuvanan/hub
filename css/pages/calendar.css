@@ -1,13 +1,14 @@
-.cal-head{display:flex;align-items:center;justify-content:space-between;gap:1rem}
-.cal-head h2{margin:0;font-size:1.5rem}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:1rem 0}
-.cal-dow{text-align:center;font-weight:700;font-size:.85rem}
-.cal-day{min-height:48px;padding:4px;border:2px solid #e6dcc9;border-radius:10px;background:#fff;font:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px}
-.cal-day[aria-pressed=true]{border-color:var(--coral);background:#fff1ea}
-.cal-day.empty{visibility:hidden}
-.dots{display:flex;gap:3px}
-.dot{display:inline-block;width:8px;height:8px;border-radius:50%}
-.dot-diary{background:var(--leaf)} .dot-quest{background:var(--coral)}
-.cal-thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:.5rem}
-.cal-thumbs img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px}
-@media (min-width:900px){.cal-day{min-height:84px;padding:8px}}
+.cal-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.cal-head h2 { margin: 0; font-size: 1.25rem; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 2px; margin-top: .75rem; }
+.cal-dow { text-align: center; font-size: .75rem; font-weight: 600; color: var(--color-text-muted); padding: .25rem 0; }
+.cal-day { min-height: 52px; padding: .25rem; border: 1px solid var(--color-border); border-radius: var(--radius-small); background: #fff; font: inherit; text-align: left; cursor: pointer; display: flex; flex-direction: column; gap: .25rem; }
+.cal-day:hover { border-color: var(--color-emerald); }
+.cal-day[aria-selected=true] { background: var(--color-emerald-tint); border-color: var(--color-emerald-deep); }
+.cal-day.today { box-shadow: inset 0 0 0 2px var(--color-forest); }
+.cal-day.blank { visibility: hidden; }
+.dots { display: flex; gap: 3px; flex-wrap: wrap; }
+.dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; }
+.d-diary { background: #1A3E2F; } .d-photo { background: #00A86B; } .d-quest { background: #7A5A00; } .d-trip { background: #4B6A9B; }
+.legend { display: flex; gap: .75rem; flex-wrap: wrap; align-items: center; }
+@media (min-width: 768px) { .cal-day { min-height: 84px; padding: .5rem; } }

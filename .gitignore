@@ -1,6 +1,21 @@
-.env
-.env.*
-supabase/.temp/
+# Dependencies / generated
 node_modules/
 .vercel/
-*.local
+
+# Local AI config — contains a real Groq key. NEVER commit.
+js/config.local.js
+
+# Supabase CLI local state
+.supabase/
+supabase/.temp/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/settings.json
+*.swp
+
+# Build artifacts (none expected for this static project)
+dist/
+out/
