@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#07130f">
+<link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml">
+<title>รายละเอียดสถานที่ — Travel and Challenge</title>
+<meta name="description" content="ข้อมูลสถานที่ท่องเที่ยว ไฮไลท์ แผนที่ และเควสท์ที่ทำได้ ณ สถานที่นี้">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/mobile-app.css">
+<link rel="stylesheet" href="/css/pages/ar-mobile.css">
+<link rel="stylesheet" href="/css/pages/place-mobile.css">
+</head>
+<body class="app-phone app-transparent-top" data-app-page="place">
+
+<main id="placeRoot">
+  <section class="pm-hero">
+    <img class="pm-hero__img" id="pmHeroImg" alt="" referrerpolicy="no-referrer">
+    <div class="pm-hero__fallback" id="pmHeroFallback" hidden>📍</div>
+    <div class="pm-hero__scrim" aria-hidden="true"></div>
+
+    <div class="pm-nav">
+      <button class="pm-nav__btn" id="pmBack" type="button" aria-label="ย้อนกลับ">
+        <svg class="ic" width="19" height="19" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-arrow-right"></use></svg>
+      </button>
+      <div class="pm-nav__group">
+        <button class="pm-nav__btn" id="pmShare" type="button" aria-label="แชร์สถานที่">
+          <svg class="ic" width="19" height="19" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-share"></use></svg>
+        </button>
+        <button class="pm-nav__btn" id="pmFav" type="button" aria-pressed="false" aria-label="เพิ่มในรายการถูกใจ">
+          <svg class="heart" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21.2l7.8-7.7 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="pm-hero__copy">
+      <div class="pm-badges">
+        <span class="g-chip" id="pmCategory">📍 สถานที่ท่องเที่ยว</span>
+        <span class="pm-verified" id="pmVerified" hidden>
+          <svg class="ic" width="10" height="10" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-check"></use></svg>
+          VERIFIED
+        </span>
+      </div>
+      <h1 id="pmName">กำลังโหลด…</h1>
+      <div class="pm-hero__meta">
+        <span class="g-rating" id="pmRating"></span>
+        <span id="pmReviews"></span>
+        <span class="dot"></span>
+        <span id="pmWhere"></span>
+      </div>
+    </div>
+  </section>
+
+  <div class="app-main pm">
+    <div class="pm-actions">
+      <a class="g-btn g-btn--mint" id="pmGo" href="/navigate-mobile.html">
+        <svg class="ic" width="18" height="18" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-navigate"></use></svg>
+        นำทางไปที่นี่
+      </a>
+      <button class="g-btn g-btn--ghost" id="pmQuestJump" type="button">
+        <svg class="ic" width="17" height="17" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-quest"></use></svg>
+        ดูเควสท์
+      </button>
+    </div>
+
+    <p class="pm-summary" id="pmSummary"></p>
+
+    <div class="pm-info" id="pmInfo"></div>
+
+    <section class="pm-section" id="pmHighlightsSection">
+      <h2>ไฮไลท์ห้ามพลาด</h2>
+      <p class="pm-section-sub">สิ่งที่คนส่วนใหญ่มาที่นี่เพื่อสัมผัส</p>
+      <div class="pm-highlights" id="pmHighlights"></div>
+    </section>
+
+    <section class="pm-section">
+      <h2>แผนที่และพิกัด</h2>
+      <p class="pm-section-sub">แตะหมุดเพื่อดูตำแหน่งสถานที่</p>
+      <div class="pm-map" id="pmMap">
+        <div class="pm-map__overlay">
+          <span class="pm-map__coords" id="pmCoords"></span>
+          <a class="pm-map__open" id="pmMapOpen" href="#" target="_blank" rel="noopener">
+            <svg class="ic" width="12" height="12" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-external"></use></svg>
+            เปิดแผนที่
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="pm-section">
+      <h2>เกี่ยวกับสถานที่นี้</h2>
+      <p class="pm-description" id="pmDescription"></p>
+      <div class="pm-tags" id="pmTags"></div>
+    </section>
+
+    <section class="pm-quests" id="pmQuests" aria-labelledby="pmQuestTitle">
+      <div class="pm-quests__head">
+        <div>
+          <h2 id="pmQuestTitle">เควสท์ที่ทำได้ที่นี่</h2>
+          <p>เลือกภารกิจ เล่นให้สำเร็จ แล้วรับโทเคน</p>
+        </div>
+        <span class="pm-quests__count" id="pmQuestCount">0 เควสท์</span>
+      </div>
+      <div class="pm-quest-list" id="pmQuestList"></div>
+    </section>
+
+    <section class="pm-section">
+      <h2>สถานที่ใกล้เคียง</h2>
+      <p class="pm-section-sub">ต่อทริปได้ในเส้นทางเดียวกัน</p>
+      <div class="pm-nearby" id="pmNearby"></div>
+    </section>
+  </div>
+</main>
+
+<div class="pm-float" id="pmFloat">
+  <div class="pm-float__copy">
+    <strong>มีเควสท์รออยู่ที่นี่</strong>
+    <span id="pmFloatMeta">เลื่อนลงเพื่อเลือกภารกิจ</span>
+  </div>
+  <button class="g-btn g-btn--mint" id="pmFloatBtn" type="button">ดูเควสท์</button>
+</div>
+
+<script type="module" src="/js/mobile-app.js"></script>
+<script type="module" src="/js/place-mobile.js"></script>
+</body>
+</html>

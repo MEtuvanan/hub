@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#07130f">
+<link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml">
+<title>คอลเลกชันนักสำรวจ — Travel and Challenge</title>
+<meta name="description" content="สะสมตัวละคร เหรียญตรา และตราประทับจังหวัดจากการผจญภัยของคุณ">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/mobile-app.css">
+<link rel="stylesheet" href="/css/pages/collection-mobile.css">
+</head>
+<body class="app-phone" data-app-page="collection">
+
+<main class="app-main cl-head" style="padding-bottom:0">
+  <p class="app-kicker">EXPLORER COLLECTION</p>
+  <h1>คอลเลกชัน</h1>
+  <p class="app-sub">ตัวละคร เหรียญตรา และตราประทับจากทุกเส้นทางที่คุณผ่านมา</p>
+
+  <section class="cl-hero" aria-label="คะแนนคอลเลกชัน">
+    <span class="cl-hero__medal" id="clHeroMedal">🏅</span>
+    <div class="cl-hero__body">
+      <span>คะแนนสะสมนักสำรวจ</span>
+      <b id="clScore">0</b>
+      <small id="clScoreNote">เริ่มสะสมได้จากเควสท์แรกของคุณ</small>
+    </div>
+    <span class="g-chip g-chip--gold" id="clRank">Lv.1</span>
+  </section>
+
+  <div class="cl-stats" id="clStats"></div>
+</main>
+
+<section class="app-main" style="padding-top:0">
+  <div class="cl-section">
+    <div class="cl-section__head">
+      <div>
+        <h2>ตัวละครของฉัน</h2>
+        <p>สวมชุดแล้วตัวละครบนแผนที่จะเปลี่ยนตาม</p>
+      </div>
+      <a href="/shop-mobile.html">ร้านค้า →</a>
+    </div>
+    <div class="cl-chars" id="clChars"></div>
+  </div>
+
+  <div class="cl-section">
+    <div class="cl-section__head">
+      <div>
+        <h2>เหรียญตรา</h2>
+        <p>ทำภารกิจและสะสมสถานที่เพื่อปลดล็อก</p>
+      </div>
+      <a href="/quests-mobile.html">หาเควสท์ →</a>
+    </div>
+    <div class="cl-medals" id="clMedals"></div>
+  </div>
+
+  <div class="cl-section">
+    <div class="cl-section__head">
+      <div>
+        <h2>ตราประทับจังหวัด</h2>
+        <p>เก็บให้ครบทุกจังหวัดบนแผนที่</p>
+      </div>
+      <a href="/explore-mobile.html">เปิดแผนที่ →</a>
+    </div>
+    <div class="cl-provinces" id="clProvinces"></div>
+  </div>
+</section>
+
+<script type="module" src="/js/mobile-app.js"></script>
+<script type="module" src="/js/collection-mobile.js"></script>
+</body>
+</html>

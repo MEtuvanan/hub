@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#07130f">
+<link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml">
+<title>เข้าสู่ระบบ — Travel and Challenge</title>
+<meta name="description" content="เข้าสู่ระบบหรือสมัครบัญชีเพื่อซิงก์โปรไฟล์และความคืบหน้าการเดินทาง">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/mobile-app.css">
+<link rel="stylesheet" href="/css/pages/support-mobile.css">
+</head>
+<body class="app-phone" data-app-page="login">
+
+<main class="app-main sup-head">
+  <p class="app-kicker">EXPLORER ACCOUNT</p>
+  <h1 id="authTitle">เข้าสู่ระบบ</h1>
+  <p class="app-sub" id="authSub">ซิงก์โปรไฟล์ โทเคน และประวัติการเดินทางของคุณ</p>
+
+  <section class="sup-hero">
+    <span class="sup-hero__ico" id="authHeroIco">🔐</span>
+    <div class="sup-hero__body">
+      <h2 id="authHeroTitle">ยินดีต้อนรับกลับ นักสำรวจ</h2>
+      <p id="authHeroText">เข้าสู่ระบบเพื่อให้ความคืบหน้าติดไปกับทุกอุปกรณ์</p>
+    </div>
+  </section>
+
+  <div id="authArea" class="sup-auth">
+    <div class="g-segment sup-tabs" role="tablist" aria-label="เลือกโหมด">
+      <button type="button" class="is-active" data-auth-tab="signin" role="tab" aria-selected="true">เข้าสู่ระบบ</button>
+      <button type="button" data-auth-tab="signup" role="tab" aria-selected="false">สมัครสมาชิก</button>
+    </div>
+
+    <form id="authForm" novalidate>
+      <div class="g-field" id="nameField" hidden>
+        <label for="authName">ชื่อที่แสดง</label>
+        <input id="authName" maxlength="40" placeholder="ชื่อนักสำรวจของคุณ" autocomplete="nickname">
+      </div>
+
+      <div class="g-field">
+        <label for="authEmail">อีเมล</label>
+        <input id="authEmail" type="email" inputmode="email" placeholder="you@example.com" autocomplete="email" required>
+      </div>
+
+      <div class="g-field">
+        <label for="authPassword">รหัสผ่าน</label>
+        <input id="authPassword" type="password" minlength="6" placeholder="อย่างน้อย 6 ตัวอักษร" autocomplete="current-password" required>
+      </div>
+
+      <p class="sup-error" id="authError" hidden></p>
+
+      <button class="g-btn g-btn--mint g-btn--block" type="submit" id="authSubmit">เข้าสู่ระบบ</button>
+    </form>
+
+    <button class="g-btn g-btn--ghost g-btn--block" type="button" id="authForgot" style="min-height:38px;font-size:11px">
+      ลืมรหัสผ่าน?
+    </button>
+
+    <div class="sup-or">หรือ</div>
+
+    <button class="sup-oauth" type="button" id="authGoogle">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5a5.6 5.6 0 0 1-2.4 3.6v3h3.9c2.3-2.1 3.5-5.2 3.5-8.8Z"/>
+        <path fill="#34A853" d="M12 24c3.2 0 5.9-1.1 7.9-2.9l-3.9-3c-1.1.7-2.5 1.2-4 1.2-3.1 0-5.7-2.1-6.7-4.9H1.3v3.1A12 12 0 0 0 12 24Z"/>
+        <path fill="#FBBC05" d="M5.3 14.4a7.2 7.2 0 0 1 0-4.6V6.7H1.3a12 12 0 0 0 0 10.8l4-3.1Z"/>
+        <path fill="#EA4335" d="M12 4.8c1.8 0 3.3.6 4.5 1.8l3.4-3.4A11.9 11.9 0 0 0 12 0 12 12 0 0 0 1.3 6.7l4 3.1C6.3 6.9 8.9 4.8 12 4.8Z"/>
+      </svg>
+      ดำเนินการต่อด้วย Google
+    </button>
+
+    <p class="sup-auth__foot">ยังไม่พร้อมสมัคร? <a href="/index-mobile.html">เล่นในโหมดนักท่องเที่ยว</a></p>
+    <p class="sup-note">ข้อมูลบัญชีถูกจัดการโดย Supabase ตามนโยบายความเป็นส่วนตัวของเว็บไซต์</p>
+  </div>
+</main>
+
+<script type="module" src="/js/mobile-app.js"></script>
+<script type="module" src="/js/login-mobile.js"></script>
+</body>
+</html>

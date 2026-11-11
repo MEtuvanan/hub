@@ -1,0 +1,795 @@
+/* ==========================================================================
+   AR adventure map + CSS-3D avatar
+   ========================================================================== */
+
+.ar-world {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 280px;
+  overflow: hidden;
+  border-radius: 24px;
+  background: #061d27;
+  isolation: isolate;
+  touch-action: manipulation;
+}
+.ar-world--compact { height: 342px; border-radius: 0 0 30px 30px; }
+.ar-world--full { height: 100%; border-radius: 0; }
+
+.ar-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.ar-glow {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 42% at 50% 0%, rgba(242, 168, 29, .18), transparent 62%),
+    radial-gradient(ellipse 80% 40% at 50% 100%, rgba(3, 14, 10, .62), transparent 70%);
+  mix-blend-mode: screen;
+}
+.ar-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  box-shadow: inset 0 0 70px 18px rgba(2, 12, 9, .42);
+}
+.ar-world--compact .ar-vignette { box-shadow: inset 0 -40px 60px -20px rgba(2, 12, 9, .65); }
+
+.ar-weather {
+  position: absolute;
+  z-index: 30;
+  top: 74px;
+  left: 14px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, .14);
+  background: rgba(4, 13, 9, .56);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  font: 600 10.5px/1 var(--app-font-head);
+  pointer-events: none;
+}
+.ar-weather__live {
+  padding-left: 7px;
+  border-left: 1px solid rgba(255, 255, 255, .18);
+  color: var(--app-mint);
+  letter-spacing: .08em;
+}
+.ar-weather__live::before {
+  content: '';
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  margin-right: 4px;
+  border-radius: 50%;
+  background: var(--app-mint);
+  box-shadow: 0 0 7px var(--app-mint);
+  animation: appPulse 1.8s ease-in-out infinite;
+}
+
+.ar-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  z-index: 30;
+  padding: 7px 13px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, .12);
+  background: rgba(4, 13, 9, .58);
+  backdrop-filter: blur(8px);
+  color: rgba(255, 255, 255, .78);
+  font-size: 10.5px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* ----------------------------- Pins ----------------------------- */
+.ar-pins { position: absolute; inset: 0; z-index: 20; pointer-events: none; }
+.ar-pin {
+  position: absolute;
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #fff;
+  transform: translate(-50%, -100%);
+  pointer-events: auto;
+  cursor: pointer;
+  animation: appPop .35s cubic-bezier(.2, .9, .3, 1.4);
+}
+.ar-pin__beacon {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, .9);
+  background: linear-gradient(160deg, var(--pin-color, #1f7a5c), color-mix(in srgb, var(--pin-color, #1f7a5c) 55%, #07130f));
+  box-shadow: 0 5px 14px rgba(0, 0, 0, .5), 0 0 16px color-mix(in srgb, var(--pin-color, #1f7a5c) 40%, transparent);
+  font-size: 17px;
+}
+.ar-pin__beacon::before {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 1px solid var(--pin-color, #1f7a5c);
+  opacity: .45;
+  animation: arPinRing 2.4s ease-out infinite;
+}
+.ar-pin__beacon::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  background: inherit;
+  border-right: 2px solid rgba(255, 255, 255, .9);
+  border-bottom: 2px solid rgba(255, 255, 255, .9);
+  transform: translateX(-50%) rotate(45deg);
+  border-radius: 0 0 2px 0;
+}
+@keyframes arPinRing {
+  0% { transform: scale(.9); opacity: .7; }
+  80%, 100% { transform: scale(1.8); opacity: 0; }
+}
+.ar-pin__label {
+  display: grid;
+  justify-items: center;
+  gap: 1px;
+  max-width: 128px;
+  padding: 4px 8px;
+  border-radius: 9px;
+  border: 1px solid rgba(255, 255, 255, .14);
+  background: rgba(3, 11, 8, .74);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  font: 600 9.5px/1.25 var(--app-font-head);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0;
+  transform: translateY(-3px);
+  transition: opacity .18s ease, transform .18s ease;
+}
+.ar-pin__label small { color: var(--app-mint); font: 500 8.5px/1 var(--app-font-body); }
+.ar-pin.is-near .ar-pin__label, .ar-pin:focus-visible .ar-pin__label { opacity: 1; transform: none; }
+.ar-pin.is-near .ar-pin__beacon { transform: scale(1.08); }
+.ar-pin:active .ar-pin__beacon { transform: scale(.95); }
+
+/* ----------------------------- Avatar ----------------------------- */
+.ar-avatar {
+  position: absolute;
+  z-index: 70;
+  width: 92px;
+  height: 150px;
+  transform: translate(-50%, -100%);
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  filter: drop-shadow(0 14px 16px rgba(0, 0, 0, .45));
+  transition: left .04s linear, top .04s linear;
+}
+.ar-avatar__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 2px;
+  padding: 3px 8px 3px 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(98, 242, 176, .38);
+  background: rgba(3, 11, 8, .82);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  font: 600 9.5px/1.2 var(--app-font-head);
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .4);
+}
+.ar-avatar__tag span {
+  padding: 1px 4px;
+  border-radius: 5px;
+  background: rgba(242, 168, 29, .18);
+  color: var(--app-gold);
+  font-size: 8px;
+}
+.ar-avatar__figure {
+  position: relative;
+  width: 62px;
+  height: 108px;
+  transform-style: preserve-3d;
+  transform: perspective(500px) rotateX(4deg) rotateY(-14deg);
+  transition: transform .25s ease;
+}
+.ar-avatar.is-left .ar-avatar__figure { transform: perspective(500px) rotateX(4deg) rotateY(14deg) scaleX(-1); }
+.ar-avatar__spark {
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  width: 54px;
+  height: 14px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(98, 242, 176, .45), transparent 68%);
+  filter: blur(2px);
+  animation: appPulse 2.8s ease-in-out infinite;
+}
+.doll-shadow {
+  position: absolute;
+  left: 50%;
+  bottom: 2px;
+  width: 44px;
+  height: 11px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: rgba(0, 0, 0, .42);
+  filter: blur(2px);
+}
+.doll {
+  position: absolute;
+  left: 50%;
+  bottom: 8px;
+  width: 56px;
+  height: 100px;
+  transform: translateX(-50%);
+  transform-style: preserve-3d;
+}
+
+/* head */
+.doll__head {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 34px;
+  height: 34px;
+  transform: translateX(-50%) translateZ(4px);
+  border-radius: 48% 48% 44% 44%;
+  background: var(--doll-skin, #f2c49b);
+  box-shadow: inset -4px -4px 8px rgba(116, 63, 20, .18), 0 3px 0 rgba(0, 0, 0, .08);
+  z-index: 4;
+}
+.doll__face { position: absolute; inset: 0; }
+.doll__face .eye {
+  position: absolute;
+  top: 15px;
+  width: 3.6px;
+  height: 5px;
+  border-radius: 3px;
+  background: #241811;
+}
+.doll__face .eye--l { left: 10px; }
+.doll__face .eye--r { right: 10px; }
+.doll__face .mouth {
+  position: absolute;
+  left: 50%;
+  top: 23px;
+  width: 7px;
+  height: 3.5px;
+  transform: translateX(-50%);
+  border-radius: 0 0 7px 7px;
+  border-bottom: 1.6px solid #9b5d48;
+}
+.doll__face .blush {
+  position: absolute;
+  top: 20px;
+  width: 5px;
+  height: 3px;
+  border-radius: 50%;
+  background: rgba(240, 116, 97, .35);
+}
+.doll__face .blush--l { left: 5px; }
+.doll__face .blush--r { right: 5px; }
+
+/* hair variants */
+.doll__hair {
+  position: absolute;
+  inset: -3px -2px auto -2px;
+  height: 19px;
+  border-radius: 50% 50% 36% 36%;
+  background: var(--doll-hair, #2b1a13);
+  z-index: 1;
+  box-shadow: inset -3px -3px 6px rgba(0, 0, 0, .25);
+}
+.doll__hair::after {
+  content: '';
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  bottom: -5px;
+  height: 8px;
+  border-radius: 0 0 8px 8px;
+  background: inherit;
+  clip-path: polygon(0 0, 8% 100%, 20% 30%, 32% 100%, 45% 25%, 58% 100%, 72% 28%, 85% 100%, 100% 0);
+}
+[data-hair="bob"] .doll__hair { height: 27px; border-radius: 50% 50% 42% 42%; }
+[data-hair="bob"] .doll__hair::after { height: 12px; clip-path: none; border-radius: 0 0 9px 9px; }
+[data-hair="ponytail"] .doll__hair::before {
+  content: '';
+  position: absolute;
+  right: -7px;
+  top: 4px;
+  width: 10px;
+  height: 26px;
+  border-radius: 6px;
+  background: inherit;
+  transform: rotate(12deg);
+}
+[data-hair="wizard"] .doll__hair { height: 34px; border-radius: 50% 50% 30% 30%; }
+[data-hair="wizard"] .doll__hair::after { height: 22px; clip-path: none; border-radius: 0 0 12px 12px; }
+
+/* hat variants */
+.doll__hat { position: absolute; inset: 0; z-index: 5; }
+[data-hat="cap"] .doll__hat::before {
+  content: '';
+  position: absolute;
+  top: -7px;
+  left: 50%;
+  width: 32px;
+  height: 15px;
+  transform: translateX(-50%);
+  border-radius: 16px 16px 3px 3px;
+  background: var(--doll-hat, #f2a81d);
+  box-shadow: inset -3px -2px 5px rgba(0, 0, 0, .18);
+}
+[data-hat="cap"] .doll__hat::after {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  width: 22px;
+  height: 5px;
+  transform: translateX(-30%);
+  border-radius: 0 6px 6px 4px;
+  background: var(--doll-hat, #f2a81d);
+  filter: brightness(.86);
+}
+[data-hat="beanie"] .doll__hat::before {
+  content: '';
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  width: 29px;
+  height: 17px;
+  transform: translateX(-50%);
+  border-radius: 50% 50% 5px 5px;
+  background: var(--doll-hat, #f2a81d);
+  box-shadow: inset -3px -2px 5px rgba(0, 0, 0, .15);
+}
+[data-hat="wizard"] .doll__hat::before {
+  content: '';
+  position: absolute;
+  top: -28px;
+  left: 50%;
+  width: 34px;
+  height: 36px;
+  transform: translateX(-50%) rotate(-4deg);
+  background: var(--doll-hat, #f2a81d);
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, .2));
+}
+[data-hat="wizard"] .doll__hat::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 50%;
+  width: 44px;
+  height: 8px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: var(--doll-hat, #f2a81d);
+  filter: brightness(.8);
+}
+[data-hat="crown"] .doll__hat::before {
+  content: '';
+  position: absolute;
+  top: -11px;
+  left: 50%;
+  width: 30px;
+  height: 14px;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, #ffe27a, #d09b12);
+  clip-path: polygon(0 100%, 0 25%, 18% 60%, 32% 0, 50% 52%, 68% 0, 82% 60%, 100% 25%, 100% 100%);
+  filter: drop-shadow(0 0 5px rgba(242, 168, 29, .7));
+}
+
+/* torso */
+.doll__torso {
+  position: absolute;
+  top: 31px;
+  left: 50%;
+  width: 33px;
+  height: 37px;
+  transform: translateX(-50%) translateZ(2px);
+  z-index: 3;
+}
+.doll__top {
+  position: absolute;
+  inset: 0;
+  border-radius: 10px 10px 9px 9px;
+  background:
+    linear-gradient(120deg, rgba(255, 255, 255, .22), transparent 45%),
+    var(--doll-top, #2f6fed);
+  box-shadow: inset -5px -3px 8px rgba(0, 0, 0, .18);
+}
+[data-top="jacket"] .doll__top::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 3px;
+  bottom: 4px;
+  width: 2px;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, .22);
+}
+[data-top="jacket"] .doll__top::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 17px;
+  height: 12px;
+  transform: translateX(-50%);
+  background: color-mix(in srgb, var(--doll-top, #2f6fed) 70%, #fff);
+  clip-path: polygon(0 0, 50% 78%, 100% 0, 82% 100%, 50% 86%, 18% 100%);
+}
+[data-top="hoodie"] .doll__top::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 5px;
+  width: 15px;
+  height: 8px;
+  transform: translateX(-50%);
+  border-radius: 3px;
+  background: rgba(0, 0, 0, .16);
+}
+[data-top="dress"] .doll__top {
+  bottom: -10px;
+  border-radius: 9px 9px 4px 4px;
+  clip-path: polygon(13% 0, 87% 0, 100% 100%, 0 100%);
+}
+[data-top="armor"] .doll__top {
+  background:
+    linear-gradient(120deg, rgba(255, 255, 255, .38), transparent 42%),
+    linear-gradient(180deg, #d9dcff, var(--doll-top, #7c4dff) 70%);
+  border-radius: 8px;
+  box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, .35), inset -5px -3px 8px rgba(0, 0, 0, .18);
+}
+[data-top="armor"] .doll__torso::before,
+[data-top="armor"] .doll__torso::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  width: 14px;
+  height: 13px;
+  border-radius: 7px 7px 4px 4px;
+  background: linear-gradient(180deg, #e8eaff, var(--doll-top, #7c4dff));
+  z-index: 4;
+}
+[data-top="armor"] .doll__torso::before { left: -7px; }
+[data-top="armor"] .doll__torso::after { right: -7px; }
+
+/* arms */
+.doll__arm {
+  position: absolute;
+  top: 4px;
+  width: 10px;
+  height: 30px;
+  border-radius: 6px;
+  background: var(--doll-top, #2f6fed);
+  transform-origin: 50% 4px;
+  z-index: 2;
+  box-shadow: inset -2px -2px 4px rgba(0, 0, 0, .16);
+}
+.doll__arm::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 10px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--doll-skin, #f2c49b);
+}
+.doll__arm--l { left: -6px; }
+.doll__arm--r { right: -6px; }
+
+/* legs */
+.doll__legs {
+  position: absolute;
+  top: 65px;
+  left: 50%;
+  width: 25px;
+  height: 34px;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  z-index: 2;
+}
+.doll__leg {
+  position: relative;
+  width: 10px;
+  height: 30px;
+  border-radius: 4px 4px 3px 3px;
+  background: var(--doll-bottom, #25324a);
+  transform-origin: 50% 2px;
+  box-shadow: inset -2px -2px 4px rgba(0, 0, 0, .18);
+}
+.doll__leg::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: -2px;
+  width: 14px;
+  height: 8px;
+  border-radius: 4px 5px 3px 4px;
+  background: var(--doll-shoe, #4a2f1b);
+  box-shadow: inset -2px -1px 3px rgba(0, 0, 0, .25);
+}
+[data-bottom="shorts"] .doll__leg { border-radius: 4px; height: 20px; }
+[data-bottom="shorts"] .doll__leg::before {
+  content: '';
+  position: absolute;
+  top: 18px;
+  left: 1px;
+  width: 8px;
+  height: 12px;
+  border-radius: 3px;
+  background: var(--doll-skin, #f2c49b);
+}
+[data-bottom="skirt"] .doll__leg { height: 22px; }
+[data-bottom="skirt"] .doll__legs::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  width: 36px;
+  height: 20px;
+  transform: translateX(-50%);
+  border-radius: 4px 4px 12px 12px;
+  background: var(--doll-bottom, #25324a);
+  clip-path: polygon(12% 0, 88% 0, 100% 100%, 0 100%);
+  box-shadow: inset -4px -2px 6px rgba(0, 0, 0, .16);
+}
+[data-bottom="robe"] .doll__leg { width: 12px; height: 32px; }
+[data-bottom="robe"] .doll__legs::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  width: 40px;
+  height: 30px;
+  transform: translateX(-50%);
+  border-radius: 6px 6px 14px 14px;
+  background: var(--doll-bottom, #25324a);
+  clip-path: polygon(10% 0, 90% 0, 100% 100%, 0 100%);
+}
+[data-shoes="boots"] .doll__leg::after { height: 12px; bottom: -7px; border-radius: 4px 5px 2px 4px; }
+[data-shoes="sneaker"] .doll__leg::after { height: 7px; border-radius: 3px 7px 4px 4px; background: #fff; box-shadow: inset 0 -2px 0 var(--doll-shoe, #4a2f1b); }
+[data-shoes="sandal"] .doll__leg::after { height: 4px; bottom: -2px; border-radius: 3px; }
+
+/* accessory */
+.doll__accessory {
+  position: absolute;
+  right: -16px;
+  top: 12px;
+  z-index: 6;
+  font-size: 15px;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, .35));
+}
+[data-accessory="backpack"] .doll__accessory { right: auto; left: -15px; top: 5px; }
+[data-accessory="map"] .doll__accessory { right: -14px; top: 20px; }
+[data-accessory="sword"] .doll__accessory { right: -15px; top: 2px; }
+[data-accessory="camera"] .doll__accessory { right: -13px; top: 17px; }
+
+/* walk + idle animation */
+.ar-avatar.is-walking .doll__leg--l { animation: dollLegL .38s ease-in-out infinite; }
+.ar-avatar.is-walking .doll__leg--r { animation: dollLegR .38s ease-in-out infinite; }
+.ar-avatar.is-walking .doll__arm--l { animation: dollArmL .38s ease-in-out infinite; }
+.ar-avatar.is-walking .doll__arm--r { animation: dollArmR .38s ease-in-out infinite; }
+.ar-avatar.is-walking .doll {
+  animation: dollBob .38s ease-in-out infinite;
+}
+.ar-avatar:not(.is-walking) .doll {
+  animation: dollIdle 3.2s ease-in-out infinite;
+}
+.ar-avatar:not(.is-walking) .doll__arm--l { transform: rotate(6deg); }
+.ar-avatar:not(.is-walking) .doll__arm--r { transform: rotate(-6deg); }
+@keyframes dollLegL { 0%, 100% { transform: rotate(24deg); } 50% { transform: rotate(-24deg); } }
+@keyframes dollLegR { 0%, 100% { transform: rotate(-24deg); } 50% { transform: rotate(24deg); } }
+@keyframes dollArmL { 0%, 100% { transform: rotate(-26deg); } 50% { transform: rotate(26deg); } }
+@keyframes dollArmR { 0%, 100% { transform: rotate(26deg); } 50% { transform: rotate(-26deg); } }
+@keyframes dollBob { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-3px); } }
+@keyframes dollIdle { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-2px); } }
+
+/* ----------------------------- Joystick / controls ----------------------------- */
+.ar-joystick {
+  position: absolute;
+  left: 18px;
+  bottom: 22px;
+  z-index: 40;
+  width: 98px;
+  height: 98px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, .18);
+  background: rgba(4, 14, 10, .46);
+  backdrop-filter: blur(8px);
+  box-shadow: inset 0 0 24px rgba(98, 242, 176, .1), 0 8px 20px rgba(0, 0, 0, .35);
+  touch-action: none;
+}
+.ar-joystick__ring {
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 255, 255, .22);
+}
+.ar-joystick__knob {
+  position: relative;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #b9ffdf, #38d996 55%, #158a60);
+  border: 1px solid rgba(255, 255, 255, .5);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, .45), 0 0 18px rgba(98, 242, 176, .4);
+  transition: transform .05s linear;
+}
+.ar-controls {
+  position: absolute;
+  right: 16px;
+  bottom: 24px;
+  z-index: 40;
+  display: grid;
+  gap: 10px;
+}
+.ar-ctrl {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, .18);
+  background: rgba(4, 14, 10, .68);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  font-size: 20px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, .42);
+  cursor: pointer;
+}
+.ar-ctrl.is-on {
+  border-color: rgba(242, 168, 29, .8);
+  background: rgba(242, 168, 29, .24);
+  box-shadow: 0 0 0 3px rgba(242, 168, 29, .16), 0 0 22px rgba(242, 168, 29, .45);
+}
+.ar-ctrl:active { transform: scale(.92); }
+
+/* ----------------------------- Full map page HUD ----------------------------- */
+.ar-screen {
+  position: relative;
+  height: calc(100dvh - var(--app-tab-h) - 18px);
+  min-height: 520px;
+  overflow: hidden;
+  background: #061d27;
+}
+.ar-screen .app-topbar { position: absolute; }
+.ar-hud {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  top: 72px;
+  z-index: 35;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  pointer-events: none;
+}
+.ar-hud__card {
+  pointer-events: auto;
+  padding: 10px 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, .13);
+  background: rgba(4, 13, 9, .62);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, .35);
+}
+.ar-hud__card b { display: block; color: #fff; font: 700 13px/1.2 var(--app-font-head); }
+.ar-hud__card span { display: block; margin-top: 2px; color: var(--app-muted); font-size: 10px; }
+.ar-hud__stats { display: flex; gap: 6px; margin-top: 6px; }
+.ar-hud__stat {
+  display: grid;
+  justify-items: center;
+  min-width: 42px;
+  padding: 5px 6px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, .06);
+  border: 1px solid rgba(255, 255, 255, .07);
+}
+.ar-hud__stat b { color: var(--app-mint); font-size: 12px; }
+.ar-hud__stat span { font-size: 8px; }
+.ar-hud__actions { display: grid; gap: 8px; pointer-events: auto; }
+
+/* Bottom place card over the map */
+.ar-place-card {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 12px;
+  z-index: 45;
+  padding: 12px;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, .14);
+  background: linear-gradient(160deg, rgba(16, 44, 33, .97), rgba(5, 16, 11, .98));
+  box-shadow: 0 24px 50px rgba(0, 0, 0, .6);
+  backdrop-filter: blur(16px);
+  transform: translateY(calc(100% + 20px));
+  opacity: 0;
+  transition: transform .3s cubic-bezier(.2, .9, .3, 1.05), opacity .25s ease;
+}
+.ar-place-card.is-open { transform: none; opacity: 1; }
+.ar-place-card__main { display: flex; gap: 10px; align-items: center; }
+.ar-place-card__thumb {
+  width: 64px;
+  height: 64px;
+  flex: 0 0 64px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: linear-gradient(145deg, #1d5a43, #0b241b);
+}
+.ar-place-card__thumb img { width: 100%; height: 100%; object-fit: cover; }
+.ar-place-card h3 { margin: 0 0 2px; font-size: 15px; line-height: 1.25; }
+.ar-place-card p { margin: 0; color: var(--app-muted); font-size: 10.5px; }
+.ar-place-card__actions { display: flex; gap: 7px; margin-top: 9px; }
+.ar-place-card__actions .g-btn { flex: 1; }
+.ar-place-card__close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, .12);
+  background: rgba(0, 0, 0, .28);
+  color: #fff;
+  cursor: pointer;
+}
+
+/* Map legend pill */
+.ar-legend {
+  position: absolute;
+  left: 14px;
+  bottom: calc(18px + 106px);
+  z-index: 38;
+  display: flex;
+  gap: 8px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: rgba(4, 13, 9, .55);
+  border: 1px solid rgba(255, 255, 255, .1);
+  color: var(--app-muted);
+  font-size: 9px;
+  backdrop-filter: blur(8px);
+}
+.ar-legend i { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 3px; }
+
+@media (max-height: 700px) {
+  .ar-world--compact { height: 290px; }
+  .ar-screen { min-height: 470px; }
+}

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#07130f">
+<link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml">
+<title>ไดอารี่นักเดินทาง — Travel and Challenge</title>
+<meta name="description" content="บันทึกความทรงจำทริป อารมณ์ และเควสท์ที่พิชิตแล้วในไดอารี่นักเดินทาง">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/mobile-app.css">
+<link rel="stylesheet" href="/css/pages/journal-mobile.css">
+</head>
+<body class="app-phone" data-app-page="journal">
+
+<main class="app-main jr-head" style="padding-bottom:0">
+  <p class="app-kicker">TRAVEL JOURNAL</p>
+  <h1>ไดอารี่นักเดินทาง</h1>
+  <p class="app-sub">เก็บความรู้สึกและเรื่องเล่าจากทุกเส้นทางไว้ในที่เดียว</p>
+
+  <div class="jr-stats" id="jrStats"></div>
+
+  <section class="jr-compose" id="jrCalendar">
+    <div class="jr-compose__head">
+      <div>
+        <h2>เขียนบันทึกใหม่</h2>
+        <p>เลือกอารมณ์ สถานที่ แล้วเล่าเรื่องที่คุณประทับใจ</p>
+      </div>
+      <span class="jr-compose__pen">✍️</span>
+    </div>
+
+    <form id="jrForm">
+      <div class="g-field">
+        <label>วันนี้รู้สึกอย่างไร</label>
+        <div class="jr-moods" id="jrMoods"></div>
+      </div>
+
+      <div class="g-field">
+        <label for="jrPlace">สถานที่</label>
+        <select id="jrPlace"></select>
+      </div>
+
+      <div class="g-field">
+        <label for="jrTitle">หัวข้อ</label>
+        <input id="jrTitle" maxlength="70" placeholder="เช่น พระอาทิตย์ตกที่วัดอรุณ" autocomplete="off">
+      </div>
+
+      <div class="g-field">
+        <label for="jrNote">เรื่องเล่า</label>
+        <textarea id="jrNote" maxlength="600" placeholder="วันนี้ได้เห็นอะไร ประทับใจอะไรบ้าง..." rows="4"></textarea>
+      </div>
+
+      <button class="g-btn g-btn--mint g-btn--block" type="submit">
+        <svg class="ic" width="17" height="17" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-journal"></use></svg>
+        บันทึกเรื่องราว
+      </button>
+    </form>
+  </section>
+</main>
+
+<section class="app-main" style="padding-top:0">
+  <div class="jr-section">
+    <div class="app-section-head" style="margin-top:6px">
+      <h2>ปฏิทินการเดินทาง</h2>
+      <span class="app-tiny" id="jrCalNote">28 วันล่าสุด</span>
+    </div>
+    <div class="jr-cal" id="jrCal"></div>
+  </div>
+
+  <div class="jr-section">
+    <div class="jr-section__head">
+      <h2>บันทึกของฉัน</h2>
+      <div class="g-segment jr-filters" id="jrFilters" role="tablist" aria-label="กรองบันทึก">
+        <button type="button" class="is-active" data-filter="all" role="tab" aria-selected="true">ทั้งหมด</button>
+        <button type="button" data-filter="journal" role="tab" aria-selected="false">ไดอารี่</button>
+        <button type="button" data-filter="quest" role="tab" aria-selected="false">เควสท์</button>
+      </div>
+    </div>
+    <div class="jr-list" id="jrList" aria-live="polite"></div>
+  </div>
+</section>
+
+<script type="module" src="/js/mobile-app.js"></script>
+<script type="module" src="/js/journal-mobile.js"></script>
+</body>
+</html>

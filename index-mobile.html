@@ -3,133 +3,126 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Travel and Challenge — สำรวจไทย ทำเควสท์ รับรางวัล</title>
-<meta name="description" content="ค้นหาสถานที่จริงทั่วไทย ทำเควสท์ สะสมโทเคน และวางแผนทริปด้วย AI">
+<meta name="theme-color" content="#07130f">
+<link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml">
+<title>Travel and Challenge — แผนที่ผจญภัย</title>
+<meta name="description" content="สำรวจไทยแบบเกมผจญภัย เดินตัวละคร 3D บนแผนที่ ทำเควสท์จริง และสะสมโทเคน">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="/css/base.css">
-<link rel="stylesheet" href="/css/mobile.css">
-<link rel="stylesheet" href="/css/animations.css">
-<link rel="stylesheet" href="/css/pages/home.css">
+<link rel="stylesheet" href="/css/mobile-app.css">
+<link rel="stylesheet" href="/css/pages/ar-mobile.css">
 <link rel="stylesheet" href="/css/pages/home-mobile.css">
 </head>
-<body>
-<nav id="site-nav" aria-label="Main navigation"></nav>
+<body class="app-phone app-home" data-app-page="home">
 
-<main class="hm">
-  <section class="hm-hero">
-    <p class="hm-kicker">Travel and Challenge</p>
-    <h1 class="hm-title">เที่ยวไทยให้เป็นภารกิจ</h1>
-    <p class="hm-lead">หาสถานที่จริง ทำเควสท์ถ่ายรูปเช็คอิน แล้วรับโทเคนไปปลดล็อกตัวละคร</p>
-    <div class="hm-actions">
-      <a class="btn btn-large" href="/explore-mobile.html"><svg class="ic" width="20" height="20" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-map"></use></svg>เปิดแผนที่</a>
-      <a class="btn btn-secondary btn-large" href="/planner.html"><svg class="ic" width="20" height="20" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-ai"></use></svg>วางแผนทริปด้วย AI</a>
+<main class="app-main app-main--flush">
+  <section class="hm-hero" aria-label="แผนที่ผจญภัย AR">
+    <div class="hm-hero-map" id="homeMap"></div>
+    <div class="hm-hero-scrim" aria-hidden="true"></div>
+
+    <div class="hm-hero-copy">
+      <p class="hm-kicker"><span class="dot"></span> AR ADVENTURE · ไทย</p>
+      <h1 class="hm-title">สวัสดี <span id="homeName">นักเดินทาง</span><br>ออกไปตามหา<span>ตำนาน</span></h1>
+      <p class="hm-lead">เดินตัวละครของคุณบนแผนที่ 3D แตะหมุดเพื่อสำรวจ และทำเควสท์จริงเพื่อรับโทเคน</p>
+      <div class="hm-hero-cta">
+        <a class="g-btn g-btn--mint" href="/quests-mobile.html">
+          <svg class="ic" width="18" height="18" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-quest"></use></svg>
+          เริ่มทำเควสท์
+        </a>
+        <a class="hm-round-btn" href="/explore-mobile.html" aria-label="เปิดแผนที่เต็มจอ">
+          <svg class="ic" width="22" height="22" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-compass"></use></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="hm-hero-hud">
+      <div class="hm-level-card">
+        <div class="hm-level-row">
+          <span>เลเวล <b id="homeLevel">1</b> · นักสำรวจ</span>
+          <span id="homeXp">0 / 250 XP</span>
+        </div>
+        <div class="hm-xp" role="progressbar" aria-label="ความคืบหน้าระดับ"><i id="homeXpBar"></i></div>
+      </div>
+      <div class="hm-hud-stats">
+        <div class="hm-hud-stat"><b id="homeNearby">0</b><span>เควสท์ใกล้คุณ</span></div>
+        <div class="hm-hud-stat"><b id="homePlaces">0</b><span>สถานที่ให้สำรวจ</span></div>
+        <div class="hm-hud-stat"><b id="homeProvinces">0</b><span>จังหวัด</span></div>
+      </div>
     </div>
   </section>
 
-  <nav class="hm-shortcuts" aria-label="เมนูหลัก">
-    <a href="/explore-mobile.html"><svg class="ic" width="24" height="24" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-map"></use></svg>แผนที่</a>
-    <a href="/quests.html"><svg class="ic" width="24" height="24" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-quest"></use></svg>เควสท์</a>
-    <a href="/collection.html"><svg class="ic" width="24" height="24" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-star"></use></svg>ตัวละคร</a>
-    <a href="/journal.html"><svg class="ic" width="24" height="24" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-calendar"></use></svg>ปฏิทิน & บันทึก</a>
-    <a href="/partner.html"><svg class="ic" width="24" height="24" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-map"></use></svg>เพิ่มสถานที่</a>
-  </nav>
+  <div class="hm-feed">
+    <a class="hm-daily" href="#" id="homeDaily">
+      <span class="hm-daily__star" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M12 1.6c.5 5.8 3.1 8.5 9.9 10.4-6.8 1.9-9.4 4.6-9.9 10.4-.5-5.8-3.1-8.5-9.9-10.4C8.9 10.1 11.5 7.4 12 1.6Z"/></svg>
+      </span>
+      <span class="hm-daily__copy">
+        <strong>ดาวนำทางประจำวัน</strong>
+        <span>เช็คอินรับโทเคนฟรี และสะสมสตรีค 7 วัน</span>
+      </span>
+      <span class="hm-daily__cta">รับ +25</span>
+    </a>
 
-  <section class="hm-section">
-    <div class="hm-section-head">
-      <h2>สถานที่แนะนำ</h2>
-      <a href="/explore-mobile.html">ดูทั้งหมด</a>
-    </div>
-    <div id="featured" class="hm-list" aria-live="polite">
-      <p class="muted">กำลังโหลดสถานที่…</p>
-    </div>
-  </section>
-
-  <section class="hm-section">
-    <div class="hm-section-head">
-      <h2>แคมเปญพิเศษจำกัดเวลา</h2>
-      <a href="/quests.html">เควสท์ทั้งหมด</a>
-    </div>
-    <div id="campaigns" class="hm-list" aria-live="polite">
-
-      <!-- Campaign 1: สำรวจเมืองแห่งการค้นพบ (เรย์) -->
-      <article class="card campaign-card campaign-ray">
-        <div class="campaign-media">
-          <img src="/assets/img/Wat Arun (Temple of Dawn).webp" alt="สำรวจเมืองแห่งการค้นพบ" loading="lazy" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=800&auto=format&fit=crop&q=80'">
-          <div class="campaign-media-overlay">
-            <span class="campaign-tokens-badge"><svg class="ic" width="16" height="16" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-coin"></use></svg> +150 Tokens</span>
-            <span class="campaign-char-badge-tag"><svg class="ic" width="14" height="14" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-gift"></use></svg> แจกตัวละครฟรี</span>
-          </div>
+    <section class="hm-section" aria-labelledby="homeQuestTitle">
+      <div class="hm-section-head">
+        <div>
+          <h2 id="homeQuestTitle">เควสท์ใกล้คุณ</h2>
+          <p>ภารกิจจริงในสถานที่จริง รับโทเคนได้ทันที</p>
         </div>
-        <div class="campaign-body">
-          <div class="campaign-header">
-            <span class="badge badge-campaign">Special Campaign</span>
-            <span class="campaign-deadline"><svg class="ic" width="14" height="14" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-calendar"></use></svg> เหลืออีก 90 วัน</span>
-          </div>
-          <h3 class="card-title">🔭 สำรวจเมืองแห่งการค้นพบ</h3>
-          <p class="card-summary">ออกเดินทางค้นหาสถานที่ซ่อนเร้นทั่วเมือง เช็คอินครบ 5 แห่ง รับตัวละคร "เรย์" และ 150 โทเคน</p>
+        <a href="/quests-mobile.html">ปัดการ์ด ${'→'}</a>
+      </div>
+      <div class="hm-rail" id="homeQuestRail" aria-live="polite">
+        <div class="hm-empty-mini">กำลังโหลดเควสท์…</div>
+      </div>
+    </section>
 
-          <div class="campaign-reward-box reward-ray">
-            <img class="campaign-char-thumb" src="/assets/img/ray.png" alt="นักสำรวจ เรย์" loading="lazy">
-            <div class="campaign-reward-info">
-              <div class="campaign-reward-title">
-                <span>นักสำรวจ — เรย์</span>
-                <span class="badge-epic">Epic</span>
-              </div>
-              <div class="campaign-reward-subtitle">ชุดน้ำเงิน-ขาว • ×2 โทเคนเควสท์ใหม่</div>
-            </div>
-          </div>
-
-          <div class="campaign-cta-row">
-            <a class="btn btn-small" href="/quests.html">เข้าร่วมแคมเปญ →</a>
-          </div>
+    <section class="hm-section" aria-labelledby="homePlaceTitle">
+      <div class="hm-section-head">
+        <div>
+          <h2 id="homePlaceTitle">สถานที่ที่ต้องไป</h2>
+          <p>คัดจากคะแนนจริงของนักเดินทาง</p>
         </div>
-      </article>
+        <a href="/search-mobile.html">ดูทั้งหมด ${'→'}</a>
+      </div>
+      <div class="hm-places" id="homePlaceList" aria-live="polite">
+        <div class="hm-empty-mini">กำลังโหลดสถานที่…</div>
+      </div>
+    </section>
 
-      <!-- Campaign 2: ผจญภัยชายฝั่ง — มายา อีดิชัน (มายา) -->
-      <article class="card campaign-card campaign-maya">
-        <div class="campaign-media">
-          <img src="https://images.unsplash.com/photo-1548940740-204726a19be3?w=800&auto=format&fit=crop&q=80" alt="ผจญภัยชายฝั่ง — มายา อีดิชัน" loading="lazy" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1587474260584-136574528ed5?w=800&auto=format&fit=crop&q=80'">
-          <div class="campaign-media-overlay">
-            <span class="campaign-tokens-badge"><svg class="ic" width="16" height="16" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-coin"></use></svg> +120 Tokens</span>
-            <span class="campaign-char-badge-tag tag-maya"><svg class="ic" width="14" height="14" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-gift"></use></svg> แจกตัวละครฟรี</span>
-          </div>
+    <section class="hm-section" aria-labelledby="homeCampaignTitle">
+      <div class="hm-section-head">
+        <div>
+          <h2 id="homeCampaignTitle">แคมเปญพิเศษ</h2>
+          <p>ช่วงเวลาจำกัด รับตัวละครและโทเคน</p>
         </div>
-        <div class="campaign-body">
-          <div class="campaign-header">
-            <span class="badge badge-campaign">Special Campaign</span>
-            <span class="campaign-deadline"><svg class="ic" width="14" height="14" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-calendar"></use></svg> เหลืออีก 60 วัน</span>
-          </div>
-          <h3 class="card-title">⛵ ผจญภัยชายฝั่ง — มายา อีดิชัน</h3>
-          <p class="card-summary">สำรวจท่าเรือและตลาดน้ำ เช็คอินครบ 4 แห่งริมน้ำ รับตัวละคร "มายา" และ 120 โทเคน</p>
+        <a href="/quests-mobile.html">ทั้งหมด ${'→'}</a>
+      </div>
+      <div id="homeCampaigns" aria-live="polite"></div>
+    </section>
 
-          <div class="campaign-reward-box reward-maya">
-            <img class="campaign-char-thumb" src="/assets/img/maya.png" alt="นักสำรวจ มายา" loading="lazy">
-            <div class="campaign-reward-info">
-              <div class="campaign-reward-title">
-                <span>นักสำรวจ — มายา</span>
-                <span class="badge-epic">Epic</span>
-              </div>
-              <div class="campaign-reward-subtitle">ชุดเหลือง-เขียว • ×2 โทเคนเควสท์ริมน้ำ</div>
-            </div>
-          </div>
-
-          <div class="campaign-cta-row">
-            <a class="btn btn-small" href="/quests.html">เข้าร่วมแคมเปญ →</a>
-          </div>
+    <section class="hm-section" aria-labelledby="homeLogTitle">
+      <div class="hm-section-head">
+        <div>
+          <h2 id="homeLogTitle">บันทึกนักสำรวจ</h2>
+          <p>ความคืบหน้าของการเดินทางคุณ</p>
         </div>
-      </article>
-
-    </div>
-  </section>
-
-  <section class="hm-cta">
-    <h2>พร้อมออกเดินทางหรือยัง</h2>
-    <a class="btn btn-large" href="/login.html">สมัครสมาชิกฟรี</a>
-  </section>
+      </div>
+      <div class="hm-log">
+        <div class="hm-log__item"><b id="homeDone">0</b><span>เควสท์สำเร็จ</span></div>
+        <div class="hm-log__item"><b id="homeLiked">0</b><span>สถานที่ถูกใจ</span></div>
+        <div class="hm-log__item"><b id="homeTokenStat">850</b><span>โทเคนคงเหลือ</span></div>
+        <div class="hm-log__foot">
+          <span>สะสมต่อเพื่อปลดล็อกตัวละครใหม่</span>
+          <a href="/collection-mobile.html">คอลเลกชัน →</a>
+        </div>
+      </div>
+    </section>
+  </div>
 </main>
 
-<footer id="site-footer"></footer>
-<script type="module" src="/js/app.js"></script>
-<script type="module" src="/js/home.js"></script>
+<script type="module" src="/js/mobile-app.js"></script>
+<script type="module" src="/js/home-mobile.js"></script>
 </body>
 </html>

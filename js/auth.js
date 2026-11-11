@@ -135,9 +135,9 @@ export const signIn = async (email, password) => {
 };
 
 // Sign in with OAuth (Google)
-export const signInWithOAuth = (provider = 'google') => {
+export const signInWithOAuth = (provider = 'google', redirectPath = '/login.html') => {
   const nextParam = safeNext(new URLSearchParams(location.search).get('next'));
-  const redirectTo = `${location.origin}/login.html?next=${encodeURIComponent(nextParam)}`;
+  const redirectTo = `${location.origin}${redirectPath}?next=${encodeURIComponent(nextParam)}`;
   return supabase.auth.signInWithOAuth({
     provider,
     options: {
@@ -160,8 +160,8 @@ export const resetPassword = email =>
   supabase.auth.resetPasswordForEmail(email, { redirectTo: `${location.origin}/login.html` });
 
 // Only allow same-site relative paths as post-login targets (prevents open redirects).
-export function safeNext(raw) {
-  return typeof raw === 'string' && /^\/(?![\/\\])[A-Za-z0-9_\-./?=&%]*$/.test(raw) ? raw : '/index.html';
+export function safeNext(raw, fallback = '/index.html') {
+  return typeof raw === 'string' && /^\/(?![\/\\])[A-Za-z0-9_\-./?=&%]*$/.test(raw) ? raw : fallback;
 }
 
 // UX redirect only; protection of data is done by RLS.

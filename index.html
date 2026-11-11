@@ -5,10 +5,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script>
-    // Small screens get the mobile home. Add ?desktop=1 to keep this page.
-    if (matchMedia('(max-width: 767px)').matches && !/[?&]desktop=1/.test(location.search)) {
-      location.replace('/index-mobile.html' + location.search + location.hash);
-    }
+    // Small screens get the mobile home. Add ?desktop=1 or set
+    // localStorage tc_force_desktop=1 to keep this page.
+    try {
+      var forceDesktop = localStorage.getItem('tc_force_desktop') === '1';
+      if (matchMedia('(max-width: 767px)').matches && !forceDesktop && !/[?&]desktop=1/.test(location.search)) {
+        location.replace('/index-mobile.html' + location.search + location.hash);
+      }
+    } catch (e) {}
   </script>
   <title>Travel and Challenge — สำรวจไทย ทำเควสท์ รับรางวัล</title>
   <meta name="description"

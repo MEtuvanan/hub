@@ -3,54 +3,84 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>สำรวจสถานที่ท่องเที่ยว — Travel and Challenge</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap">
+<meta name="theme-color" content="#07130f">
+<link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml">
+<title>แผนที่ผจญภัย AR — Travel and Challenge</title>
+<meta name="description" content="เดินตัวละคร 3D บนแผนที่ไทย แตะหมุดเพื่อสำรวจสถานที่และทำเควสท์">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="/css/base.css">
-<link rel="stylesheet" href="/css/mobile.css">
-<link rel="stylesheet" href="/css/pages/explore.css">
+<link rel="stylesheet" href="/css/mobile-app.css">
+<link rel="stylesheet" href="/css/pages/ar-mobile.css">
 <link rel="stylesheet" href="/css/pages/explore-mobile.css">
-<link rel="stylesheet" href="/css/components/ai-planner-modal.css">
 </head>
-<body data-protected='true' class='xm-body'>
-<nav id='site-nav' aria-label='Main'></nav>
-<main class='xm'>
-  <div class='xm-map-wrap'>
-    <div id='map-error' class='alert alert-error' role='alert' hidden></div>
-    <div id='map' class='map'></div>
-  </div>
+<body class="app-phone app-explore" data-app-page="explore">
 
-  <header class='xm-top'>
-    <p class='xm-top-title'><svg class="ic" width="18" height="18" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-map"></use></svg> สำรวจสถานที่ทั่วไทย</p>
-    <form id='filters' class='xm-search' role='search' aria-label='ค้นหาสถานที่ท่องเที่ยว'>
-      <div class='search-bar-row'>
-        <div class='search-input-wrap'>
-          <span class='search-input-icon'><svg class="ic" width="16" height="16" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-search"></use></svg></span>
-          <input id='search' type='search' maxlength='80' placeholder='ค้นหาสถานที่, วัด, ตลาด, คาเฟ่…' autocomplete='off'>
-          <button type='button' id='search-clear-btn' class='search-clear-btn' aria-label='ล้างคำค้นหา' hidden><svg class="ic" width="14" height="14" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-close"></use></svg></button>
-        </div>
-      </div>
-    </form>
-  </header>
+<main class="ex" aria-label="แผนที่ผจญภัย AR">
+  <div class="ex-map" id="exMap"></div>
 
-  <div class='xm-fabs'>
-    <button type='button' class='xm-fab' aria-label='ตำแหน่งของฉัน' title='ตำแหน่งของฉัน'><svg class="ic" width="18" height="18" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-compass"></use></svg></button>
-    <a class='xm-fab' href='/help.html#explore' target='_blank' aria-label='คู่มือการสำรวจ' title='คู่มือการสำรวจ'><svg class="ic" width="18" height="18" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-book"></use></svg></a>
-  </div>
-
-  <section class='xm-sheet' id='sheet' aria-label='รายการสถานที่'>
-    <button type='button' id='sheet-handle' class='xm-handle' aria-expanded='true' aria-label='ขยาย/ย่อรายการ'><span></span></button>
-    <div class='xm-summary'>
-      <div class='xm-summary-text'>
-        <p class='xm-count'>สถานที่ทั้งหมด</p>
-        <p id='status' role='status' class='meta'></p>
-      </div>
-      <button type='button' class='xm-close' id='sheet-close' aria-label='ปิดรายการ'>✕</button>
+  <div class="ex-top">
+    <div class="ex-title-row">
+      <span class="ex-title">
+        <svg class="ic" width="14" height="14" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-compass"></use></svg>
+        แผนที่ผจญภัย
+      </span>
+      <span class="ex-live">AR LIVE</span>
     </div>
-    <ul id='list' class='place-list'></ul>
+    <div class="ex-chips" id="exChips" aria-label="เลือกจังหวัด"></div>
+  </div>
+
+  <div class="ex-legend" aria-hidden="true">
+    <span><i></i> สถานที่ท่องเที่ยว</span>
+    <span><i></i> เควสท์แนะนำ</span>
+    <span><i></i> เส้นทางเดิน</span>
+  </div>
+
+  <div class="ex-fabs">
+    <button class="ex-fab" type="button" id="exRecenter" aria-label="กลับจุดเริ่มต้น">
+      <svg class="ic" width="20" height="20" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-gps"></use></svg>
+    </button>
+    <button class="ex-fab ex-fab--gold" type="button" id="exListBtn" aria-label="รายการสถานที่">
+      <svg class="ic" width="20" height="20" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-menu"></use></svg>
+    </button>
+  </div>
+
+  <section class="ex-card is-hidden" id="exCard" aria-label="สถานที่ที่เลือก">
+    <button class="ex-card__close" type="button" id="exCloseCard" aria-label="ปิดการ์ด">
+      <svg class="ic" width="12" height="12" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-close"></use></svg>
+    </button>
+    <span class="ex-card__media">
+      <img id="exCardImg" alt="" referrerpolicy="no-referrer">
+      <span class="fallback" id="exCardFallback" hidden>📍</span>
+    </span>
+    <div class="ex-card__body">
+      <h2 id="exCardName">สถานที่</h2>
+      <div class="ex-card__meta" id="exCardMeta"></div>
+      <span class="ex-card__hint" id="exCardHint"></span>
+      <div class="ex-card__actions">
+        <button class="g-btn g-btn--sm g-btn--mint" type="button" id="exWalk">เดินไป</button>
+        <a class="g-btn g-btn--sm g-btn--ghost" id="exDetail" href="#">รายละเอียด</a>
+        <a class="g-btn g-btn--sm g-btn--ghost" id="exNav" href="#">นำทาง</a>
+      </div>
+    </div>
   </section>
 </main>
-<script type='module' src='/js/app.js'></script>
-<script type='module' src='/js/explore.js?v=2'></script>
-<script type='module' src='/js/explore-sheet.js'></script>
+
+<dialog class="app-sheet ex-sheet" id="exListSheet" aria-labelledby="exListTitle">
+  <div class="dialog-bar">
+    <strong id="exListTitle">สถานที่บนแผนที่</strong>
+    <button class="sheet-close" type="button" data-close-explore aria-label="ปิดรายการ">
+      <svg class="ic" width="16" height="16" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-close"></use></svg>
+    </button>
+  </div>
+  <div class="dialog-scroll">
+    <p class="app-tiny" style="margin:0 0 10px">แตะสถานที่เพื่อให้ตัวละครเดินไปอัตโนมัติ</p>
+    <div class="ex-list" id="exList"></div>
+  </div>
+</dialog>
+
+<script type="module" src="/js/mobile-app.js"></script>
+<script type="module" src="/js/explore-mobile.js"></script>
 </body>
 </html>

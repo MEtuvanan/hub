@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#07130f">
+<link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml">
+<title>โปรไฟล์นักสำรวจ — Travel and Challenge</title>
+<meta name="description" content="แต่งตัวละครนักสำรวจ ปรับชุด ทรงผม และดูสถิติการเดินทางของคุณ">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/mobile-app.css">
+<link rel="stylesheet" href="/css/pages/ar-mobile.css">
+<link rel="stylesheet" href="/css/pages/profile-mobile.css">
+</head>
+<body class="app-phone" data-app-page="profile">
+
+<main class="app-main pf">
+  <header class="pf-head">
+    <p class="app-kicker">EXPLORER PROFILE</p>
+    <h1>โปรไฟล์นักสำรวจ</h1>
+    <p class="app-sub">แต่งตัวละครของคุณ แล้วออกไปเดินบนแผนที่ AR</p>
+  </header>
+
+  <section class="pf-stage" aria-label="ตัวละครนักสำรวจ">
+    <span class="pf-stage__lv">
+      <svg class="ic" width="13" height="13" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-star"></use></svg>
+      <span id="pfStageLv">Lv.1 · นักสำรวจหน้าใหม่</span>
+    </span>
+    <span class="pf-stage__coins">
+      <svg class="ic" width="13" height="13" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-coin"></use></svg>
+      <span id="pfToken">850</span>
+    </span>
+    <div class="pf-stage__ring" aria-hidden="true"></div>
+    <div class="pf-doll" id="pfDoll" aria-hidden="true"></div>
+    <span class="pf-stage__tag">AR CHARACTER · TAP TO CUSTOMIZE</span>
+  </section>
+
+  <div class="pf-identity">
+    <div class="pf-identity__main">
+      <h2>
+        <svg class="ic" width="16" height="16" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-user"></use></svg>
+        <span id="pfName">นักเดินทาง</span>
+      </h2>
+      <p><span id="pfLevel">Lv.1</span> · นักสำรวจแห่งล้านนา</p>
+    </div>
+    <button class="pf-edit" type="button" id="pfEditName">
+      <svg class="ic" width="12" height="12" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-edit"></use></svg>
+      แก้ชื่อ
+    </button>
+  </div>
+
+  <div class="pf-xp">
+    <div class="pf-xp__row">
+      <span>ความคืบหน้าระดับ</span>
+      <b id="pfXp">0 / 250 XP</b>
+    </div>
+    <div class="pf-xp__bar" role="progressbar" aria-label="ความคืบหน้าระดับ"><i id="pfXpBar"></i></div>
+  </div>
+
+  <div class="pf-stats">
+    <div class="pf-stat"><b id="pfDone">0</b><span>เควสท์สำเร็จ</span></div>
+    <div class="pf-stat"><b id="pfLiked">0</b><span>สถานที่ถูกใจ</span></div>
+    <div class="pf-stat"><b id="pfTokenStat">850</b><span>โทเคน</span></div>
+    <div class="pf-stat"><b id="pfLvStat">1</b><span>เลเวล</span></div>
+  </div>
+
+  <section class="pf-wardrobe" aria-labelledby="pfWardrobeTitle">
+    <div class="pf-wardrobe__head">
+      <div>
+        <h2 id="pfWardrobeTitle">ตู้เสื้อผ้า</h2>
+        <p>เลือกทรงผม เสื้อผ้า และของพกติดตัว</p>
+      </div>
+      <button class="pf-random" type="button" id="pfRandom" aria-label="สุ่มชุด">🎲</button>
+    </div>
+
+    <div class="pf-presets" id="pfPresets" aria-label="ชุดสำเร็จรูป"></div>
+    <div class="pf-tabs" id="pfTabs" aria-label="หมวดเสื้อผ้า"></div>
+    <div class="pf-options" id="pfOptions"></div>
+    <div class="pf-colors" id="pfColors" aria-label="สี"></div>
+
+    <div class="pf-wardrobe__actions">
+      <button class="g-btn g-btn--mint" type="button" id="pfSave">
+        <svg class="ic" width="17" height="17" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-check"></use></svg>
+        บันทึกชุดนี้
+      </button>
+      <a class="g-btn g-btn--ghost" href="/explore-mobile.html">ลองบนแผนที่</a>
+    </div>
+  </section>
+
+  <nav class="pf-menu" aria-label="เมนูโปรไฟล์">
+    <a class="pf-menu__item" href="/collection-mobile.html">
+      <span class="pf-menu__ico"><svg class="ic" width="18" height="18" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-trophy"></use></svg></span>
+      <span class="pf-menu__body"><strong>คอลเลกชันและเหรียญรางวัล</strong><span>ตัวละคร เหรียญ และความสำเร็จ</span></span>
+      <svg class="ic" width="16" height="16" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-arrow-right"></use></svg>
+    </a>
+    <a class="pf-menu__item" href="/journal-mobile.html" data-tone="gold">
+      <span class="pf-menu__ico"><svg class="ic" width="18" height="18" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-journal"></use></svg></span>
+      <span class="pf-menu__body"><strong>ไดอารี่นักเดินทาง</strong><span>บันทึกความทรงจำและเควสท์ที่ทำแล้ว</span></span>
+      <svg class="ic" width="16" height="16" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-arrow-right"></use></svg>
+    </a>
+    <a class="pf-menu__item" href="/planner-mobile.html" data-tone="blue">
+      <span class="pf-menu__ico"><svg class="ic" width="18" height="18" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-ai"></use></svg></span>
+      <span class="pf-menu__body"><strong>วางแผนทริป</strong><span>สร้างเส้นทางเที่ยวตามวันและงบประมาณ</span></span>
+      <svg class="ic" width="16" height="16" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-arrow-right"></use></svg>
+    </a>
+    <a class="pf-menu__item" href="/topup-mobile.html" data-tone="gold">
+      <span class="pf-menu__ico"><svg class="ic" width="18" height="18" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-coin"></use></svg></span>
+      <span class="pf-menu__body"><strong>เติมโทเคน</strong><span>ซื้อแพ็กโทเคนและดูประวัติ</span></span>
+      <svg class="ic" width="16" height="16" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-arrow-right"></use></svg>
+    </a>
+    <a class="pf-menu__item" href="/shop-mobile.html" data-tone="violet">
+      <span class="pf-menu__ico"><svg class="ic" width="18" height="18" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-store"></use></svg></span>
+      <span class="pf-menu__body"><strong>ร้านค้า</strong><span>ตัวละครใหม่ ไอเท็ม และสิทธิพิเศษ</span></span>
+      <svg class="ic" width="16" height="16" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-arrow-right"></use></svg>
+    </a>
+    <a class="pf-menu__item" href="/help-mobile.html">
+      <span class="pf-menu__ico"><svg class="ic" width="18" height="18" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-book"></use></svg></span>
+      <span class="pf-menu__body"><strong>คู่มือการใช้งาน</strong><span>วิธีทำเควสท์และรับโทเคน</span></span>
+      <svg class="ic" width="16" height="16" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-arrow-right"></use></svg>
+    </a>
+    <a class="pf-menu__item" href="/index.html?desktop=1" data-tone="blue">
+      <span class="pf-menu__ico"><svg class="ic" width="18" height="18" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-external"></use></svg></span>
+      <span class="pf-menu__body"><strong>เปิดเว็บเดสก์ท็อป</strong><span>มุมมองเต็มจอสำหรับคอมพิวเตอร์</span></span>
+      <svg class="ic" width="16" height="16" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-arrow-right"></use></svg>
+    </a>
+  </nav>
+
+  <div class="pf-auth" id="pfAuth">
+    <span class="pf-menu__ico"><svg class="ic" width="18" height="18" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-lock"></use></svg></span>
+    <div class="pf-auth__body">
+      <strong id="pfAuthLabel">เข้าสู่ระบบ / สมัครฟรี</strong>
+      <span id="pfAuthSub">ซิงก์เควสท์และโทเคนข้ามอุปกรณ์</span>
+    </div>
+    <button class="g-btn g-btn--sm g-btn--ghost" type="button" id="pfAuthBtn">ดำเนินการ</button>
+  </div>
+
+  <p class="pf-version">Travel &amp; Challenge · Mobile build</p>
+</main>
+
+<script type="module" src="/js/mobile-app.js"></script>
+<script type="module" src="/js/profile-mobile.js"></script>
+</body>
+</html>

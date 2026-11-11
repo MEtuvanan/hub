@@ -1,0 +1,178 @@
+/* ==========================================================================
+   Journal mobile — moods, timeline notes, calendar, and quest log
+   ========================================================================== */
+
+.jr-head { padding-top: 6px; }
+.jr-head h1 { margin: 0 0 4px; font-size: 27px; line-height: 1.12; }
+
+.jr-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin-top: 14px; }
+.jr-stat {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  padding: 10px 4px;
+  border: 1px solid var(--app-line);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, .035);
+}
+.jr-stat b { color: #fff; font: 700 17px/1.1 var(--app-font-head); }
+.jr-stat span { color: var(--app-muted); font-size: 8.5px; }
+
+/* compose */
+.jr-compose {
+  margin-top: 18px;
+  padding: 15px 14px 16px;
+  border: 1px solid rgba(242, 168, 29, .22);
+  border-radius: 20px;
+  background:
+    radial-gradient(ellipse 80% 120% at 100% 0%, rgba(242, 168, 29, .13), transparent 60%),
+    rgba(255, 255, 255, .035);
+}
+.jr-compose__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+.jr-compose__head h2 { margin: 0; font-size: 17px; }
+.jr-compose__head p { margin: 2px 0 0; color: var(--app-muted); font-size: 10px; line-height: 1.45; }
+.jr-compose__pen {
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid rgba(242, 168, 29, .3);
+  background: rgba(242, 168, 29, .12);
+  font-size: 18px;
+}
+
+.jr-moods { display: flex; flex-wrap: wrap; gap: 6px; }
+.jr-mood {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 36px;
+  padding: 4px 10px;
+  border: 1px solid var(--app-line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .04);
+  color: var(--app-muted);
+  font: 500 11px/1 var(--app-font-body);
+  cursor: pointer;
+  transition: transform .16s ease, border-color .16s ease, background .16s ease;
+}
+.jr-mood .emoji { font-size: 16px; }
+.jr-mood.is-active {
+  border-color: rgba(98, 242, 176, .45);
+  background: rgba(98, 242, 176, .12);
+  color: var(--app-mint);
+  transform: translateY(-1px);
+}
+.jr-mood:active { transform: scale(.96); }
+
+.jr-compose textarea { min-height: 96px; }
+
+/* calendar */
+.jr-section { margin-top: 22px; }
+.jr-section__head { display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+.jr-section__head h2 { margin: 0; font-size: 18px; }
+.jr-filters { width: auto; }
+.jr-filters button { min-height: 30px; padding: 4px 10px; font-size: 10px; }
+
+.jr-cal {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+  padding: 11px;
+  border: 1px solid var(--app-line);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, .025);
+}
+.jr-cal__day {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  border-radius: 9px;
+  border: 1px solid transparent;
+  background: rgba(255, 255, 255, .03);
+  color: var(--app-muted);
+  font: 600 9.5px/1 var(--app-font-head);
+}
+.jr-cal__day.is-sun { color: #ffb0a5; }
+.jr-cal__day.has-entry { background: rgba(98, 242, 176, .16); border-color: rgba(98, 242, 176, .3); color: var(--app-mint); }
+.jr-cal__day.has-quest { background: rgba(242, 168, 29, .16); border-color: rgba(242, 168, 29, .3); color: #ffd57a; }
+.jr-cal__day.is-today { box-shadow: 0 0 0 2px var(--app-mint); color: #fff; }
+.jr-cal__day i {
+  position: absolute;
+  bottom: 3px;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* timeline */
+.jr-list { display: grid; gap: 9px; }
+.jr-entry {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  gap: 10px;
+  align-items: start;
+  padding: 12px;
+  border: 1px solid var(--app-line);
+  border-radius: 17px;
+  background: rgba(255, 255, 255, .035);
+  animation: jrIn .3s ease both;
+}
+@keyframes jrIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.jr-entry__date {
+  display: grid;
+  justify-items: center;
+  gap: 1px;
+  padding: 6px 2px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, .05);
+}
+.jr-entry__date b { color: #fff; font: 700 15px/1 var(--app-font-head); }
+.jr-entry__date span { color: var(--app-muted); font-size: 8px; text-transform: uppercase; }
+.jr-entry__body { min-width: 0; }
+.jr-entry__body h3 { margin: 0 0 3px; font-size: 12.5px; line-height: 1.3; }
+.jr-entry__body p { margin: 0; color: var(--app-muted); font-size: 10.5px; line-height: 1.5; white-space: pre-line; }
+.jr-entry__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 6px; color: var(--app-mint-soft); font-size: 9px; }
+.jr-entry__meta .ic { width: 11px; height: 11px; }
+.jr-entry__mood { font-size: 24px; line-height: 1; }
+.jr-entry__side { display: grid; justify-items: center; gap: 6px; }
+.jr-entry__del {
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(255, 107, 87, .25);
+  border-radius: 7px;
+  background: rgba(255, 107, 87, .08);
+  color: #ff9b8c;
+  cursor: pointer;
+}
+.jr-entry__del:active { transform: scale(.9); }
+.jr-entry--quest { border-color: rgba(242, 168, 29, .2); background: rgba(242, 168, 29, .04); }
+.jr-entry--quest .jr-entry__date { background: rgba(242, 168, 29, .12); }
+.jr-entry--quest .jr-entry__date b { color: var(--app-gold); }
+.jr-entry__link { color: var(--app-gold) !important; font: 600 10px/1 var(--app-font-head); text-decoration: none; }
+
+.jr-empty {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding: 26px 16px;
+  border: 1px dashed var(--app-line);
+  border-radius: 18px;
+  text-align: center;
+}
+.jr-empty .emoji { font-size: 38px; }
+.jr-empty h3 { margin: 0; font-size: 15px; }
+.jr-empty p { margin: 0; max-width: 240px; color: var(--app-muted); font-size: 11px; line-height: 1.5; }
+
+@media (max-width: 380px) {
+  .jr-head h1 { font-size: 24px; }
+  .jr-entry { grid-template-columns: 40px 1fr auto; }
+  .jr-filters button { padding: 4px 8px; }
+}

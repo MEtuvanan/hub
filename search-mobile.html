@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#07130f">
+<link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml">
+<title>ค้นหาสถานที่ — Travel and Challenge</title>
+<meta name="description" content="ค้นหาสถานที่ท่องเที่ยวทั่วไทย กรองตามจังหวัด อำเภอ และหมวดหมู่ พร้อมปัดการ์ดเลือกที่ถูกใจ">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/mobile-app.css">
+<link rel="stylesheet" href="/css/pages/search-mobile.css">
+</head>
+<body class="app-phone" data-app-page="search">
+
+<main class="app-main sm-head">
+  <div class="sm-title-row">
+    <div>
+      <p class="app-kicker">FIND YOUR NEXT STOP</p>
+      <h1>ค้นหา</h1>
+    </div>
+    <span class="sm-count" id="smCount" aria-live="polite"><b>0</b> สถานที่</span>
+  </div>
+
+  <div class="sm-search">
+    <div class="g-searchbar">
+      <svg class="ic" width="20" height="20" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-search"></use></svg>
+      <input id="smInput" type="search" placeholder="ชื่อสถานที่ จังหวัด อำเภอ หรือของกิน…" autocomplete="off" aria-label="ค้นหาสถานที่">
+      <button class="sm-clear-input" id="smClearInput" type="button" aria-label="ล้างคำค้นหา">
+        <svg class="ic" width="14" height="14" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-close"></use></svg>
+      </button>
+      <button class="sm-filter-btn" id="smFilterBtn" type="button" aria-label="เปิดตัวกรอง">
+        <svg class="ic" width="18" height="18" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-filter"></use></svg>
+        <span class="sm-filter-badge" hidden>0</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="sm-active" id="smActive" aria-label="ตัวกรองที่ใช้อยู่"></div>
+
+  <div class="sm-bar">
+    <div class="sm-view" role="group" aria-label="รูปแบบผลลัพธ์">
+      <button type="button" data-sm-view="deck" class="is-active" aria-label="มุมมองการ์ด">
+        <svg class="ic" width="17" height="17" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-image"></use></svg>
+      </button>
+      <button type="button" data-sm-view="list" aria-label="มุมมองรายการ">
+        <svg class="ic" width="17" height="17" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-menu"></use></svg>
+      </button>
+    </div>
+    <span class="sm-sort-note" id="smSortNote"></span>
+  </div>
+</main>
+
+<section class="app-main" id="smDeckPanel" style="padding-top:0" aria-label="ผลลัพธ์แบบการ์ด">
+  <div id="searchDeck"></div>
+</section>
+
+<section class="app-main" id="smListPanel" style="padding-top:0" aria-label="ผลลัพธ์แบบรายการ" hidden>
+  <div class="sm-list" id="searchList"></div>
+</section>
+
+<dialog class="app-sheet sm-filter-sheet" id="filterSheet" aria-labelledby="filterTitle">
+  <div class="dialog-bar">
+    <strong id="filterTitle">ตัวกรองการค้นหา</strong>
+    <button class="sheet-close" type="button" data-close-filter aria-label="ปิดตัวกรอง">
+      <svg class="ic" width="16" height="16" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-close"></use></svg>
+    </button>
+  </div>
+  <div class="dialog-scroll">
+    <button class="sm-geo" id="smGeo" type="button">
+      <svg class="ic" width="19" height="19" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-gps"></use></svg>
+      <span style="display:grid;gap:1px;text-align:left">
+        <strong>ใช้ตำแหน่งของฉัน</strong>
+        <span>เรียงผลลัพธ์ตามระยะทางจากคุณ</span>
+      </span>
+    </button>
+
+    <div class="sm-filter-section" style="margin-top:18px">
+      <h3>
+        <svg class="ic" width="13" height="13" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-map"></use></svg>
+        จังหวัด และอำเภอ
+      </h3>
+      <div class="g-field" style="margin-bottom:9px">
+        <label for="smProvince">จังหวัด</label>
+        <select id="smProvince"></select>
+      </div>
+      <div class="g-field" style="margin-bottom:0">
+        <label for="smDistrict">อำเภอ / เขต</label>
+        <select id="smDistrict"></select>
+      </div>
+    </div>
+
+    <div class="sm-filter-section">
+      <h3>
+        <svg class="ic" width="13" height="13" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-filter"></use></svg>
+        หมวดหมู่
+      </h3>
+      <div class="sm-filter-grid" id="smCategories"></div>
+    </div>
+
+    <div class="sm-filter-section">
+      <h3>
+        <svg class="ic" width="13" height="13" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-chart"></use></svg>
+        เรียงตาม
+      </h3>
+      <div class="g-field" style="margin-bottom:0">
+        <select id="smSort">
+          <option value="recommended">แนะนำสำหรับคุณ</option>
+          <option value="rating">คะแนนสูงสุด</option>
+          <option value="reviews">รีวิวมากที่สุด</option>
+          <option value="distance">ใกล้ฉันที่สุด</option>
+          <option value="name">ชื่อ ก–ฮ</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="sm-filter-actions">
+      <button class="g-btn g-btn--ghost" type="button" id="smReset">ล้างตัวกรอง</button>
+      <button class="g-btn g-btn--mint" type="button" id="smApply">ดูผลลัพธ์</button>
+    </div>
+  </div>
+</dialog>
+
+<script type="module" src="/js/mobile-app.js"></script>
+<script type="module" src="/js/search-mobile.js"></script>
+</body>
+</html>

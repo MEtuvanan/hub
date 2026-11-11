@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#07130f">
+<link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml">
+<title>เควสท์ที่เที่ยว — Travel and Challenge</title>
+<meta name="description" content="ปัดการ์ดเลือกเควสท์ท่องเที่ยวที่ถูกใจ แล้วออกไปทำภารกิจจริงเพื่อรับโทเคน">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/mobile-app.css">
+<link rel="stylesheet" href="/css/pages/quests-mobile.css">
+</head>
+<body class="app-phone" data-app-page="quests">
+
+<main class="app-main qm-head">
+  <div class="qm-title-row">
+    <div>
+      <p class="app-kicker">QUEST DECK</p>
+      <h1>เควสท์ที่เที่ยว</h1>
+    </div>
+    <button class="qm-reset" type="button" id="questReset">
+      <svg class="ic" width="13" height="13" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-quest"></use></svg>
+      สับใหม่
+    </button>
+  </div>
+  <div class="g-segment qm-tabs" role="tablist" aria-label="มุมมองเควสท์">
+    <button type="button" role="tab" data-qtab="deck" class="is-active" aria-selected="true">ปัดการ์ด <b></b></button>
+    <button type="button" role="tab" data-qtab="liked" aria-selected="false">ถูกใจ <b>0</b></button>
+    <button type="button" role="tab" data-qtab="done" aria-selected="false">สำเร็จ <b>0</b></button>
+  </div>
+
+  <div class="qm-filters" id="questFilters" aria-label="กรองประเภทเควสท์"></div>
+</main>
+
+<section class="app-main" id="deckPanel" style="padding-top:0" aria-label="การ์ดเควสท์">
+  <div id="questDeck"></div>
+</section>
+
+<section class="app-main" id="likedPanel" style="padding-top:6px" aria-label="เควสท์ที่ถูกใจ" hidden>
+  <div class="qm-list" id="likedList"></div>
+</section>
+
+<section class="app-main" id="donePanel" style="padding-top:6px" aria-label="เควสท์ที่สำเร็จ" hidden>
+  <div class="qm-list" id="doneList"></div>
+</section>
+
+<script type="module" src="/js/mobile-app.js"></script>
+<script type="module" src="/js/quests-mobile.js"></script>
+</body>
+</html>

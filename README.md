@@ -43,6 +43,28 @@
 
 ---
 
+## 📱 Phone-First Mobile App
+
+Every desktop route has a dedicated `*-mobile.html` page with a shared game-like shell: profile pill, token wallet, daily star reward, and a fixed 5-tab bar (map, quests, centered search, shop, more). Opening the site on a small screen redirects to the mobile home; add `?desktop=1` or set `localStorage.tc_force_desktop = '1'` to opt out.
+
+| Mobile page | Purpose |
+|---|---|
+| `index-mobile.html` | AR map hero, scrolling feed, daily reward, quest rail |
+| `explore-mobile.html` | Full-screen AR map with a walking character |
+| `quests-mobile.html` | Tinder-style swipe deck for quests |
+| `search-mobile.html` | Province/district filters, category chips, deck or list view |
+| `place-mobile.html` | Place detail with scroll-revealed quests |
+| `profile-mobile.html` | CSS-3D character, outfit editor, stats |
+| `shop-mobile.html` / `topup-mobile.html` | Characters, perks, token packs, history |
+| `collection-mobile.html` | Owned characters, medals, province stamps |
+| `journal-mobile.html` / `calendar-mobile.html` | Diary, activity calendar, completed-quest log |
+| `planner-mobile.html` | Day-by-day trip builder |
+| `help-mobile.html`, `partner-mobile.html`, `navigate-mobile.html`, `login-mobile.html`, `admin-mobile.html` | Support, partner signup, directions, auth, local admin dashboard |
+
+Mobile pages load `css/mobile-app.css` plus a page stylesheet and do **not** load the desktop navigation or `js/app.js`. Shared demo/live data lives in `js/mobile-data.js`; the shell API is in `js/mobile-app.js`. Guest mode works offline, while Supabase auth and data are merged in when available. Demo progress (tokens, outfit, journal, top-ups) is stored in `localStorage` under `tc_mobile_*` keys.
+
+---
+
 ## 🏗️ Technology Stack
 
 | Layer | Technologies |
