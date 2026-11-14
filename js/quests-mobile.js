@@ -243,7 +243,6 @@ function bootDeck() {
     onLike: q => {
       toggleSet(LIKED_QUESTS_KEY, q.id, true);
       toggleSet(PASSED_QUESTS_KEY, q.id, false);
-      toast(`เก็บ “${q.title}” ไว้แล้ว`);
       renderLiked();
       updateTabs();
     },

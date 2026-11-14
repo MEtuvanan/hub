@@ -236,7 +236,6 @@ function renderAll() {
         </div>`,
         onLike: p => {
           toggleFavoritePlace(p.id);
-          toast(`เพิ่ม “${p.name}” ในรายการถูกใจ`);
         },
         onPass: () => {},
         onInfo: p => { location.href = `/place-mobile.html?id=${encodeURIComponent(p.id)}`; },
@@ -289,13 +288,15 @@ function populateSelects() {
     const current = state.province;
     pSel.innerHTML = `<option value="">ทุกจังหวัด</option>` +
       provinceList().map(p => `<option value="${esc(p)}" ${p === current ? 'selected' : ''}>${esc(p)}</option>`).join('');
+    pSel.value = current;
   }
   const dSel = $('smDistrict');
   if (dSel) {
     const list = districtList(state.province);
-    dSel.innerHTML = `<option value="">ทุกอำเภอ</option>` +
+    dSel.innerHTML = `<option value="">ทุกอำเภอ / เขต</option>` +
       list.map(d => `<option value="${esc(d)}" ${d === state.district ? 'selected' : ''}>${esc(d)}</option>`).join('');
-    dSel.disabled = !state.province;
+    dSel.value = state.district;
+    dSel.disabled = false;
   }
 }
 
@@ -326,7 +327,18 @@ function bindFilters() {
     state.district = '';
     populateSelects();
   });
-  $('smDistrict')?.addEventListener('change', e => { state.district = e.target.value; });
+  $('smDistrict')?.addEventListener('change', e => {
+    state.district = e.target.value;
+    if (state.district && !state.province) {
+      const match = places.find(p => p.district === state.district);
+      if (match?.province) {
+        state.province = match.province;
+        const pSel = $('smProvince');
+        if (pSel) pSel.value = match.province;
+        populateSelects();
+      }
+    }
+  });
   $('smSort')?.addEventListener('change', e => { state.sort = e.target.value; });
 
   $('smGeo')?.addEventListener('click', () => {
@@ -394,6 +406,7 @@ async function boot() {
   renderCategoryChoices();
   bindFilters();
   places = await fetchPlaces();
+  populateSelects();
   renderAll();
 
   const input = $('smInput');
