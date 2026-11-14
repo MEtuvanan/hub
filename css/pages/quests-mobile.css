@@ -57,8 +57,8 @@
 }
 
 /* quest card inside the shared swipe stage */
-.qm-card { display: flex; flex-direction: column; height: 100%; }
-.qm-card .swipe-card__media { flex: 1 1 auto; min-height: 170px; }
+.qm-card { display: flex; flex-direction: column; height: 100%; overflow: hidden; }
+.qm-card .swipe-card__media { flex: 1 1 auto; min-height: 130px; }
 .qm-card__code {
   display: inline-flex;
   align-items: center;
@@ -113,8 +113,8 @@
 /* deck helpers */
 .qm-head { padding-bottom: 10px; }
 #questDeck { margin-top: 4px; }
-#deckPanel { padding-bottom: calc(var(--app-tab-h) + 26px); }
-#questDeck .swipe-stage { height: clamp(372px, 45.5dvh, 440px); }
+#deckPanel { padding-bottom: calc(var(--app-tab-h) + 36px); }
+#questDeck .swipe-stage { height: clamp(390px, 48dvh, 450px); }
 
 /* saved / completed lists */
 .qm-list { display: grid; gap: 10px; margin-top: 8px; }
