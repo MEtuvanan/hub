@@ -89,7 +89,7 @@ export function setMarkers(map, state, places, onSelect, { fit = true } = {}) {
     state.markers = places.map(p => {
       const pin = L.divIcon({
         className: 'custom-leaflet-marker',
-        html: `<div style="background:linear-gradient(135deg, #00A86B, #0B251B);width:30px;height:30px;border-radius:50%;border:2.5px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,0.3);display:grid;place-items:center;color:#fff;font-size:14px;cursor:pointer;">📍</div>`,
+        html: `<div style="background:linear-gradient(135deg, #00A86B, #0B251B);width:30px;height:30px;border-radius:50%;border:2.5px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,0.3);display:grid;place-items:center;color:#fff;font-size:14px;cursor:pointer;"></div>`,
         iconSize: [30, 30],
         iconAnchor: [15, 15],
         popupAnchor: [0, -15]
@@ -100,7 +100,7 @@ export function setMarkers(map, state, places, onSelect, { fit = true } = {}) {
           <strong style="font-size:13px;display:block;margin-bottom:4px;color:#1a202c;">${p.name}</strong>
           <div style="display:flex;gap:6px;margin-top:6px;">
             <a href="/place.html?id=${encodeURIComponent(p.id)}" style="display:inline-block;padding:3px 8px;background:#e2e8f0;color:#2d3748;border-radius:4px;font-size:11px;text-decoration:none;font-weight:600;">ดูข้อมูล</a>
-            <a href="/navigate.html?lat=${p.lat}&lng=${p.lng}&name=${encodeURIComponent(p.name)}&id=${encodeURIComponent(p.id)}" style="display:inline-block;padding:3px 8px;background:#00A86B;color:#fff;border-radius:4px;font-size:11px;text-decoration:none;font-weight:600;">🧭 นำทาง</a>
+            <a href="/navigate.html?lat=${p.lat}&lng=${p.lng}&name=${encodeURIComponent(p.name)}&id=${encodeURIComponent(p.id)}" style="display:inline-block;padding:3px 8px;background:#00A86B;color:#fff;border-radius:4px;font-size:11px;text-decoration:none;font-weight:600;">นำทาง</a>
           </div>
         </div>
       `;

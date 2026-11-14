@@ -293,15 +293,10 @@
 }
 .pf-color.is-active { border-color: #fff; box-shadow: 0 0 0 3px rgba(255, 255, 255, .18); }
 .pf-color.is-active::after {
-  content: '✓';
+  content: '';
   position: absolute;
   inset: 0;
-  display: grid;
-  place-items: center;
-  color: #fff;
-  font-size: 13px;
-  font-weight: 800;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, .8);
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="%23ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>') center no-repeat;
 }
 
 .pf-wardrobe__actions { display: grid; grid-template-columns: 1.4fr 1fr; gap: 8px; padding: 16px; }

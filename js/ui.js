@@ -4,6 +4,14 @@
 const ESC = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
 export const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ESC[c]);
 
+// User/admin content sometimes carries emoji; the UI is SVG-only, so strip them
+// from free-text fields before rendering.
+const EMOJI_ALL = /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}\u{FE0F}\u200D]/gu;
+export const stripEmoji = s => String(s ?? '')
+  .replace(EMOJI_ALL, '')
+  .replace(/[ \t]{2,}/g, ' ')
+  .trim();
+
 export const isUuid = v =>
   typeof v === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v);
 

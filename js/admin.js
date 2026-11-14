@@ -44,7 +44,7 @@ async function guard() {
     document.body.innerHTML = `
       <main class="section" style="padding:4rem 1rem;text-align:center;">
         <div style="max-width:480px;margin:0 auto;background:#FFF;padding:2rem;border-radius:12px;border:1px solid #E2E8F0;box-shadow:0 4px 12px rgba(0,0,0,0.05)">
-          <div style="font-size:3rem;margin-bottom:1rem;">🔒</div>
+          <div style="font-size:3rem;margin-bottom:1rem;"></div>
           <h2 style="font-size:1.35rem;font-weight:800;margin-bottom:0.5rem;color:#0F172A;">Admin Access Only</h2>
           <p style="color:#64748B;font-size:0.95rem;margin-bottom:1.5rem;">หน้านี้สงวนสิทธิ์เฉพาะผู้ดูแลระบบ กรุณาเข้าสู่ระบบด้วยบัญชีแอดมิน</p>
           <a href="/login.html" class="btn">เข้าสู่ระบบ</a>
@@ -161,7 +161,7 @@ async function loadRecentActivity() {
               <strong>${esc(c.profiles?.display_name || 'ผู้เล่น')}</strong>
               <div style="color:#64748B;font-size:0.8rem;">${esc(c.quests?.title || 'เควสท์')}</div>
             </div>
-            <span class="badge badge-success">+${c.quests?.reward_tokens || 50} 🪙</span>
+            <span class="badge badge-success">+${c.quests?.reward_tokens || 50} </span>
           </div>
         `).join('');
       } else {
@@ -179,7 +179,7 @@ async function loadRecentActivity() {
           <div style="display:flex;align-items:center;justify-content:space-between;padding:0.6rem 0;border-bottom:1px solid #F1F5F9;font-size:0.88rem;">
             <div>
               <strong>${esc(u.display_name || 'ผู้ใช้')}</strong>
-              <div style="color:#64748B;font-size:0.8rem;">${u.role === 'admin' ? '🛡️ ผู้ดูแลระบบ' : u.role === 'partner' ? '🏢 ผู้ประกอบการ' : '👤 สมาชิก'}</div>
+              <div style="color:#64748B;font-size:0.8rem;">${u.role === 'admin' ? 'ผู้ดูแลระบบ' : u.role === 'partner' ? 'ผู้ประกอบการ' : 'สมาชิก'}</div>
             </div>
             <span class="badge ${u.role === 'admin' ? 'badge-warning' : 'badge-info'}">${u.role || 'user'}</span>
           </div>
@@ -193,7 +193,7 @@ async function loadRecentActivity() {
   }
 }
 
-// ── 📍 PLACES (MANAGEMENT & PINNING) ──────────────────────────────────────────
+// ── PLACES (MANAGEMENT & PINNING) ──────────────────────────────────────────
 let placePage = 0, placeSearch = '', placeStatusFilter = '';
 
 async function loadPlaces() {
@@ -240,13 +240,13 @@ async function loadPlaces() {
           <td class="meta">${esc(loc)}</td>
           <td>
             <button class="btn btn-small btn-secondary" onclick="window.viewPlaceOnMap(${p.lat}, ${p.lng}, '${esc(p.name)}')" title="ดูบนแผนที่">
-              📍 ${coords}
+              ${coords}
             </button>
           </td>
           <td>${statusBadge}</td>
           <td>
-            <button class="btn btn-small btn-secondary" data-act="place-edit" data-id="${esc(p.id)}">✏️ แก้ไข</button>
-            <button class="btn btn-small btn-danger" data-act="place-del" data-id="${esc(p.id)}" data-name="${esc(p.name)}">🗑️</button>
+            <button class="btn btn-small btn-secondary" data-act="place-edit" data-id="${esc(p.id)}">แก้ไข</button>
+            <button class="btn btn-small btn-danger" data-act="place-del" data-id="${esc(p.id)}" data-name="${esc(p.name)}"></button>
           </td>
         </tr>
       `;
@@ -365,12 +365,12 @@ function renderImagePreviews() {
         <div class="preview-item ${idx === 0 ? 'is-cover' : ''}">
           <img src="${esc(img.previewUrl)}" alt="รูปสถานที่ ${idx + 1}">
           <span class="preview-badge ${idx === 0 ? 'badge-cover' : ''}">
-            ${idx === 0 ? '🌟 ภาพหน้าปก' : `รูปที่ ${idx + 1}`}
+            ${idx === 0 ? 'ภาพหน้าปก' : `รูปที่ ${idx + 1}`}
           </span>
           <div class="preview-actions">
             ${idx > 0 ? `<button type="button" class="preview-btn" data-action="move-left" data-idx="${idx}" title="เลื่อนไปข้างหน้า (ตั้งเป็นปก)">◀</button>` : ''}
             ${idx < count - 1 ? `<button type="button" class="preview-btn" data-action="move-right" data-idx="${idx}" title="เลื่อนไปข้างหลัง">▶</button>` : ''}
-            <button type="button" class="preview-btn preview-btn-delete" data-action="remove-img" data-idx="${idx}" title="ลบรูปนี้">✖</button>
+            <button type="button" class="preview-btn preview-btn-delete" data-action="remove-img" data-idx="${idx}" title="ลบรูปนี้"></button>
           </div>
         </div>
       `).join('');
@@ -380,8 +380,8 @@ function renderImagePreviews() {
   if (dropzone) {
     if (count >= MAX_PLACE_IMAGES) {
       dropzone.classList.add('is-full');
-      if (title) title.textContent = '✅ ครบ 4 รูปแล้ว (ลบรูปเดิมออกหากต้องการเปลี่ยน)';
-      if (hint) hint.textContent = 'สามารถกดปุ่ม ✖ บนรูปเพื่อลบ หรือกด ◀/▶ เพื่อเรียงลำดับภาพหน้าปก';
+      if (title) title.textContent = 'ครบ 4 รูปแล้ว (ลบรูปเดิมออกหากต้องการเปลี่ยน)';
+      if (hint) hint.textContent = 'สามารถกดปุ่ม บนรูปเพื่อลบ หรือกด ◀/▶ เพื่อเรียงลำดับภาพหน้าปก';
       if (fileInput) fileInput.disabled = true;
     } else {
       dropzone.classList.remove('is-full');
@@ -476,7 +476,7 @@ function openPlaceEditor(id = null) {
   $('place-modal-msg').hidden = true;
 
   if (id) {
-    $('place-modal-title').textContent = '✏️ แก้ไขข้อมูลสถานที่';
+    $('place-modal-title').textContent = 'แก้ไขข้อมูลสถานที่';
     // Load place details with up to 4 images
     supabase.from('places').select('*, place_images(id, url, position)').eq('id', id).single().then(({ data }) => {
       if (data) {
@@ -511,7 +511,7 @@ function openPlaceEditor(id = null) {
       }
     });
   } else {
-    $('place-modal-title').textContent = '📍 ปักสถานที่ใหม่';
+    $('place-modal-title').textContent = 'ปักสถานที่ใหม่';
     $('pm-name').value = '';
     $('pm-subdistrict').value = '';
     $('pm-lat').value = '13.7563';
@@ -634,7 +634,7 @@ function initPlaceForm() {
 
     // Full description combines overview and detailed history for deep reading
     const fullDescription = history
-      ? `${desc}\n\n📜 ประวัติและความเป็นมา:\n${history}`
+      ? `${desc}\n\nประวัติและความเป็นมา:\n${history}`
       : desc;
 
     let visitorInfo = $('pm-hours').value.trim();
@@ -742,7 +742,7 @@ function initPlaceForm() {
         await supabase.from('place_images').delete().eq('place_id', placeId);
       }
 
-      toast(id ? 'บันทึกการแก้ไขสถานที่และรูปภาพเรียบร้อย 📍' : 'ปักสถานที่ใหม่พร้อมรูปภาพสำเร็จแล้ว! 📍');
+      toast(id ? 'บันทึกการแก้ไขสถานที่และรูปภาพเรียบร้อย ' : 'ปักสถานที่ใหม่พร้อมรูปภาพสำเร็จแล้ว! ');
       dlg.close();
       loadPlaces();
       loadStats();
@@ -753,13 +753,13 @@ function initPlaceForm() {
       msg.textContent = err.message || 'เกิดข้อผิดพลาดในการบันทึกสถานที่';
     } finally {
       saveBtn.disabled = false;
-      saveBtn.textContent = '💾 บันทึกสถานที่';
+      saveBtn.textContent = 'บันทึกสถานที่';
     }
   });
 }
 
 
-// ── 🎯 QUESTS (MANAGEMENT) ───────────────────────────────────────────────────
+// ── QUESTS (MANAGEMENT) ───────────────────────────────────────────────────
 let questPage = 0, questSearch = '', questDiffFilter = '', questStatusFilter = '';
 
 function getLocalAdminQuests() {
@@ -829,17 +829,17 @@ async function loadQuests() {
     }
 
     tbody.innerHTML = quests.map(q => {
-      const diffBadge = q.difficulty === 'easy' ? '<span class="badge badge-success">ง่าย 🟢</span>' :
-                        q.difficulty === 'medium' ? '<span class="badge badge-warning">ปานกลาง 🟡</span>' :
-                        '<span class="badge badge-danger">ยาก 🔴</span>';
+      const diffBadge = q.difficulty === 'easy' ? '<span class="badge badge-success">ง่าย </span>' :
+                        q.difficulty === 'medium' ? '<span class="badge badge-warning">ปานกลาง </span>' :
+                        '<span class="badge badge-danger">ยาก </span>';
       const isLocal = q.is_local || String(q.id).startsWith('local-');
-      const statusBadge = isLocal ? '<span class="badge badge-warning" title="บันทึกในเครื่อง รอรัน SQL เพื่อ Sync Cloud">💾 ออฟไลน์/รอ SQL</span>' :
+      const statusBadge = isLocal ? '<span class="badge badge-warning" title="บันทึกในเครื่อง รอรัน SQL เพื่อ Sync Cloud">ออฟไลน์/รอ SQL</span>' :
                           q.status === 'published' ? '<span class="badge badge-success">เผยแพร่</span>' :
                           q.status === 'draft' ? '<span class="badge badge-warning">ร่าง</span>' :
                           '<span class="badge badge-muted">เก็บถาวร</span>';
-      const typeLabel = q.type === 'photo' ? '📸 ถ่ายรูปเช็คอิน' :
-                        q.type === 'exploration' ? '📡 เช็คอิน GPS' :
-                        q.type === 'quiz' ? '❓ ตอบคำถาม' : '🏛️ วัฒนธรรม';
+      const typeLabel = q.type === 'photo' ? 'ถ่ายรูปเช็คอิน' :
+                        q.type === 'exploration' ? 'เช็คอิน GPS' :
+                        q.type === 'quiz' ? 'ตอบคำถาม' : 'วัฒนธรรม';
       const placeName = q.quest_places?.[0]?.places?.name || q.places?.name || 'สถานที่ในระบบ';
 
       return `
@@ -847,12 +847,12 @@ async function loadQuests() {
           <td><strong>${esc(q.title)}</strong></td>
           <td><span class="badge badge-info">${typeLabel}</span></td>
           <td>${diffBadge}</td>
-          <td><strong style="color:#059669;">+${q.reward_tokens || 50} 🪙</strong></td>
+          <td><strong style="color:#059669;">+${q.reward_tokens || 50} </strong></td>
           <td class="meta">${esc(placeName)}</td>
           <td>${statusBadge}</td>
           <td>
-            <button class="btn btn-small btn-secondary" data-act="quest-edit" data-id="${esc(q.id)}">✏️ แก้ไข</button>
-            <button class="btn btn-small btn-danger" data-act="quest-del" data-id="${esc(q.id)}" data-name="${esc(q.title)}">🗑️</button>
+            <button class="btn btn-small btn-secondary" data-act="quest-edit" data-id="${esc(q.id)}">แก้ไข</button>
+            <button class="btn btn-small btn-danger" data-act="quest-del" data-id="${esc(q.id)}" data-name="${esc(q.title)}"></button>
           </td>
         </tr>
       `;
@@ -880,14 +880,14 @@ function renderQuestImagePreview() {
     wrap.innerHTML = `
       <div class="preview-item is-cover" style="aspect-ratio:16/9;position:relative;">
         <img src="${esc(currentQuestImage.previewUrl)}" alt="ภาพเควสท์">
-        <span class="preview-badge badge-cover">📸 ภาพเควสท์</span>
+        <span class="preview-badge badge-cover">ภาพเควสท์</span>
         <div class="preview-actions">
-          <button type="button" class="preview-btn preview-btn-delete" id="btn-remove-quest-img" title="ลบรูปภาพ">✕</button>
+          <button type="button" class="preview-btn preview-btn-delete" id="btn-remove-quest-img" title="ลบรูปภาพ"></button>
         </div>
       </div>
     `;
     dropzone.classList.add('is-full');
-    $('qm-dropzone-title').textContent = 'มีรูปภาพเควสท์แล้ว (คลิกปุ่ม ✕ บนรูปเพื่อเปลี่ยน)';
+    $('qm-dropzone-title').textContent = 'มีรูปภาพเควสท์แล้ว (คลิกปุ่ม บนรูปเพื่อเปลี่ยน)';
     if (counter) counter.textContent = '1 / 1 รูป';
     if (hiddenPhoto) hiddenPhoto.value = currentQuestImage.url || '';
     wrap.querySelector('#btn-remove-quest-img')?.addEventListener('click', () => {
@@ -932,7 +932,7 @@ function openQuestEditor(id = null) {
   $('quest-modal-msg').hidden = true;
 
   if (id) {
-    $('quest-modal-title').textContent = '✏️ แก้ไขเควสท์';
+    $('quest-modal-title').textContent = 'แก้ไขเควสท์';
     if (String(id).startsWith('local-')) {
       const local = getLocalAdminQuests().find(q => q.id === id);
       if (local) {
@@ -971,7 +971,7 @@ function openQuestEditor(id = null) {
       }
     });
   } else {
-    $('quest-modal-title').textContent = '🎯 สร้างเควสท์ใหม่';
+    $('quest-modal-title').textContent = 'สร้างเควสท์ใหม่';
     $('qm-title').value = '';
     $('qm-type').value = 'photo';
     $('qm-difficulty').value = 'medium';
@@ -1160,7 +1160,7 @@ function initQuestForm() {
             await supabase.from('quest_places').insert({ quest_id: newQ.id, place_id: placeId });
           }
           saved = true;
-          toast('สร้างเควสท์ใหม่ลงใน Supabase สำเร็จแล้ว! 🎯');
+          toast('สร้างเควสท์ใหม่ลงใน Supabase สำเร็จแล้ว! ');
         }
       } catch (directErr) {
         console.warn('Direct quest save failed, attempting RPC admin_save_quest:', directErr);
@@ -1182,7 +1182,7 @@ function initQuestForm() {
 
           if (!rpcErr && rpcData?.ok) {
             saved = true;
-            toast(id ? 'บันทึกการแก้ไขเควสท์ลงใน Supabase เรียบร้อย' : 'สร้างเควสท์ใหม่ลงใน Supabase สำเร็จแล้ว! 🎯');
+            toast(id ? 'บันทึกการแก้ไขเควสท์ลงใน Supabase เรียบร้อย' : 'สร้างเควสท์ใหม่ลงใน Supabase สำเร็จแล้ว! ');
           } else {
             console.warn('RPC admin_save_quest also not available or failed:', rpcErr);
             throw directErr;
@@ -1226,12 +1226,12 @@ function initQuestForm() {
       msg.textContent = err.message || 'เกิดข้อผิดพลาดในการบันทึกเควสท์';
     } finally {
       saveBtn.disabled = false;
-      saveBtn.textContent = '💾 บันทึกเควสท์';
+      saveBtn.textContent = 'บันทึกเควสท์';
     }
   });
 }
 
-// ── 👤 USERS & BLOCKING (MANAGEMENT) ─────────────────────────────────────────
+// ── USERS & BLOCKING (MANAGEMENT) ─────────────────────────────────────────
 let userPage = 0, userSearch = '', userStatusFilter = '', userRoleFilter = '';
 
 async function loadUsers() {
@@ -1295,25 +1295,25 @@ async function loadUsers() {
       const isBanned = bannedUsers.includes(u.id) || (u.email && bannedUsers.includes(u.email));
       const tokens = balanceMap[u.id] != null ? balanceMap[u.id] : 0;
       const email = u.email || '—';
-      const roleBadge = u.role === 'admin' ? '<span class="badge badge-warning">🛡️ Admin</span>'
-        : u.role === 'partner' ? '<span class="badge badge-success">🏢 ผู้ประกอบการ</span>'
-        : '<span class="badge badge-info">👤 User</span>';
-      const statusBadge = isBanned ? '<span class="badge badge-danger">🚫 ถูกบล็อก</span>' : '<span class="badge badge-success">✓ ปกติ</span>';
+      const roleBadge = u.role === 'admin' ? '<span class="badge badge-warning">Admin</span>'
+        : u.role === 'partner' ? '<span class="badge badge-success">ผู้ประกอบการ</span>'
+        : '<span class="badge badge-info">User</span>';
+      const statusBadge = isBanned ? '<span class="badge badge-danger">ถูกบล็อก</span>' : '<span class="badge badge-success">ปกติ</span>';
       const toggleBtn = isBanned
-        ? `<button class="btn btn-small btn-secondary" onclick="window.toggleBlockUser('${esc(u.id)}', '${esc(email)}', false)">✅ ปลดบล็อก</button>`
-        : `<button class="btn btn-small btn-danger" onclick="window.toggleBlockUser('${esc(u.id)}', '${esc(email)}', true)">🚫 บล็อก</button>`;
+        ? `<button class="btn btn-small btn-secondary" onclick="window.toggleBlockUser('${esc(u.id)}', '${esc(email)}', false)">ปลดบล็อก</button>`
+        : `<button class="btn btn-small btn-danger" onclick="window.toggleBlockUser('${esc(u.id)}', '${esc(email)}', true)">บล็อก</button>`;
 
       return `
         <tr>
           <td><strong>${esc(u.display_name || 'ผู้ใช้')}</strong></td>
           <td class="meta">${esc(email)}</td>
           <td>${roleBadge}</td>
-          <td><strong style="color:#D97706;">🪙 ${tokens.toLocaleString()}</strong></td>
+          <td><strong style="color:#D97706;">${tokens.toLocaleString()}</strong></td>
           <td>${statusBadge}</td>
           <td class="meta">${u.created_at ? new Date(u.created_at).toLocaleDateString('th-TH') : 'วันนี้'}</td>
           <td>
             ${toggleBtn}
-            <button class="btn btn-small btn-secondary" onclick="window.adjustUserTokens('${esc(u.id)}', '${esc(u.display_name || email)}')">🪙 ให้โทเคน</button>
+            <button class="btn btn-small btn-secondary" onclick="window.adjustUserTokens('${esc(u.id)}', '${esc(u.display_name || email)}')">ให้โทเคน</button>
           </td>
         </tr>
       `;
@@ -1330,7 +1330,7 @@ window.loadUsers = loadUsers;
 window.toggleBlockUser = async (userId, userEmail, block = true) => {
   const actionText = block ? 'บล็อกการเข้าสู่ระบบของ' : 'ปลดบล็อก';
   if (!(await confirmDialog({
-    title: `${block ? '🚫 บล็อกผู้ใช้' : '✅ ปลดบล็อกผู้ใช้'}`,
+    title: `${block ? 'บล็อกผู้ใช้' : 'ปลดบล็อกผู้ใช้'}`,
     message: `คุณต้องการ${actionText} "${userEmail || userId}" หรือไม่?`,
     confirmLabel: block ? 'ยืนยันบล็อก' : 'ปลดบล็อก',
     danger: block
@@ -1372,7 +1372,7 @@ window.adjustUserTokens = async (userId, name) => {
     });
     if (error) throw error;
     const newBal = Number(data?.balance ?? 0);
-    toast(`เพิ่ม ${amt} โทเคนให้ ${name} เรียบร้อย! (ยอดรวม: ${newBal.toLocaleString()} 🪙)`);
+    toast(`เพิ่ม ${amt} โทเคนให้ ${name} เรียบร้อย! (ยอดรวม: ${newBal.toLocaleString()} )`);
   } catch (e) {
     console.error('adjustUserTokens error', e);
     toast('ไม่สามารถปรับยอดโทเคนได้: ' + (e.message || ''), 'error');
@@ -1382,7 +1382,7 @@ window.adjustUserTokens = async (userId, name) => {
   loadTokensAnalytics();
 };
 
-// ── 👤 CREATE USER ACCOUNT ───────────────────────────────────────────────────
+// ── CREATE USER ACCOUNT ───────────────────────────────────────────────────
 function initUserCreation() {
   const dlg = $('user-modal');
   $('btn-new-user')?.addEventListener('click', () => {
@@ -1446,7 +1446,7 @@ function initUserCreation() {
   });
 }
 
-// ── 🪙 TOKEN ANALYTICS & LEADERBOARD ─────────────────────────────────────────
+// ── TOKEN ANALYTICS & LEADERBOARD ─────────────────────────────────────────
 async function loadTokensAnalytics() {
   const lbTbody = $('token-leaderboard');
   const histTbody = $('token-history');
@@ -1475,8 +1475,8 @@ async function loadTokensAnalytics() {
 
     if (!rows.length) {
       lbTbody.innerHTML = `<tr><td colspan="5">${stateEmpty('ยังไม่มีข้อมูลโทเคนจากผู้ใช้งาน')}</td></tr>`;
-      $('tok-total').textContent = '0 🪙';
-      $('tok-avg').textContent = '0 🪙';
+      $('tok-total').textContent = '0 ';
+      $('tok-avg').textContent = '0 ';
       $('tok-max-user').textContent = '—';
       $('tok-top-quest').textContent = '—';
     } else {
@@ -1486,13 +1486,13 @@ async function loadTokensAnalytics() {
       let avg = rows.length ? Math.round(total / rows.length) : 0;
       let topUser = rows[0]?.display_name || '—';
 
-      $('tok-total').textContent = total.toLocaleString() + ' 🪙';
-      $('tok-avg').textContent = avg.toLocaleString() + ' 🪙';
+      $('tok-total').textContent = total.toLocaleString() + ' ';
+      $('tok-avg').textContent = avg.toLocaleString() + ' ';
       $('tok-max-user').textContent = topUser;
       $('tok-top-quest').textContent = 'เควสท์ท่องเที่ยวเช็คอินสถานที่จริง';
 
       lbTbody.innerHTML = rows.slice(0, 10).map((r, i) => {
-        const rankIcon = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i + 1}`;
+        const rankIcon = i === 0 ? '' : i === 1 ? '' : i === 2 ? '' : `${i + 1}`;
         const name = r.display_name;
         const bal = (r.balance || 0).toLocaleString();
         const done = Math.max(1, Math.round(r.balance / 50));
@@ -1502,7 +1502,7 @@ async function loadTokensAnalytics() {
             <td><strong style="font-size:1.1rem;">${rankIcon}</strong></td>
             <td><strong>${esc(name)}</strong></td>
             <td class="meta">${esc(r.user_id.slice(0, 18))}...</td>
-            <td><strong style="color:#D97706;">🪙 ${bal}</strong></td>
+            <td><strong style="color:#D97706;">${bal}</strong></td>
             <td><span class="badge badge-success">${done} เควสท์</span></td>
           </tr>
         `;
@@ -1516,7 +1516,7 @@ async function loadTokensAnalytics() {
           <tr>
             <td><strong>${esc(nameMap.get(t.user_id) || 'ผู้ใช้')}</strong></td>
             <td>ภารกิจ (${esc(t.source_type)})</td>
-            <td><strong style="color:#059669;">+${t.amount} 🪙</strong></td>
+            <td><strong style="color:#059669;">+${t.amount} </strong></td>
             <td class="meta">${new Date(t.created_at).toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' })}</td>
           </tr>
         `).join('');
@@ -1529,7 +1529,7 @@ async function loadTokensAnalytics() {
   }
 }
 
-// ── 🤖 AI ASSISTANT (GPT-OSS) ────────────────────────────────────────────────
+// ── AI ASSISTANT (GPT-OSS) ────────────────────────────────────────────────
 function initAiAssistant() {
   const form = $('ai-form');
   const input = $('ai-input');
@@ -1539,7 +1539,7 @@ function initAiAssistant() {
   $('btn-clear-chat')?.addEventListener('click', () => {
     msgs.innerHTML = `
       <div class="ai-msg ai-msg-bot">
-        <div class="ai-avatar">🤖</div>
+        <div class="ai-avatar"></div>
         <div class="ai-bubble">
           <p><strong>สวัสดีครับแอดมิน! ประวัติการสนทนาถูกล้างแล้ว</strong></p>
           <p>มีอะไรให้ผมช่วยคิดเควสท์ ปักหมุดสถานที่ หรือตรวจสอบสถิติระบบ พิมพ์ถามได้ตลอดครับ!</p>
@@ -1577,7 +1577,7 @@ function initAiAssistant() {
     const botMsg = document.createElement('div');
     botMsg.className = 'ai-msg ai-msg-bot';
     botMsg.innerHTML = `
-      <div class="ai-avatar">🤖</div>
+      <div class="ai-avatar"></div>
       <div class="ai-bubble"><p><em>GPT-OSS กำลังคิดและประมวลผลคำตอบ...</em></p></div>
     `;
     msgs.appendChild(botMsg);
@@ -1601,50 +1601,50 @@ async function generateAiResponse(query) {
     const tokens = $('stat-tokens-total')?.textContent || '1,250';
     const completions = $('stat-completions')?.textContent || '48';
     return `
-      <p><strong>📊 รายงานสรุปภาพรวมระบบล่าสุด:</strong></p>
+      <p><strong>รายงานสรุปภาพรวมระบบล่าสุด:</strong></p>
       <ul>
-        <li>📍 <strong>สถานที่ท่องเที่ยวในระบบ:</strong> ${places} แห่ง (เผยแพร่แล้ว)</li>
-        <li>🎯 <strong>เควสท์ & ภารกิจถ่ายรูป:</strong> ${quests} เควสท์</li>
-        <li>👤 <strong>สมาชิกทั้งหมด:</strong> ${users} บัญชี</li>
-        <li>🏆 <strong>การเช็คอินสำเร็จ:</strong> ${completions} ครั้ง</li>
-        <li>🪙 <strong>โทเคนที่แจกให้ผู้ใช้:</strong> ${tokens} TC Tokens</li>
+        <li><strong>สถานที่ท่องเที่ยวในระบบ:</strong> ${places} แห่ง (เผยแพร่แล้ว)</li>
+        <li><strong>เควสท์ & ภารกิจถ่ายรูป:</strong> ${quests} เควสท์</li>
+        <li><strong>สมาชิกทั้งหมด:</strong> ${users} บัญชี</li>
+        <li><strong>การเช็คอินสำเร็จ:</strong> ${completions} ครั้ง</li>
+        <li><strong>โทเคนที่แจกให้ผู้ใช้:</strong> ${tokens} TC Tokens</li>
       </ul>
-      <p>💡 <em>ระบบทำงานปกติ ความหนาแน่นของผู้เล่นอยู่ที่โซนเกาะรัตนโกสินทร์และเยาวราช</em></p>
+      <p><em>ระบบทำงานปกติ ความหนาแน่นของผู้เล่นอยู่ที่โซนเกาะรัตนโกสินทร์และเยาวราช</em></p>
     `;
   }
 
   // 2. Quest suggestions
   if (q.includes('แนะนำเควสท์') || q.includes('เควสท์ใหม่') || q.includes('ถ่ายรูป')) {
     return `
-      <p><strong>🎯 ไอเดียเควสท์ถ่ายรูปเช็คอินใหม่ที่น่าสนใจ:</strong></p>
+      <p><strong>ไอเดียเควสท์ถ่ายรูปเช็คอินใหม่ที่น่าสนใจ:</strong></p>
       <ol>
         <li>
-          <strong>📸 สถาปัตยกรรมกระเบื้องสีวัดอรุณ</strong><br>
-          <em>ระดับ:</em> 🟢 ง่าย | <em>รางวัล:</em> 50 โทเคน<br>
+          <strong>สถาปัตยกรรมกระเบื้องสีวัดอรุณ</strong><br>
+          <em>ระดับ:</em> ง่าย | <em>รางวัล:</em> 50 โทเคน<br>
           <em>พิกัด:</em> 13.7437, 100.4889 (วัดอรุณราชวราราม)<br>
           <em>ภารกิจ:</em> ถ่ายรูปเจาะมุมลายกระเบื้องเคลือบโบราณบนพระปรางค์ประธาน
         </li>
         <li>
-          <strong>📸 แสงนีออนและสตรีทฟู้ดยามค่ำคืนเยาวราช</strong><br>
-          <em>ระดับ:</em> 🟡 ปานกลาง | <em>รางวัล:</em> 75 โทเคน<br>
+          <strong>แสงนีออนและสตรีทฟู้ดยามค่ำคืนเยาวราช</strong><br>
+          <em>ระดับ:</em> ปานกลาง | <em>รางวัล:</em> 75 โทเคน<br>
           <em>พิกัด:</em> 13.7410, 100.5085 (ซุ้มประตูเฉลิมพระเกียรติ เยาวราช)<br>
           <em>ภารกิจ:</em> ถ่ายรูปป้ายไฟนีออนพร้อมรถตุ๊กตุ๊กหรือบรรยากาศร้านอาหารริมทาง
         </li>
         <li>
-          <strong>📸 บันไดวนและวิวกรุงเทพฯ 360° บนยอดภูเขาทอง</strong><br>
-          <em>ระดับ:</em> 🔴 ท้าทาย | <em>รางวัล:</em> 100 โทเคน<br>
+          <strong>บันไดวนและวิวกรุงเทพฯ 360° บนยอดภูเขาทอง</strong><br>
+          <em>ระดับ:</em> ท้าทาย | <em>รางวัล:</em> 100 โทเคน<br>
           <em>พิกัด:</em> 13.7538, 100.5066 (วัดสระเกศราชวรมหาวิหาร)<br>
           <em>ภารกิจ:</em> เดินขึ้นบันได 344 ขั้น ถ่ายรูปวิวมุมสูงของเกาะรัตนโกสินทร์
         </li>
       </ol>
-      <p><button class="btn btn-small" onclick="window.quickCreateQuest()">➕ สร้างเควสท์ตามข้อเสนอนี้ทันที</button></p>
+      <p><button class="btn btn-small" onclick="window.quickCreateQuest()">สร้างเควสท์ตามข้อเสนอนี้ทันที</button></p>
     `;
   }
 
   // 3. Place recommendation
   if (q.includes('แนะนำสถานที่') || q.includes('ปักหมุด') || q.includes('ที่เที่ยว')) {
     return `
-      <p><strong>📍 สถานที่น่าปักหมุดเพิ่มในระบบ Travel & Challenge:</strong></p>
+      <p><strong>สถานที่น่าปักหมุดเพิ่มในระบบ Travel & Challenge:</strong></p>
       <ul>
         <li><strong>พิพิธภัณฑ์สถานแห่งชาติ พระนคร</strong> (ใกล้สนามหลวง) — แหล่งรวมประวัติศาสตร์และโบราณวัตถุระดับชาติ พิกัด <code>13.7583, 100.4925</code></li>
         <li><strong>ชุมชนกุฎีจีน (Kudi Chin)</strong> — ย่านพหุวัฒนธรรมไทย-โปรตุเกสริมแม่น้ำเจ้าพระยา ขนมฝรั่งกุฎีจีน พิกัด <code>13.7388, 100.4926</code></li>
@@ -1657,24 +1657,24 @@ async function generateAiResponse(query) {
   // 4. Token policy
   if (q.includes('โทเคน') || q.includes('รางวัล')) {
     return `
-      <p><strong>🪙 คำแนะนำการตั้งค่ารางวัลโทเคน (Token Balancing):</strong></p>
+      <p><strong>คำแนะนำการตั้งค่ารางวัลโทเคน (Token Balancing):</strong></p>
       <ul>
-        <li>🟢 <strong>เควสท์ง่าย (Easy):</strong> 25 - 50 โทเคน (เข้าถึงง่าย เช่น เช็คอินหน้าทางเข้า หรือถ่ายรูปจุดเด่นทั่วไป)</li>
-        <li>🟡 <strong>เควสท์ปานกลาง (Medium):</strong> 75 - 100 โทเคน (ต้องเดินสำรวจ หรือมีมุมถ่ายรูปเฉพาะ)</li>
-        <li>🔴 <strong>เควสท์ยาก (Hard):</strong> 150 - 200 โทเคน (ต้องเดินทางหลายจุด หรือใช้ความพยายามสูง เช่น ปีนบันไดภูเขาทอง)</li>
+        <li><strong>เควสท์ง่าย (Easy):</strong> 25 - 50 โทเคน (เข้าถึงง่าย เช่น เช็คอินหน้าทางเข้า หรือถ่ายรูปจุดเด่นทั่วไป)</li>
+        <li><strong>เควสท์ปานกลาง (Medium):</strong> 75 - 100 โทเคน (ต้องเดินสำรวจ หรือมีมุมถ่ายรูปเฉพาะ)</li>
+        <li><strong>เควสท์ยาก (Hard):</strong> 150 - 200 โทเคน (ต้องเดินทางหลายจุด หรือใช้ความพยายามสูง เช่น ปีนบันไดภูเขาทอง)</li>
       </ul>
-      <p>💡 <em>แนะนำให้ตั้งรางวัลเฉลี่ย 1 ทริป 1 วัน ให้ผู้เล่นได้รับประมาณ 150-250 โทเคน เพื่อแลกรับของรางวัลหรือบัตรส่วนลดได้อย่างคุ้มค่า</em></p>
+      <p><em>แนะนำให้ตั้งรางวัลเฉลี่ย 1 ทริป 1 วัน ให้ผู้เล่นได้รับประมาณ 150-250 โทเคน เพื่อแลกรับของรางวัลหรือบัตรส่วนลดได้อย่างคุ้มค่า</em></p>
     `;
   }
 
   // 5. Anti-cheat / User management
   if (q.includes('บล็อก') || q.includes('ทุจริต') || q.includes('โกง') || q.includes('ปัญหา')) {
     return `
-      <p><strong>⚠️ มาตรการรับมือและการจัดการผู้ใช้:</strong></p>
+      <p><strong>มาตรการรับมือและการจัดการผู้ใช้:</strong></p>
       <ol>
         <li><strong>ระบบ GPS Radius Verification:</strong> บังคับให้การเช็คอินต้องอยู่ในรัศมีที่กำหนด (แนะนำ 50-100 เมตร) พร้อมตรวจสอบความแม่นยำของพิกัดดาวเทียม</li>
         <li><strong>การจำกัดความถี่ (Rate Limiting):</strong> จำกัดการลองส่งคำตอบหรือรูปภาพไม่เกิน 5 ครั้งต่อ 10 นาที</li>
-        <li><strong>มาตรการบล็อกบัญชี:</strong> ในแท็บ "จัดการผู้ใช้" สามารถกดปุ่ม <code>🚫 บล็อก</code> ได้ทันที บัญชีนั้นจะไม่สามารถเข้าสู่ระบบหรือส่งการเช็คอินได้</li>
+        <li><strong>มาตรการบล็อกบัญชี:</strong> ในแท็บ "จัดการผู้ใช้" สามารถกดปุ่ม <code>บล็อก</code> ได้ทันที บัญชีนั้นจะไม่สามารถเข้าสู่ระบบหรือส่งการเช็คอินได้</li>
       </ol>
     `;
   }
@@ -1698,7 +1698,7 @@ window.quickCreateQuest = () => {
   $('qm-instructions').value = 'ถ่ายรูปเจาะมุมลายกระเบื้องเคลือบโบราณบนพระปรางค์วัดอรุณให้เห็นสีสันชัดเจน';
 };
 
-// ── 📋 AUDIT LOG ─────────────────────────────────────────────────────────────
+// ── AUDIT LOG ─────────────────────────────────────────────────────────────
 async function loadAuditLog() {
   const el = $('audit-log');
   if (!el) return;
@@ -1746,11 +1746,11 @@ function wireFilter(id, callback) {
   el.addEventListener('change', callback);
 }
 
-// ── 🏢 PARTNER APPLICATIONS, PENDING PLACES/QUESTS, CHECK-IN STATS ───────────
+// ── PARTNER APPLICATIONS, PENDING PLACES/QUESTS, CHECK-IN STATS ───────────
 function partnerStatusBadge(status) {
-  if (status === 'pending') return '<span class="badge badge-warning">⏳ รอดำเนินการ</span>';
-  if (status === 'approved' || status === 'published') return '<span class="badge badge-success">✅ อนุมัติแล้ว</span>';
-  if (status === 'rejected') return '<span class="badge badge-danger">❌ ไม่ผ่าน</span>';
+  if (status === 'pending') return '<span class="badge badge-warning">รอดำเนินการ</span>';
+  if (status === 'approved' || status === 'published') return '<span class="badge badge-success">อนุมัติแล้ว</span>';
+  if (status === 'rejected') return '<span class="badge badge-danger">ไม่ผ่าน</span>';
   return `<span class="badge badge-muted">${esc(status || '—')}</span>`;
 }
 
@@ -1922,8 +1922,8 @@ function renderAdminPartnerApps() {
               <td class="meta">${a.created_at ? new Date(a.created_at).toLocaleString('th-TH') : '—'}</td>
               <td>
                 ${a.status === 'pending' ? `
-                  <button class="btn btn-small" data-act="partner-approve" data-id="${esc(a.id)}">✅ อนุมัติ</button>
-                  <button class="btn btn-small btn-danger" data-act="partner-reject" data-id="${esc(a.id)}" data-name="${esc(a.business_name)}">❌ ไม่ผ่าน</button>
+                  <button class="btn btn-small" data-act="partner-approve" data-id="${esc(a.id)}">อนุมัติ</button>
+                  <button class="btn btn-small btn-danger" data-act="partner-reject" data-id="${esc(a.id)}" data-name="${esc(a.business_name)}">ไม่ผ่าน</button>
                 ` : a.status === 'rejected' && a.admin_notes ? `<span class="meta">${esc(a.admin_notes)}</span>` : '—'}
               </td>
             </tr>
@@ -1974,8 +1974,8 @@ async function renderAdminPendingPlaces() {
               <td>${partnerStatusBadge(p.approval_status)}</td>
               <td class="meta">${p.created_at ? new Date(p.created_at).toLocaleString('th-TH') : '—'}</td>
               <td>
-                <button class="btn btn-small" data-act="partner-place-approve" data-id="${esc(p.id)}" data-name="${esc(p.name)}">✅ เผยแพร่</button>
-                <button class="btn btn-small btn-danger" data-act="partner-place-reject" data-id="${esc(p.id)}" data-name="${esc(p.name)}">❌ ไม่ผ่าน (ลบ)</button>
+                <button class="btn btn-small" data-act="partner-place-approve" data-id="${esc(p.id)}" data-name="${esc(p.name)}">เผยแพร่</button>
+                <button class="btn btn-small btn-danger" data-act="partner-place-reject" data-id="${esc(p.id)}" data-name="${esc(p.name)}">ไม่ผ่าน (ลบ)</button>
               </td>
             </tr>
           `).join('')}
@@ -2025,11 +2025,11 @@ async function renderAdminPendingQuests() {
                 ${placePending ? '<div class="meta" style="color:#D97706;">สถานที่ที่เชื่อมยังรอดำเนินการ — อนุมัติสถานที่ก่อน</div>' : ''}
               </td>
               <td>${esc(places)}</td>
-              <td>🪙 ${q.reward_tokens || 0}</td>
+              <td>${q.reward_tokens || 0}</td>
               <td>${partnerStatusBadge(q.approval_status)}</td>
               <td>
-                <button class="btn btn-small" data-act="partner-quest-approve" data-id="${esc(q.id)}" data-name="${esc(q.title)}">✅ เผยแพร่</button>
-                <button class="btn btn-small btn-danger" data-act="partner-quest-reject" data-id="${esc(q.id)}" data-name="${esc(q.title)}">❌ ไม่ผ่าน (ลบ)</button>
+                <button class="btn btn-small" data-act="partner-quest-approve" data-id="${esc(q.id)}" data-name="${esc(q.title)}">เผยแพร่</button>
+                <button class="btn btn-small btn-danger" data-act="partner-quest-reject" data-id="${esc(q.id)}" data-name="${esc(q.title)}">ไม่ผ่าน (ลบ)</button>
               </td>
             </tr>`;
           }).join('')}
@@ -2089,7 +2089,7 @@ async function renderAdminPendingCampaigns() {
             const places = (c.campaign_places || []).map(cp => cp.places?.name).filter(Boolean);
             const placesHtml = places.length
               ? `<div style="display:flex;flex-wrap:wrap;gap:0.25rem;font-size:0.8rem;">
-                  ${places.map(p => `<span style="background:#F1F5F9;padding:1px 5px;border-radius:4px;border:1px solid #CBD5E1;">📍 ${esc(p)}</span>`).join('')}
+                  ${places.map(p => `<span style="background:#F1F5F9;padding:1px 5px;border-radius:4px;border:1px solid #CBD5E1;">${esc(p)}</span>`).join('')}
                 </div>`
               : '<span class="muted" style="font-size:0.8rem;">(ไม่ได้ระบุ)</span>';
 
@@ -2101,14 +2101,14 @@ async function renderAdminPendingCampaigns() {
                   ${c.starts_at || c.ends_at ? `<div class="meta" style="font-size:0.75rem;color:#64748B;">ช่วงเวลา: ${c.starts_at ? new Date(c.starts_at).toLocaleDateString('th-TH') : '—'} ถึง ${c.ends_at ? new Date(c.ends_at).toLocaleDateString('th-TH') : '—'}</div>` : ''}
                 </td>
                 <td>${placesHtml}</td>
-                <td>🪙 ${c.reward_tokens || 0}</td>
+                <td>${c.reward_tokens || 0}</td>
                 <td class="meta">${c.created_at ? new Date(c.created_at).toLocaleString('th-TH') : '—'}</td>
                 <td>${partnerStatusBadge(c.approval_status)}</td>
                 <td>
-                  <button class="btn btn-small" data-act="partner-campaign-approve" data-id="${esc(c.id)}" data-name="${esc(c.title)}">✅ อนุมัติ</button>
-                  <button class="btn btn-small btn-secondary" data-act="partner-campaign-edit" data-id="${esc(c.id)}" data-name="${esc(c.title)}">✏️ แก้ไข</button>
-                  <button class="btn btn-small btn-danger" data-act="partner-campaign-reject" data-id="${esc(c.id)}" data-name="${esc(c.title)}">❌ ปฏิเสธ</button>
-                  <button class="btn btn-small btn-danger" data-act="partner-campaign-delete" data-id="${esc(c.id)}" data-name="${esc(c.title)}">🗑️ ลบ</button>
+                  <button class="btn btn-small" data-act="partner-campaign-approve" data-id="${esc(c.id)}" data-name="${esc(c.title)}">อนุมัติ</button>
+                  <button class="btn btn-small btn-secondary" data-act="partner-campaign-edit" data-id="${esc(c.id)}" data-name="${esc(c.title)}">แก้ไข</button>
+                  <button class="btn btn-small btn-danger" data-act="partner-campaign-reject" data-id="${esc(c.id)}" data-name="${esc(c.title)}">ปฏิเสธ</button>
+                  <button class="btn btn-small btn-danger" data-act="partner-campaign-delete" data-id="${esc(c.id)}" data-name="${esc(c.title)}">ลบ</button>
                 </td>
               </tr>
             `;
@@ -2178,7 +2178,7 @@ async function renderAdminPendingCharacters() {
             const campTitle = campsMap.get(c.campaign_id) || '—';
             const mult = c.token_multiplier || 2.0;
             const rarity = c.rarity || 'epic';
-            const has3d = c.model_url ? `<a href="${esc(c.model_url)}" target="_blank" rel="noopener" class="btn btn-small btn-secondary" style="font-size:0.75rem;">📦 ดูโมเดล 3D</a>` : '<span class="muted" style="font-size:0.8rem;">—</span>';
+            const has3d = c.model_url ? `<a href="${esc(c.model_url)}" target="_blank" rel="noopener" class="btn btn-small btn-secondary" style="font-size:0.75rem;">ดูโมเดล 3D</a>` : '<span class="muted" style="font-size:0.8rem;">—</span>';
 
             return `
               <tr>
@@ -2190,7 +2190,7 @@ async function renderAdminPendingCharacters() {
                   <div class="meta" style="font-size:0.8rem;color:#64748B;">${esc(c.description || '—')}</div>
                   ${c.unlock_hint ? `<div class="meta" style="font-size:0.75rem;color:#059669;margin-top:2px;">เงื่อนไข: ${esc(c.unlock_hint)}</div>` : ''}
                 </td>
-                <td><span style="font-size:0.85rem;color:#1E293B;font-weight:500;">📣 ${esc(campTitle)}</span></td>
+                <td><span style="font-size:0.85rem;color:#1E293B;font-weight:500;">${esc(campTitle)}</span></td>
                 <td>
                   <span style="font-weight:700;color:#D97706;font-size:0.85rem;">×${mult} โทเคน</span>
                   <div style="font-size:0.75rem;color:#7C3AED;font-weight:600;">${esc(rarity.toUpperCase())}</div>
@@ -2198,8 +2198,8 @@ async function renderAdminPendingCharacters() {
                 <td>${has3d}</td>
                 <td>${partnerStatusBadge(c.approval_status || c.status)}</td>
                 <td style="white-space:nowrap;">
-                  <button class="btn btn-small" data-act="partner-character-approve" data-id="${esc(c.id)}" data-name="${esc(c.name)}">✅ อนุมัติ</button>
-                  <button class="btn btn-small btn-danger" data-act="partner-character-reject" data-id="${esc(c.id)}" data-name="${esc(c.name)}">❌ ปฏิเสธ</button>
+                  <button class="btn btn-small" data-act="partner-character-approve" data-id="${esc(c.id)}" data-name="${esc(c.name)}">อนุมัติ</button>
+                  <button class="btn btn-small btn-danger" data-act="partner-character-reject" data-id="${esc(c.id)}" data-name="${esc(c.name)}">ปฏิเสธ</button>
                 </td>
               </tr>
             `;
@@ -2224,7 +2224,7 @@ async function renderAdminPartnerCheckins() {
       registryHtml = `
         <div style="margin-bottom:1.5rem;">
           <h4 style="margin:0 0 0.75rem;font-size:0.95rem;font-weight:700;display:flex;align-items:center;gap:0.4rem;">
-            🗂️ ผู้ประกอบการที่บันทึกแล้ว (Auto-login Registry)
+            ผู้ประกอบการที่บันทึกแล้ว (Auto-login Registry)
             <span style="background:#059669;color:#fff;border-radius:999px;padding:0 8px;font-size:0.75rem;">${entries.length} คน</span>
           </h4>
           <div class="table-wrap">
@@ -2244,7 +2244,7 @@ async function renderAdminPartnerCheckins() {
         </div>`;
     } else {
       registryHtml = `<div style="padding:0.75rem 1rem;background:#FEF3C7;border-radius:8px;color:#92400E;font-size:0.875rem;margin-bottom:1.25rem;">
-        ⚠️ ยังไม่มีข้อมูลใน tc_approved_partners registry — จะถูกบันทึกอัตโนมัติเมื่ออนุมัติผู้ประกอบการจากแท็บ "ใบสมัคร"
+        ยังไม่มีข้อมูลใน tc_approved_partners registry — จะถูกบันทึกอัตโนมัติเมื่ออนุมัติผู้ประกอบการจากแท็บ "ใบสมัคร"
       </div>`;
     }
   } catch (e) {}
@@ -2275,7 +2275,7 @@ async function renderAdminPartnerCheckins() {
     stats.push({ ...p, questCount: questIds.length, total, unique, today });
   }
   el.innerHTML = registryHtml + `
-    <h4 style="margin:0 0 0.75rem;font-size:0.95rem;font-weight:700;">📊 สถิติการเช็คอินของผู้ประกอบการ</h4>
+    <h4 style="margin:0 0 0.75rem;font-size:0.95rem;font-weight:700;">สถิติการเช็คอินของผู้ประกอบการ</h4>
     <div class="table-wrap">
       <table class="table">
         <thead>
@@ -2440,7 +2440,7 @@ document.addEventListener('click', async e => {
       console.warn('Local update error:', e);
     }
 
-    toast('✅ อนุมัติผู้ประกอบการแล้ว — บัญชีจะเข้า Dashboard อัตโนมัติครั้งถัดไป');
+    toast('อนุมัติผู้ประกอบการแล้ว — บัญชีจะเข้า Dashboard อัตโนมัติครั้งถัดไป');
     await loadPartnersPanel();
     loadUsers?.();
     return;
@@ -2515,7 +2515,7 @@ document.addEventListener('click', async e => {
       }
     }
 
-    toast('เผยแพร่สถานที่เรียบร้อย 📍');
+    toast('เผยแพร่สถานที่เรียบร้อย ');
     await loadPartnersPanel();
     loadPlaces();
     loadStats();
@@ -2599,7 +2599,7 @@ document.addEventListener('click', async e => {
       }
     }
 
-    toast('เผยแพร่เควสท์สำเร็จแล้ว! พร้อมให้ผู้เล่นทำภารกิจ 🎯', 'ok');
+    toast('เผยแพร่เควสท์สำเร็จแล้ว! พร้อมให้ผู้เล่นทำภารกิจ ', 'ok');
     await loadPartnersPanel();
     loadQuests();
     loadStats();
@@ -2661,7 +2661,7 @@ document.addEventListener('click', async e => {
       } catch (e) {}
     }
 
-    toast('อนุมัติและเผยแพร่แคมเปญเรียบร้อยแล้ว 🎉', 'ok');
+    toast('อนุมัติและเผยแพร่แคมเปญเรียบร้อยแล้ว ', 'ok');
     await loadPartnersPanel();
     window.loadAdminStore?.();
     return;
@@ -2758,7 +2758,7 @@ document.addEventListener('click', async e => {
       } catch (e) {}
     }
 
-    toast('อนุมัติและเปิดใช้งานตัวละครเรียบร้อยแล้ว 🎉', 'ok');
+    toast('อนุมัติและเปิดใช้งานตัวละครเรียบร้อยแล้ว ', 'ok');
     await loadPartnersPanel();
     window.loadAdminStore?.();
     return;

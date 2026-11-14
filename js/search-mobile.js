@@ -1,7 +1,7 @@
 // search-mobile.js — text search, province/district/category filters, deck + list.
 
 import { esc, toast } from './ui.js';
-import { icon } from './icons.js';
+import { icon, iconFor } from './icons.js';
 import { createSwipeDeck } from './swipe-deck.js';
 import {
   fetchPlaces, CATEGORIES, categoryMeta,
@@ -139,7 +139,7 @@ function renderActive() {
 function imageFallback(p) {
   return `
     <img src="${esc(p.image || '')}" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.hidden=false">
-    <span class="fallback" hidden>${esc(p.fallbackEmoji || '📍')}</span>`;
+    <span class="fallback" hidden>${iconFor(p.fallbackEmoji, 20)}</span>`;
 }
 
 function ratingMarkup(p) {
@@ -155,11 +155,11 @@ function renderCard(p) {
       <div class="swipe-card__media g-media">
         <img src="${esc(p.image || '')}" alt="${esc(p.name)}" loading="lazy"
           onerror="this.style.display='none';this.parentElement.classList.add('is-fallback')">
-        <span class="media-emoji">${esc(p.fallbackEmoji || meta.emoji)}</span>
+        <span class="media-emoji">${iconFor(p.fallbackEmoji || meta.emoji, 30)}</span>
         <div class="swipe-card__top">
           <div class="app-wrap">
-            <span class="g-chip" style="border-color:${meta.color}66;color:${meta.color}">${meta.emoji} ${esc(p.categoryLabel || meta.label)}</span>
-            ${p._fav ? `<span class="g-chip g-chip--danger">♥ ถูกใจ</span>` : ''}
+            <span class="g-chip" style="border-color:${meta.color}66;color:${meta.color}">${iconFor(meta.emoji, 12)} ${esc(p.categoryLabel || meta.label)}</span>
+            ${p._fav ? `<span class="g-chip g-chip--danger">${icon('heart', 10)} ถูกใจ</span>` : ''}
           </div>
           ${dist}
         </div>
@@ -178,7 +178,7 @@ function renderCard(p) {
 
 function renderList(rows) {
   if (!rows.length) return `<div class="sm-empty">
-      <div class="emoji">🔎</div><h3>ไม่พบสถานที่ที่ตรงกับเงื่อนไข</h3>
+      <div class="emoji">${icon('search', 30)}</div><h3>ไม่พบสถานที่ที่ตรงกับเงื่อนไข</h3>
       <p>ลองลบตัวกรองบางอย่าง หรือค้นหาด้วยชื่อจังหวัด/อำเภอ</p>
       <button class="g-btn g-btn--sm g-btn--mint" type="button" data-clear-all>ล้างตัวกรอง</button>
     </div>`;
@@ -195,7 +195,7 @@ function renderList(rows) {
           <span>· ${esc(p.province || '')}${dist}</span>
         </span>
         <p class="sm-result__summary">${esc(p.summary || '')}</p>
-        <span class="sm-result__meta">${meta.emoji} ${esc(p.categoryLabel || meta.label)}</span>
+        <span class="sm-result__meta">${iconFor(meta.icon || meta.emoji, 12)} ${esc(p.categoryLabel || meta.label)}</span>
       </div>
       <button class="sm-result__fav ${p._fav ? 'is-on' : ''}" type="button" data-fav="${esc(p.id)}" aria-label="${p._fav ? 'เอาออกจากรายการถูกใจ' : 'เพิ่มในรายการถูกใจ'}">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21.2l7.8-7.7 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg>
@@ -230,7 +230,7 @@ function renderAll() {
         likeLabel: 'ถูกใจ',
         passLabel: 'ข้าม',
         emptyHTML: () => `<div class="sm-empty" style="min-height:420px">
-          <div class="emoji">🧭</div><h3>ไม่พบสถานที่ที่ตรงกับเงื่อนไข</h3>
+          <div class="emoji">${icon('compass', 30)}</div><h3>ไม่พบสถานที่ที่ตรงกับเงื่อนไข</h3>
           <p>ลองเปลี่ยนจังหวัด อำเภอ หรือหมวดหมู่ แล้วปัดการ์ดอีกครั้ง</p>
           <button class="g-btn g-btn--sm g-btn--mint" type="button" data-clear-all>ล้างตัวกรอง</button>
         </div>`,
@@ -379,7 +379,7 @@ function renderCategoryChoices() {
   if (!box) return;
   box.innerHTML = CATEGORIES.map(c => `
     <button class="sm-choice ${state.categories.has(c.id) ? 'is-active' : ''}" type="button" data-sm-cat="${esc(c.id)}">
-      <span class="emoji">${c.emoji}</span>${esc(c.label)}
+      <span class="emoji">${iconFor(c.emoji, 13)}</span>${esc(c.label)}
     </button>`).join('');
   box.querySelectorAll('[data-sm-cat]').forEach(btn => {
     btn.addEventListener('click', () => {

@@ -20,13 +20,13 @@
     linear-gradient(160deg, rgba(255, 255, 255, .08), rgba(255, 255, 255, .02));
 }
 .sh-wallet::after {
-  content: '🪙';
+  content: '';
   position: absolute;
   right: 76px;
   top: -14px;
-  font-size: 66px;
-  opacity: .08;
-  transform: rotate(-18deg);
+  width: 66px;
+  height: 66px;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="%23f2a81d" stroke-width="1.8" opacity="0.12"><circle cx="12" cy="12" r="8"/><path d="M12 8v8M9.5 10h4a1.5 1.5 0 0 1 0 3h-3a1.5 1.5 0 0 0 0 3h4"/></svg>') center no-repeat;
   pointer-events: none;
 }
 .sh-wallet__coin {

@@ -22,6 +22,64 @@ export function icon(name, size = 18, cls = '', label = '') {
 }
 
 /**
+ * Emoji → sprite icon name. Demo data still carries emoji as a legacy label,
+ * so renderers translate them here instead of printing the glyph.
+ */
+export const EMOJI_ICON = {
+  '🛕': 'building', '🏯': 'building', '🏛️': 'building', '🏛': 'building', '⛩️': 'building',
+  '🏢': 'building', '🏙️': 'building', '🪟': 'building',
+  '⛰️': 'leaf', '⛰': 'leaf', '🌳': 'leaf', '🌵': 'leaf', '🌿': 'leaf', '🌫️': 'leaf',
+  '🌫': 'leaf', '🍀': 'leaf', '🏞️': 'leaf',
+  '🏖️': 'sun', '🏝️': 'sun', '🌊': 'sun', '🌇': 'sun', '🌅': 'sun', '🌄': 'sun',
+  '☀️': 'sun', '🏄': 'sun', '🍢': 'store',
+  '🍜': 'store', '🍸': 'store', '🦐': 'store', '🦀': 'store', '🛍️': 'store',
+  '🏪': 'store', '🧰': 'store', '🎒': 'store', '📦': 'store',
+  '📸': 'camera', '📷': 'camera', '📱': 'camera',
+  '🧠': 'ai', '🤖': 'ai', '💭': 'ai', '📡': 'ai',
+  '⚔️': 'flame', '⚡': 'flame', '🐉': 'flame',
+  '🔖': 'flag', '🏁': 'flag', '🗡️': 'flag',
+  '⚠️': 'warning', '⚠': 'warning',
+  '✨': 'star', '⭐': 'star', '🌟': 'star', '💎': 'star', '🎉': 'star', '🌙': 'star',
+  '🔍': 'search', '🔎': 'search', '🔭': 'search',
+  '📋': 'journal', '📔': 'journal', '📜': 'journal', '🗂️': 'journal', '✉️': 'journal',
+  '✉': 'journal', '📧': 'journal',
+  '📍': 'pin', '📌': 'pin', '🗺️': 'map', '🗺': 'map', '🌏': 'map',
+  '💡': 'info', '💬': 'info', '❓': 'info',
+  '😄': 'smile', '🤩': 'smile', '😌': 'smile', '🥱': 'smile',
+  '❤️': 'heart', '❤': 'heart', '💚': 'heart', '🥰': 'heart', '🤝': 'heart', '🧘': 'heart',
+  '💆': 'heart',
+  '👑': 'trophy', '🏆': 'trophy', '🏅': 'trophy', '🥇': 'trophy', '🥈': 'trophy',
+  '🥉': 'trophy',
+  '🧙': 'user', '🧝': 'user', '🧑‍🚀': 'user', '🧍': 'user', '👤': 'user', '👥': 'user',
+  '👕': 'user', '👖': 'user', '🥾': 'user', '🧢': 'user', '🎩': 'user', '👗': 'user',
+  '👘': 'user', '🩳': 'user', '🥋': 'user', '👟': 'user', '🩴': 'user', '🧥': 'user',
+  '🎭': 'user', '👹': 'user', '💇': 'user',
+  '🪙': 'coin', '💰': 'coin', '💳': 'coin',
+  '🎯': 'quest', '🔐': 'lock', '🔒': 'lock', '🔑': 'lock', '🔓': 'lock', '🛡️': 'lock',
+  '🛡': 'lock',
+  '📖': 'book', '🎓': 'book', '✍️': 'edit', '✍': 'edit', '✏️': 'edit', '📝': 'edit',
+  '🖼️': 'image', '🖼': 'image', '🎨': 'image',
+  '📅': 'calendar', '📆': 'calendar', '🗓️': 'calendar', '🗓': 'calendar',
+  '🕐': 'clock', '🚇': 'bike', '🚲': 'bike', '🚴': 'bike',
+  '🏠': 'navigate', '🚀': 'navigate', '⛵': 'navigate', '🚤': 'navigate', '🛶': 'navigate',
+  '🚌': 'navigate', '🛺': 'navigate', '🎿': 'navigate', '🏃': 'navigate',
+  '🎁': 'gift', '🎀': 'gift', '🧭': 'compass', '🐢': 'compass', '🤿': 'compass',
+  '🧗': 'compass', '🎮': 'play', '♥': 'heart', '★': 'star', '✓': 'check', '✔️': 'check',
+  '✅': 'check-circle', '❌': 'close', '✖️': 'close', '✕': 'close', '🚫': 'close',
+  '🔄': 'refresh', '🔁': 'refresh', '➕': 'plus', '➔': 'arrow-right', '⬅': 'arrow-right',
+  '📊': 'chart', '📈': 'chart', '📣': 'volume', '📤': 'upload', '📩': 'upload',
+  '🗑️': 'trash', '🧹': 'trash', '⚙️': 'settings', '⚙': 'settings', '🇹🇭': 'map',
+  '🟢': 'check-circle', '🟡': 'clock', '🔴': 'warning',
+};
+
+/** Render a legacy emoji label as a sprite icon (falls back to a star). */
+export function iconFor(emoji, size = 16, cls = '') {
+  const key = String(emoji ?? '').replace(/\uFE0F/g, '');
+  const name = EMOJI_ICON[key] || EMOJI_ICON[String(emoji ?? '')] || 'star';
+  return icon(name, size, cls);
+}
+
+/**
  * Convenience map — use these instead of emoji throughout the app.
  * ic.camera(20) === icon('camera', 20)
  */

@@ -7,10 +7,6 @@ import { fetchPlaces, categoryMeta } from './mobile-data.js';
 import { getDisplayName, levelInfo, confetti } from './mobile-app.js';
 
 const $ = id => document.getElementById(id);
-const PROVINCE_EMOJI = {
-  'กรุงเทพมหานคร': '🏙️', 'เชียงใหม่': '⛰️', 'ภูเก็ต': '🏖️', 'กระบี่': '🏝️',
-  'กาญจนบุรี': '🌿', 'ชลบุรี': '🌊', 'พระนครศรีอยุธยา': '🏛️', 'สุโขทัย': '🌅',
-};
 
 let places = [];
 let map = null;
@@ -25,14 +21,14 @@ function renderChips() {
   const box = $('exChips');
   if (!box) return;
   box.innerHTML = `
-    <button class="ex-chip ${!province ? 'is-active' : ''}" type="button" data-province=""><span class="emoji">🗺️</span>ทั้งหมด</button>
-    ${provinces().map(p => `<button class="ex-chip ${province === p ? 'is-active' : ''}" type="button" data-province="${esc(p)}"><span class="emoji">${PROVINCE_EMOJI[p] || '📍'}</span>${esc(p.replace('มหานคร', ''))}</button>`).join('')}`;
+    <button class="ex-chip ${!province ? 'is-active' : ''}" type="button" data-province="">${icon('map', 13)}<span>ทั้งหมด</span></button>
+    ${provinces().map(p => `<button class="ex-chip ${province === p ? 'is-active' : ''}" type="button" data-province="${esc(p)}">${icon('pin', 12)}<span>${esc(p.replace('มหานคร', ''))}</span></button>`).join('')}`;
   box.querySelectorAll('[data-province]').forEach(btn => {
     btn.addEventListener('click', () => {
       province = btn.dataset.province;
       renderChips();
       const rows = province ? places.filter(p => p.province === province) : places;
-      map?.setPlaces(rows);
+      map?.setPlaces(rows, { fit: !!province });
       if (!rows.some(p => p.id === selected?.id)) {
         selected = rows[0] || null;
         renderCard();
@@ -60,13 +56,13 @@ function renderCard() {
     img.alt = selected.name;
     img.hidden = false;
     if (fb) fb.hidden = true;
-    img.onerror = () => { img.hidden = true; if (fb) { fb.hidden = false; fb.textContent = selected.fallbackEmoji || meta.emoji; } };
+    img.onerror = () => { img.hidden = true; if (fb) { fb.hidden = false; fb.innerHTML = icon('image', 24); } };
   }
   $('exCardName').textContent = selected.name;
   $('exCardMeta').innerHTML = `
     <span class="g-rating"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg>${Number(selected.rating || 0).toFixed(1)}</span>
     <span>· ${esc(selected.province || '')}</span>
-    <span class="g-chip">${meta.emoji} ${esc(selected.categoryLabel || meta.label)}</span>`;
+    <span class="g-chip">${icon('pin', 12)}${esc(selected.categoryLabel || meta.label)}</span>`;
   $('exDetail').href = `/place-mobile.html?id=${encodeURIComponent(selected.id)}`;
   $('exNav').href = `/navigate-mobile.html?name=${encodeURIComponent(selected.name)}&lat=${selected.lat || ''}&lng=${selected.lng || ''}&id=${encodeURIComponent(selected.id)}`;
   const hint = $('exCardHint');
@@ -81,14 +77,14 @@ function openList() {
     <button class="ex-item" type="button" data-place="${esc(p.id)}">
       <span class="ex-item__media">
         <img src="${esc(p.image || '')}" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.hidden=false">
-        <span class="fallback" hidden>${esc(p.fallbackEmoji || '📍')}</span>
+        <span class="fallback" hidden>${icon('image', 20)}</span>
       </span>
       <span class="ex-item__body">
         <strong>${esc(p.name)}</strong>
         <span>${esc(p.province || '')} · ${Number(p.rating || 0).toFixed(1)} ดาว</span>
       </span>
-      <span class="ex-item__go">เดินไป →</span>
-    </button>`).join('') : `<div class="g-empty"><div class="emoji">🗺️</div><strong>ยังไม่มีสถานที่</strong><span>ลองเลือกจังหวัดอื่น</span></div>`;
+      <span class="ex-item__go">เดินไป ${icon('arrow-right', 12)}</span>
+    </button>`).join('') : `<div class="g-empty">${icon('map', 24)}<strong>ยังไม่มีสถานที่</strong><span>ลองเลือกจังหวัดอื่น</span></div>`;
   box.querySelectorAll('[data-place]').forEach(btn => {
     btn.addEventListener('click', () => {
       const place = places.find(p => p.id === btn.dataset.place);
@@ -111,6 +107,7 @@ async function boot() {
     interactive: true,
     autoWalk: false,
     showPins: true,
+    zoom: 12,
     onPlaceClick: (place) => {
       showCard(place);
     },

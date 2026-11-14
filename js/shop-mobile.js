@@ -1,7 +1,7 @@
 // shop-mobile.js — characters, token packs, and explorer perks (local demo).
 
 import { esc, toast } from './ui.js';
-import { icon } from './icons.js';
+import { icon, iconFor } from './icons.js';
 import {
   CHARACTERS, PRESETS, loadOutfit, saveOutfit,
   readJSON, writeJSON,
@@ -16,17 +16,17 @@ const PERKS_KEY = 'tc_mobile_perks';
 const TOPUP_KEY = 'tc_mobile_topups';
 
 const PACKS = [
-  { id: 'p300', tokens: 300, bonus: 0, price: 59, emoji: '🪙', note: 'เริ่มต้นสายนักสำรวจ' },
-  { id: 'p700', tokens: 700, bonus: 50, price: 129, emoji: '💰', note: 'คุ้มค่าที่สุดสำหรับเควสท์รายวัน', hot: true },
-  { id: 'p1500', tokens: 1500, bonus: 150, price: 259, emoji: '🧰', note: 'ปลดล็อกตัวละครระดับ Epic' },
-  { id: 'p3200', tokens: 3200, bonus: 400, price: 499, emoji: '💎', note: 'สำหรับนักสะสมตัวจริง' },
+  { id: 'p300', tokens: 300, bonus: 0, price: 59, icon: 'coin', note: 'เริ่มต้นสายนักสำรวจ' },
+  { id: 'p700', tokens: 700, bonus: 50, price: 129, icon: 'store', note: 'คุ้มค่าที่สุดสำหรับเควสท์รายวัน', hot: true },
+  { id: 'p1500', tokens: 1500, bonus: 150, price: 259, icon: 'store', note: 'ปลดล็อกตัวละครระดับ Epic' },
+  { id: 'p3200', tokens: 3200, bonus: 400, price: 499, icon: 'star', note: 'สำหรับนักสะสมตัวจริง' },
 ];
 
 const PERKS = [
-  { id: 'double-xp', name: 'XP เร่งด่วน ×2', desc: 'รับ XP เพิ่มเป็นสองเท่าเป็นเวลา 24 ชั่วโมง', cost: 200, emoji: '⚡' },
-  { id: 'token-boost', name: 'พรนักสำรวจ +10%', desc: 'โทเคนจากเควสท์เพิ่ม 10% ตลอดทั้งสัปดาห์', cost: 300, emoji: '🍀' },
-  { id: 'night-map', name: 'ธีมแผนที่กลางคืน', desc: 'เปลี่ยนบรรยากาศแผนที่ AR เป็นโหมดราตรี', cost: 180, emoji: '🌙' },
-  { id: 'outfit-pack', name: 'ชุดนักสำรวจพิเศษ', desc: 'ปลดล็อกชุดและหมวกสำหรับแต่งตัวละคร', cost: 250, emoji: '🎒' },
+  { id: 'double-xp', name: 'XP เร่งด่วน ×2', desc: 'รับ XP เพิ่มเป็นสองเท่าเป็นเวลา 24 ชั่วโมง', cost: 200, icon: 'flame' },
+  { id: 'token-boost', name: 'พรนักสำรวจ +10%', desc: 'โทเคนจากเควสท์เพิ่ม 10% ตลอดทั้งสัปดาห์', cost: 300, icon: 'leaf' },
+  { id: 'night-map', name: 'ธีมแผนที่กลางคืน', desc: 'เปลี่ยนบรรยากาศแผนที่ AR เป็นโหมดราตรี', cost: 180, icon: 'star' },
+  { id: 'outfit-pack', name: 'ชุดนักสำรวจพิเศษ', desc: 'ปลดล็อกชุดและหมวกสำหรับแต่งตัวละคร', cost: 250, icon: 'backpack' },
 ];
 
 let tab = 'chars';
@@ -66,7 +66,7 @@ function renderChars() {
           ${isOwned ? `<span class="sh-char__owned">${icon('check', 12)}</span>` : ''}
           <img src="${esc(c.image)}" alt="${esc(c.name)}" loading="lazy"
             onerror="this.style.display='none';this.nextElementSibling.hidden=false">
-          <span class="sh-char__emoji" hidden>${esc(c.rarity === 'legendary' ? '🧙' : c.rarity === 'rare' ? '🧝' : '🧭')}</span>
+          <span class="sh-char__emoji" hidden>${icon(c.rarity === 'legendary' ? 'user' : 'compass', 40)}</span>
         </div>
         <div class="sh-char__body">
           <h3>${esc(c.name)}</h3>
@@ -128,7 +128,7 @@ function renderPacks() {
   box.innerHTML = PACKS.map(pack => `
     <article class="sh-pack ${pack.hot ? 'is-hot' : ''}">
       ${pack.hot ? `<span class="sh-pack__badge">คุ้มที่สุด</span>` : ''}
-      <span class="sh-pack__coin">${pack.emoji}</span>
+      <span class="sh-pack__coin">${icon(pack.icon || 'coin', 20)}</span>
       <div class="sh-pack__body">
         <strong>${formatNum(pack.tokens + pack.bonus)} โทเคน</strong>
         <span>${esc(pack.note)}</span>
@@ -165,7 +165,7 @@ function renderPerks() {
   const owned = ownedPerks();
   box.innerHTML = PERKS.map(p => `
     <article class="sh-perk ${owned.has(p.id) ? 'is-owned' : ''}">
-      <span class="sh-perk__ico">${p.emoji}</span>
+      <span class="sh-perk__ico">${icon(p.icon || 'star', 18)}</span>
       <div class="sh-perk__body">
         <strong>${esc(p.name)}</strong>
         <span>${esc(p.desc)}</span>

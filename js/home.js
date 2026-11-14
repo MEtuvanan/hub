@@ -1,5 +1,6 @@
 import { supabase } from './supabase.js';
-import { esc, stateEmpty } from './ui.js';
+import { esc, stateEmpty, stripEmoji } from './ui.js';
+import { icon } from './icons.js';
 import { rankPlaces, boostDaysLeft } from './recommend.js';
 
 // ─── Real Unsplash photos for Thailand destinations (CDN, free-to-use) ─────────
@@ -8,7 +9,7 @@ const PLACE_IMAGES = {
   'wat-phra-kaew':    '/assets/img/Wat Phra Kaew (Temple of the Emerald Buddha).webp',
   'grand-palace':     '/assets/img/Wat Phra Kaew (Temple of the Emerald Buddha).webp',
   'wat-pho':          '/assets/img/Wat Pho (Temple of the Reclining Buddha).webp',
-  'wat-arun':         '/assets/img/Wat Arun (Temple of Dawn).webp',
+  'wat-arun':         'https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=900&auto=format&fit=crop&q=80',
   'wat-saket':        'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800&auto=format&fit=crop&q=80',
   // Markets & Culture
   'chatuchak':        '/assets/img/Chatuchak Weekend Market.webp',
@@ -72,16 +73,16 @@ async function featured() {
       return `
       <article class="card destination-card">
         <div class="card-media">
-          <img src="${esc(imgUrl)}" alt="${esc(p.name)}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'card-media-placeholder\\'><span>🏛️</span></div>'">
+          <img src="${esc(imgUrl)}" alt="${esc(p.name)}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'card-media-placeholder\\'><span></span></div>'">
           <span class="card-category-tag">${esc(p.place_categories?.name || 'Destination')}</span>
-          ${boostLeft ? `<span class="card-boost-tag" title="AI ดันให้คนเห็นมากขึ้น — สถานที่เพิ่มเข้าระบบใหม่">🚀 ใหม่ • เหลือ ${boostLeft} วัน</span>` : ''}
+          ${boostLeft ? `<span class="card-boost-tag" title="AI ดันให้คนเห็นมากขึ้น — สถานที่เพิ่มเข้าระบบใหม่">ใหม่ • เหลือ ${boostLeft} วัน</span>` : ''}
         </div>
         <div class="card-content">
-          <div class="card-location">📍 ${esc(district)}</div>
+          <div class="card-location">${icon('pin', 11)} ${esc(district)}</div>
           <h3 class="card-title"><a href="/place.html?id=${encodeURIComponent(p.id)}">${esc(p.name)}</a></h3>
           <p class="card-summary">${esc(p.summary || '')}</p>
           <div class="card-footer">
-            ${questCount > 0 ? `<span class="badge badge-quest">⚔️ ${questCount} เควสท์</span>` : '<span class="badge badge-muted">สำรวจ</span>'}
+            ${questCount > 0 ? `<span class="badge badge-quest">${questCount} เควสท์</span>` : '<span class="badge badge-muted">สำรวจ</span>'}
             <a class="card-action-link" href="/place.html?id=${encodeURIComponent(p.id)}">ดูรายละเอียด →</a>
           </div>
         </div>
@@ -100,11 +101,11 @@ async function featured() {
           <span class="card-category-tag">${esc(p.place_categories?.name || 'Destination')}</span>
         </div>
         <div class="card-content">
-          <div class="card-location">📍 ${p.districts?.name_en || 'Bangkok'}</div>
+          <div class="card-location">${icon('pin', 11)} ${p.districts?.name_en || 'Bangkok'}</div>
           <h3 class="card-title">${esc(p.name)}</h3>
           <p class="card-summary">${esc(p.summary || '')}</p>
           <div class="card-footer">
-            <span class="badge badge-quest">⚔️ เควสท์เปิดให้เล่น</span>
+            <span class="badge badge-quest">เควสท์เปิดให้เล่น</span>
             <a class="card-action-link" href="/explore.html">ดูบนแผนที่ →</a>
           </div>
         </div>
@@ -119,9 +120,9 @@ function getDemoCampaigns() {
   return [
     {
       id: 'camp-ray',
-      title: '🔭 สำรวจเมืองแห่งการค้นพบ',
+      title: 'สำรวจเมืองแห่งการค้นพบ',
       description: 'ออกเดินทางค้นหาสถานที่ซ่อนเร้นทั่วเมือง! เช็คอินให้ครบ 5 สถานที่ในแคมเปญนี้ แล้วรับตัวละครพิเศษ "นักสำรวจ เรย์" พร้อมโทเคนโบนัส 150 โทเคนเป็นรางวัล',
-      cover_image: '/assets/img/Wat Arun (Temple of Dawn).webp',
+      cover_image: 'https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=900&auto=format&fit=crop&q=80',
       reward_tokens: 150,
       char_name: 'นักสำรวจ — เรย์',
       char_thumb: '/assets/img/ray.png',
@@ -133,7 +134,7 @@ function getDemoCampaigns() {
     },
     {
       id: 'camp-maya',
-      title: '⛵ ผจญภัยชายฝั่ง — มายา อีดิชัน',
+      title: 'ผจญภัยชายฝั่ง — มายา อีดิชัน',
       description: 'สำรวจท่าเรือ ตลาดน้ำ และสถานที่ริมแม่น้ำ สัมผัสวิถีชีวิตชาวน้ำ เช็คอินให้ครบแล้วรับตัวละคร "นักสำรวจ มายา" พร้อม 120 โทเคนเป็นรางวัล!',
       cover_image: 'https://images.unsplash.com/photo-1548940740-204726a19be3?w=800&auto=format&fit=crop&q=80',
       reward_tokens: 120,
@@ -157,7 +158,7 @@ function renderCampaignCard(c, linkedChar) {
   const tagClass = isMaya ? 'campaign-char-badge-tag tag-maya' : 'campaign-char-badge-tag';
   const coverImg = c.image_url || c.cover_image || (isMaya
     ? 'https://images.unsplash.com/photo-1548940740-204726a19be3?w=800&auto=format&fit=crop&q=80'
-    : '/assets/img/Wat Arun (Temple of Dawn).webp');
+    : 'https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=900&auto=format&fit=crop&q=80');
 
   const charThumb = linkedChar?.image_url || c.char_thumb || (isMaya ? '/assets/img/maya.png' : '/assets/img/ray.png');
   const charName = linkedChar?.name || c.char_name || (isMaya ? 'นักสำรวจ — มายา' : 'นักสำรวจ — เรย์');
@@ -191,8 +192,8 @@ function renderCampaignCard(c, linkedChar) {
           <span class="badge badge-campaign">Special Campaign</span>
           <span class="campaign-deadline"><svg class="ic" width="14" height="14" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-calendar"></use></svg> ${esc(fmtDate(c.ends_at))}</span>
         </div>
-        <h3 class="card-title">${esc(c.title)}</h3>
-        <p class="card-summary">${esc(c.description || '')}</p>
+        <h3 class="card-title">${esc(stripEmoji(c.title))}</h3>
+        <p class="card-summary">${esc(stripEmoji(c.description || ''))}</p>
 
         <div class="campaign-reward-box ${rewardTheme}">
           <img class="campaign-char-thumb" src="${esc(charThumb)}" alt="${esc(charName)}" loading="lazy" onerror="this.onerror=null;this.src='/assets/img/ray.png'">
@@ -217,7 +218,7 @@ function renderCampaignCard(c, linkedChar) {
         </ul>
 
         <div class="campaign-cta-row">
-          <span class="campaign-status-note">✨ รับได้จากแคมเปญเท่านั้น</span>
+          <span class="campaign-status-note">รับได้จากแคมเปญเท่านั้น</span>
           <a class="btn btn-small" href="/quests.html">เข้าร่วมแคมเปญ →</a>
         </div>
       </div>

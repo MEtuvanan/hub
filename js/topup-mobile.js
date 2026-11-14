@@ -1,7 +1,7 @@
 // topup-mobile.js — token packs, earning guide, and top-up history (local demo).
 
 import { esc, toast, confirmDialog } from './ui.js';
-import { icon } from './icons.js';
+import { icon, iconFor } from './icons.js';
 import { readJSON, writeJSON } from './mobile-data.js';
 import {
   getTokens, awardTokens, confetti, formatNum, levelInfo,
@@ -11,17 +11,17 @@ const $ = id => document.getElementById(id);
 const TOPUP_KEY = 'tc_mobile_topups';
 
 const PACKS = [
-  { id: 'tp300', tokens: 300, bonus: 0, price: 59, emoji: '🪙', note: 'เริ่มต้นสายนักสำรวจ' },
-  { id: 'tp700', tokens: 700, bonus: 50, price: 129, emoji: '💰', note: 'คุ้มค่าที่สุดสำหรับเควสท์รายวัน', hot: true },
-  { id: 'tp1500', tokens: 1500, bonus: 150, price: 259, emoji: '🧰', note: 'ปลดล็อกตัวละครระดับ Epic' },
-  { id: 'tp3200', tokens: 3200, bonus: 400, price: 499, emoji: '💎', note: 'สำหรับนักสะสมตัวจริง' },
+  { id: 'tp300', tokens: 300, bonus: 0, price: 59, icon: 'coin', note: 'เริ่มต้นสายนักสำรวจ' },
+  { id: 'tp700', tokens: 700, bonus: 50, price: 129, icon: 'store', note: 'คุ้มค่าที่สุดสำหรับเควสท์รายวัน', hot: true },
+  { id: 'tp1500', tokens: 1500, bonus: 150, price: 259, icon: 'store', note: 'ปลดล็อกตัวละครระดับ Epic' },
+  { id: 'tp3200', tokens: 3200, bonus: 400, price: 499, icon: 'star', note: 'สำหรับนักสะสมตัวจริง' },
 ];
 
 const EARN = [
-  { emoji: '⭐', title: 'ดาวนำทางประจำวัน', desc: 'กดปุ่มดาวมุมขวาบนของแอป', value: '+25', href: '#' },
-  { emoji: '🎯', title: 'ทำเควสท์ที่เที่ยว', desc: 'เช็คอินสถานที่เพื่อรับโทเคน', value: '+60–160', href: '/quests-mobile.html' },
-  { emoji: '📸', title: 'บันทึกไดอารี่', desc: 'เล่าเรื่องทริปและเก็บความทรงจำ', value: 'สะสม', href: '/journal-mobile.html' },
-  { emoji: '💚', title: 'บันทึกสถานที่โปรด', desc: 'กดหัวใจในหน้าค้นหาและหน้ารายละเอียด', value: 'สะสม', href: '/search-mobile.html' },
+  { icon: 'star', title: 'ดาวนำทางประจำวัน', desc: 'กดปุ่มดาวมุมขวาบนของแอป', value: '+25', href: '#' },
+  { icon: 'quest', title: 'ทำเควสท์ที่เที่ยว', desc: 'เช็คอินสถานที่เพื่อรับโทเคน', value: '+60–160', href: '/quests-mobile.html' },
+  { icon: 'camera', title: 'บันทึกไดอารี่', desc: 'เล่าเรื่องทริปและเก็บความทรงจำ', value: 'สะสม', href: '/journal-mobile.html' },
+  { icon: 'heart', title: 'บันทึกสถานที่โปรด', desc: 'กดหัวใจในหน้าค้นหาและหน้ารายละเอียด', value: 'สะสม', href: '/search-mobile.html' },
 ];
 
 function renderWallet() {
@@ -38,7 +38,7 @@ function renderPacks() {
   if (!box) return;
   box.innerHTML = PACKS.map(pack => `
     <article class="tp-pack ${pack.hot ? 'is-hot' : ''}">
-      <span class="tp-pack__ico">${pack.emoji}</span>
+      <span class="tp-pack__ico">${icon(pack.icon || 'coin', 20)}</span>
       <div class="tp-pack__body">
         ${pack.hot ? `<span class="tp-pack__badge">คุ้มที่สุด</span>` : ''}
         <strong>${formatNum(pack.tokens + pack.bonus)} โทเคน</strong>
@@ -61,7 +61,7 @@ function renderEarn() {
   if (!box) return;
   box.innerHTML = EARN.map(row => `
     <a class="tp-earn__row" href="${esc(row.href)}">
-      <span class="tp-earn__ico">${row.emoji}</span>
+      <span class="tp-earn__ico">${icon(row.icon || 'star', 18)}</span>
       <span class="tp-earn__body">
         <strong>${esc(row.title)}</strong>
         <span>${esc(row.desc)}</span>

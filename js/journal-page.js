@@ -2,6 +2,7 @@ import { requireAuth } from './auth.js';
 import { supabase } from './supabase.js';
 import { listDiaries, saveDiary, deleteDiary, deletePhoto, signedUrls, validatePhoto } from './journal.js';
 import { esc, toast, confirmDialog, stateEmpty, stateLoading, isUuid } from './ui.js';
+import { icon } from './icons.js';
 
 const $ = id => document.getElementById(id);
 const pad = n => String(n).padStart(2, '0');
@@ -160,10 +161,10 @@ function selectDay(dateStr) {
   titleEl.textContent = formatThaiDate(dateStr);
 
   const parts = [];
-  if (dayData?.diary?.length) parts.push(`📔 ไดอารี่ ${dayData.diary.length} เรื่อง`);
-  if (dayData?.photo) parts.push(`📷 รูป ${dayData.photo} รูป`);
-  if (dayData?.quest?.length) parts.push(`🎯 เควสท์ ${dayData.quest.length} ภารกิจ`);
-  if (dayData?.trip?.length) parts.push(`🧭 ทริป ${dayData.trip.length} ทริป`);
+  if (dayData?.diary?.length) parts.push(`<span style="display:inline-flex;align-items:center;gap:3px;">${icon('journal', 14)} ไดอารี่ ${dayData.diary.length} เรื่อง</span>`);
+  if (dayData?.photo) parts.push(`<span style="display:inline-flex;align-items:center;gap:3px;">${icon('camera', 14)} รูป ${dayData.photo} รูป</span>`);
+  if (dayData?.quest?.length) parts.push(`<span style="display:inline-flex;align-items:center;gap:3px;">${icon('quest', 14)} เควสท์ ${dayData.quest.length} ภารกิจ</span>`);
+  if (dayData?.trip?.length) parts.push(`<span style="display:inline-flex;align-items:center;gap:3px;">${icon('compass', 14)} ทริป ${dayData.trip.length} ทริป</span>`);
 
   if (parts.length) {
     summaryEl.innerHTML = `<strong>พบกิจกรรมในวันนี้:</strong> ${parts.join(' · ')}`;
@@ -179,15 +180,15 @@ function selectDay(dateStr) {
     if (dayData.quest?.length) {
       eventsHtml += dayData.quest.map(q => `
         <div class="sdc-event-item">
-          <span>🎯 <strong>เควสท์:</strong> ${esc(q.quests?.title || 'เช็คอิน')}</span>
-          <span class="badge" style="background:#FEF3C7;color:#92400E;font-size:0.75rem;">+${q.quests?.reward_tokens || 50} 🪙</span>
+          <span style="display:inline-flex;align-items:center;gap:5px;">${icon('quest', 15)} <strong>เควสท์:</strong> ${esc(q.quests?.title || 'เช็คอิน')}</span>
+          <span class="badge" style="background:#FEF3C7;color:#92400E;font-size:0.75rem;display:inline-flex;align-items:center;gap:4px;">+${q.quests?.reward_tokens || 50} ${icon('coin', 12)}</span>
         </div>
       `).join('');
     }
     if (dayData.trip?.length) {
       eventsHtml += dayData.trip.map(t => `
         <div class="sdc-event-item">
-          <span>🧭 <strong>ทริป:</strong> <a href="/planner.html?trip=${encodeURIComponent(t.id)}">${esc(t.title)}</a></span>
+          <span style="display:inline-flex;align-items:center;gap:5px;">${icon('compass', 15)} <strong>ทริป:</strong> <a href="/planner.html?trip=${encodeURIComponent(t.id)}">${esc(t.title)}</a></span>
         </div>
       `).join('');
     }
@@ -259,11 +260,11 @@ async function refreshJournal() {
       extraCardsHtml += dayData.quest.map(q => `
         <article class="activity-card quest">
           <div style="display:flex;align-items:center;gap:0.75rem;">
-            <span style="font-size:1.8rem;">🎯</span>
+            <span style="display:inline-grid;place-items:center;width:38px;height:38px;border-radius:50%;background:#FEF3C7;color:#92400E;">${icon('quest', 22)}</span>
             <div>
-              <span class="badge" style="background:#FEF3C7;color:#92400E;font-size:0.75rem;margin-bottom:0.25rem;">เช็คอินเควสท์สำเร็จ 🏆</span>
+              <span class="badge" style="background:#FEF3C7;color:#92400E;font-size:0.75rem;margin-bottom:0.25rem;">เช็คอินเควสท์สำเร็จ</span>
               <h3 style="margin:0;font-size:1.05rem;color:#78350F;">${esc(q.quests?.title || 'เควสท์ท่องเที่ยว')}</h3>
-              <p class="meta" style="margin:0.2rem 0 0;">ได้รับ 🪙 +${q.quests?.reward_tokens || 50} โทเคน</p>
+              <p class="meta" style="margin:0.2rem 0 0;display:flex;align-items:center;gap:4px;">ได้รับ ${icon('coin', 13)} +${q.quests?.reward_tokens || 50} โทเคน</p>
             </div>
           </div>
           ${q.photo_url ? `<img src="${esc(q.photo_url)}" style="width:58px;height:58px;border-radius:8px;object-fit:cover;box-shadow:0 2px 6px rgba(0,0,0,0.15);" alt="Checkin">` : ''}
@@ -275,9 +276,9 @@ async function refreshJournal() {
       extraCardsHtml += dayData.trip.map(t => `
         <article class="activity-card trip">
           <div style="display:flex;align-items:center;gap:0.75rem;">
-            <span style="font-size:1.8rem;">🧭</span>
+            <span style="display:inline-grid;place-items:center;width:38px;height:38px;border-radius:50%;background:#DBEAFE;color:#1E40AF;">${icon('compass', 22)}</span>
             <div>
-              <span class="badge" style="background:#DBEAFE;color:#1E40AF;font-size:0.75rem;margin-bottom:0.25rem;">ทริปท่องเที่ยว ✈️</span>
+              <span class="badge" style="background:#DBEAFE;color:#1E40AF;font-size:0.75rem;margin-bottom:0.25rem;">ทริปท่องเที่ยว</span>
               <h3 style="margin:0;font-size:1.05rem;"><a href="/planner.html?trip=${encodeURIComponent(t.id)}" style="color:#1E3A8A;text-decoration:none;">${esc(t.title)}</a></h3>
               <p class="meta" style="margin:0.2rem 0 0;">กำหนดการเดินทาง ${t.total_days || 1} วัน</p>
             </div>
@@ -294,10 +295,10 @@ async function refreshJournal() {
       
       $('list').innerHTML = `
         <div style="text-align:center;padding:2.5rem 1.5rem;background:#fff;border:1px dashed var(--color-border);border-radius:var(--radius-large);margin-top:0.5rem;">
-          <div style="font-size:2.8rem;margin-bottom:0.5rem;">📔</div>
+          <div style="margin-bottom:0.5rem;color:var(--color-emerald);">${icon('journal', 42)}</div>
           <h3 style="margin:0 0 0.5rem;color:var(--color-forest);">${esc(msg)}</h3>
           <p class="muted" style="margin:0 0 1.25rem;font-size:0.875rem;">บันทึกความทรงจำ รูปถ่าย และความประทับใจ เพื่อเก็บเป็นไดอารี่การเดินทางส่วนตัวของคุณ</p>
-          <button class="btn" id="empty-add-btn" type="button">➕ เขียนบันทึกใหม่</button>
+          <button class="btn" id="empty-add-btn" type="button" style="display:inline-flex;align-items:center;gap:6px;">${icon('plus', 16)} เขียนบันทึกใหม่</button>
         </div>
       `;
       $('empty-add-btn')?.addEventListener('click', () => openEditor(null, selectedDay));
@@ -331,9 +332,9 @@ async function refreshJournal() {
             <div>
               <h2>${esc(d.title)}</h2>
               <div class="entry-meta">
-                <span class="entry-meta-badge">📅 ${esc(formattedDate)}</span>
-                ${d.mood ? `<span class="entry-meta-badge mood">💭 ${esc(d.mood)}</span>` : ''}
-                ${placeNames ? `<span class="entry-meta-badge">📍 ${esc(placeNames)}</span>` : ''}
+                <span class="entry-meta-badge" style="display:inline-flex;align-items:center;gap:4px;">${icon('calendar', 13)} ${esc(formattedDate)}</span>
+                ${d.mood ? `<span class="entry-meta-badge mood" style="display:inline-flex;align-items:center;gap:4px;">${icon('smile', 13)} ${esc(d.mood)}</span>` : ''}
+                ${placeNames ? `<span class="entry-meta-badge" style="display:inline-flex;align-items:center;gap:4px;">${icon('pin', 13)} ${esc(placeNames)}</span>` : ''}
               </div>
             </div>
           </div>
@@ -343,8 +344,8 @@ async function refreshJournal() {
           ${photosHtml ? `<div class="thumbs">${photosHtml}</div>` : ''}
 
           <div class="entry-actions">
-            <button class="btn btn-small btn-secondary" data-edit="${esc(d.id)}" type="button">✏️ แก้ไข</button>
-            <button class="btn btn-small btn-danger" data-del="${esc(d.id)}" type="button">🗑️ ลบ</button>
+            <button class="btn btn-small btn-secondary" data-edit="${esc(d.id)}" type="button" style="display:inline-flex;align-items:center;gap:4px;">${icon('edit', 14)} แก้ไข</button>
+            <button class="btn btn-small btn-danger" data-del="${esc(d.id)}" type="button" style="display:inline-flex;align-items:center;gap:4px;">${icon('trash', 14)} ลบ</button>
           </div>
         </article>
       `;
@@ -466,7 +467,7 @@ $('ed-form').addEventListener('submit', async e => {
     });
 
     $('editor').close();
-    toast(failed?.length ? `บันทึกแล้ว (มีรูปไม่สำเร็จ ${failed.length} รูป)` : 'บันทึกเรื่องราวเรียบร้อยแล้ว! 🎉', 'ok');
+    toast(failed?.length ? `บันทึกแล้ว (มีรูปไม่สำเร็จ ${failed.length} รูป)` : 'บันทึกเรื่องราวเรียบร้อยแล้ว!', 'ok');
 
     // Update both Calendar and Journal immediately
     await Promise.all([loadMonthCalendar(), refreshJournal()]);
@@ -478,7 +479,7 @@ $('ed-form').addEventListener('submit', async e => {
     msg.textContent = `เกิดข้อผิดพลาดในการบันทึก: ${err.message}`;
   } finally {
     $('ed-save').disabled = false;
-    $('ed-save').textContent = '💾 บันทึกเรื่องราว';
+    $('ed-save').textContent = 'บันทึกเรื่องราว';
   }
 });
 

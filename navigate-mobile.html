@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#07130f">
+<meta name="theme-color" content="#FFFFFF">
 <link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml">
 <title>นำทางไปสถานที่ — Travel and Challenge</title>
 <meta name="description" content="ดูแผนที่ ระยะทาง และเส้นทางไปยังสถานที่ท่องเที่ยวที่เลือก">
@@ -13,6 +13,7 @@
 <link rel="stylesheet" href="/css/base.css">
 <link rel="stylesheet" href="/css/mobile-app.css">
 <link rel="stylesheet" href="/css/pages/support-mobile.css">
+  <link rel="stylesheet" href="/css/theme.css">
 </head>
 <body class="app-phone" data-app-page="navigate">
 
@@ -22,7 +23,7 @@
   <p class="app-sub" id="navSub">กำลังโหลดข้อมูลสถานที่…</p>
 
   <section class="sup-hero" id="navHero">
-    <span class="sup-hero__ico" id="navEmoji">📍</span>
+    <span class="sup-hero__ico" id="navEmoji"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><use href="/assets/icons/sprite.svg#i-pin"></use></svg></span>
     <div class="sup-hero__body">
       <h2 id="navName">สถานที่ท่องเที่ยว</h2>
       <p id="navMeta">เลือกจากแผนที่หรือหน้ารายละเอียดสถานที่</p>
@@ -84,17 +85,17 @@
     </div>
     <div class="sup-list">
       <a class="sup-row" href="/quests-mobile.html">
-        <span class="sup-row__ico">🎯</span>
+        <span class="sup-row__ico"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><use href="/assets/icons/sprite.svg#i-quest"></use></svg></span>
         <span class="sup-row__body"><strong>หาเควสท์ที่สถานที่นี้</strong><span>ปัดการ์ดเลือกภารกิจที่สนใจ</span></span>
         <span class="sup-row__arrow">›</span>
       </a>
       <a class="sup-row" href="/journal-mobile.html">
-        <span class="sup-row__ico">📖</span>
+        <span class="sup-row__ico"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><use href="/assets/icons/sprite.svg#i-book"></use></svg></span>
         <span class="sup-row__body"><strong>เขียนบันทึกหลังเที่ยว</strong><span>เก็บความรู้สึกและรูปภาพในไดอารี่</span></span>
         <span class="sup-row__arrow">›</span>
       </a>
       <a class="sup-row" href="/explore-mobile.html">
-        <span class="sup-row__ico">🗺️</span>
+        <span class="sup-row__ico"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><use href="/assets/icons/sprite.svg#i-map"></use></svg></span>
         <span class="sup-row__body"><strong>กลับไปแผนที่ AR</strong><span>ให้ตัวละครเดินสำรวจต่อ</span></span>
         <span class="sup-row__arrow">›</span>
       </a>

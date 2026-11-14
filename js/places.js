@@ -53,7 +53,25 @@ export async function getFilterOptions() {
 }
 
 export async function getPlace(id) {
-  if (!isUuid(id)) throw new Error('invalid id');
+  if (!isUuid(id)) {
+    try {
+      const { DEMO_PLACES } = await import('./mobile-data.js');
+      const found = (DEMO_PLACES || []).find(p => p.id === id);
+      if (found) {
+        return enrichPlaceData({
+          ...found,
+          category_th: found.categoryLabel,
+          opening_hours: found.hours,
+          entry_fee: found.fee,
+          visitor_info: found.description,
+          provinces: { name_en: found.province },
+          districts: { name_en: found.district },
+          place_categories: { name: found.categoryLabel },
+        });
+      }
+    } catch {}
+    throw new Error('invalid id');
+  }
   const { data, error } = await supabase.from('places')
     .select(`*, provinces(name_en), districts(name_en), place_categories(name), place_images(url, alt, position)`)
     .eq('id', id).eq('status', 'published').maybeSingle();

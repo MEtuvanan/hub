@@ -78,7 +78,7 @@ const TURN_ICON = {
   'rotary':              '⟳', 'merge':         '↑',  'fork':             '↑',
   'ramp-left':           '↖', 'ramp-right':    '↗',
   'end of road-left':    '←',  'end of road-right': '→',
-  'new name-straight':   '↑',  'arrive':        '◎', 'depart':           '⚐',
+  'new name-straight':   '↑',  'arrive':        '◎', 'depart':           '',
   'notification-straight': '↑', 'use lane':     '→',
 };
 const TURN_TH = {
@@ -151,12 +151,12 @@ async function initMap() {
   const destIcon = L.divIcon({
     className: 'nav-dest-pin',
     html: `<div style="background:linear-gradient(135deg,#EF4444,#DC2626);width:36px;height:36px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:3px solid #fff;box-shadow:0 4px 14px rgba(239,68,68,.55);display:grid;place-items:center;">
-             <span style="transform:rotate(45deg);font-size:16px;line-height:1;">📍</span></div>`,
+             <span style="transform:rotate(45deg);font-size:16px;line-height:1;"></span></div>`,
     iconSize: [36, 36], iconAnchor: [18, 36], popupAnchor: [0, -36]
   });
   destMarker = L.marker([destination.lat, destination.lng], { icon: destIcon })
     .addTo(map)
-    .bindPopup(`<strong>🏁 ${destination.name}</strong>`, { autoClose: false });
+    .bindPopup(`<strong>${destination.name}</strong>`, { autoClose: false });
 }
 
 // ── OSRM Routing ──────────────────────────────────────────────
@@ -249,7 +249,7 @@ function speak(text) {
 // ── GPS Tracking ──────────────────────────────────────────────
 function startTracking() {
   if (!navigator.geolocation) {
-    showGPSBar('❌', 'เบราว์เซอร์ไม่รองรับ GPS');
+    showGPSBar('', 'เบราว์เซอร์ไม่รองรับ GPS');
     return;
   }
   watchId = navigator.geolocation.watchPosition(onPosition, onGPSError, WATCH_OPTIONS);
@@ -310,7 +310,7 @@ function onGPSError(err) {
     2: 'ไม่พบสัญญาณ GPS — กำลังใช้ตำแหน่งเริ่มต้นจำลอง',
     3: 'หมดเวลาค้นหา GPS — กำลังใช้ตำแหน่งเริ่มต้นจำลอง',
   };
-  showGPSBar('📍', msgs[err.code] || 'ใช้ตำแหน่งเริ่มต้นจำลอง');
+  showGPSBar('', msgs[err.code] || 'ใช้ตำแหน่งเริ่มต้นจำลอง');
   if (!userPos && destination.lat && destination.lng) {
     const fallbackLat = destination.lat - 0.02;
     const fallbackLng = destination.lng - 0.02;
@@ -322,10 +322,10 @@ function onGPSError(err) {
 // ── Route Calculation ─────────────────────────────────────────
 async function calculateRoute() {
   if (!userPos) {
-    showGPSBar('📡', 'กำลังรอสัญญาณ GPS…');
+    showGPSBar('', 'กำลังรอสัญญาณ GPS…');
     return;
   }
-  showGPSBar('🔄', 'กำลังคำนวณเส้นทาง…');
+  showGPSBar('', 'กำลังคำนวณเส้นทาง…');
   try {
     const route = await fetchRoute(userPos, destination, travelMode);
     drawRoute(route.geometry);

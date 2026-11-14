@@ -14,11 +14,11 @@ function toLocalInput(iso) {
 }
 
 const STATUS = {
-  pending: ['⏳', 'รอตรวจสอบ'],
-  approved: ['✅', 'อนุมัติแล้ว'],
-  rejected: ['❌', 'ไม่ผ่านการอนุมัติ'],
-  active: ['✅', 'อนุมัติแล้ว (ใช้งานอยู่)'],
-  draft: ['📝', 'ร่าง'],
+  pending: ['', 'รอตรวจสอบ'],
+  approved: ['', 'อนุมัติแล้ว'],
+  rejected: ['', 'ไม่ผ่านการอนุมัติ'],
+  active: ['', 'อนุมัติแล้ว (ใช้งานอยู่)'],
+  draft: ['', 'ร่าง'],
 };
 
 const PRESET_CHAR_AVATARS = [
@@ -84,7 +84,7 @@ function removeLocalCampaign(id) {
 }
 
 export async function renderStoreTab(el, session) {
-  el.innerHTML = '<div style="padding:2rem;text-align:center;color:#64748B;">⏳ กำลังโหลดข้อมูลแคมเปญและตัวละคร...</div>';
+  el.innerHTML = '<div style="padding:2rem;text-align:center;color:#64748B;">กำลังโหลดข้อมูลแคมเปญและตัวละคร...</div>';
   const uid = session.user.id;
   const isAdmin = session.isAdmin || session.user?.email?.toLowerCase() === 'ttt@gmail.com';
 
@@ -162,7 +162,7 @@ export async function renderStoreTab(el, session) {
     <div class="add-card" style="background:#FFF;border:1.5px solid #E2E8F0;border-radius:16px;padding:1.5rem;box-shadow:0 4px 15px rgba(0,0,0,0.03);">
       <div class="add-card-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;border-bottom:1px solid #F1F5F9;padding-bottom:0.75rem;">
         <span class="add-card-title" id="camp-form-title" style="font-size:1.15rem;font-weight:700;color:#0F172A;display:flex;align-items:center;gap:0.4rem;">
-          📣 สร้างแคมเปญการท่องเที่ยวใหม่ (Campaign Proposal)
+          สร้างแคมเปญการท่องเที่ยวใหม่ (Campaign Proposal)
         </span>
         <span style="font-size:0.75rem;background:#ECFDF5;color:#059669;padding:3px 10px;border-radius:9999px;font-weight:700;">ฟรี ไม่มีค่าธรรมเนียม</span>
       </div>
@@ -184,20 +184,20 @@ export async function renderStoreTab(el, session) {
           <!-- Cover Image Option -->
           <div class="pf-field" style="grid-column:1/-1">
             <label class="pf-label" style="display:flex;justify-content:space-between;">
-              <span>🖼️ ภาพปกแคมเปญ (Cover Image)</span>
+              <span>ภาพปกแคมเปญ (Cover Image)</span>
               <span style="font-size:0.75rem;color:#64748B;">เลือกภาพตัวอย่างด่วน หรืออัปโหลดไฟล์ / ระบุ URL</span>
             </label>
             <div style="display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:0.5rem;">
               ${PRESET_CAMPAIGN_COVERS.map((p, idx) => `
                 <button type="button" class="btn btn-secondary btn-small cf-preset-cover" data-url="${esc(p.url)}" style="font-size:0.78rem;padding:0.25rem 0.6rem;">
-                  📷 ${esc(p.name)}
+                  ${esc(p.name)}
                 </button>
               `).join('')}
             </div>
             <div style="display:grid;grid-template-columns:1fr auto;gap:0.5rem;">
               <input id="cf-img-url" class="pf-input" placeholder="https://... หรืออัปโหลดไฟล์ด้านขวา">
               <input id="cf-img-file" type="file" accept="image/jpeg,image/png,image/webp" style="display:none;">
-              <button type="button" class="btn btn-secondary btn-small" id="cf-img-btn" style="white-space:nowrap;">📁 เลือกไฟล์รูป</button>
+              <button type="button" class="btn btn-secondary btn-small" id="cf-img-btn" style="white-space:nowrap;">เลือกไฟล์รูป</button>
             </div>
             <div id="cf-cover-preview-box" style="margin-top:0.5rem;display:none;">
               <img id="cf-cover-preview" src="" alt="Cover preview" style="max-height:140px;border-radius:10px;border:1px solid #E2E8F0;object-fit:cover;">
@@ -220,11 +220,11 @@ export async function renderStoreTab(el, session) {
           <!-- Places Multi-select -->
           <div class="pf-field" style="grid-column:1/-1">
             <label class="pf-label" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem;">
-              <span>📍 สถานที่ของแคมเปญ (เลือกสถานที่ที่เข้าร่วม — เลือกได้หลายที่)</span>
+              <span>สถานที่ของแคมเปญ (เลือกสถานที่ที่เข้าร่วม — เลือกได้หลายที่)</span>
               <span id="cf-places-count" style="font-size:0.82rem;font-weight:600;color:#059669;">เลือกแล้ว 0 แห่ง</span>
             </label>
             <div style="display:flex;gap:0.5rem;margin-bottom:0.5rem;">
-              <input id="cf-place-filter" class="pf-input" type="search" placeholder="🔍 ค้นหาสถานที่..." style="padding:0.4rem 0.65rem;font-size:0.85rem;flex:1;">
+              <input id="cf-place-filter" class="pf-input" type="search" placeholder="ค้นหาสถานที่..." style="padding:0.4rem 0.65rem;font-size:0.85rem;flex:1;">
               <button class="btn btn-secondary btn-small" type="button" id="cf-places-clear" style="white-space:nowrap;padding:0.35rem 0.65rem;font-size:0.8rem;">ล้างที่เลือก</button>
             </div>
             <div id="cf-places-box" style="max-height:190px;overflow-y:auto;border:1.5px solid #E2E8F0;border-radius:10px;padding:0.5rem;background:#F8FAFC;display:flex;flex-direction:column;gap:0.35rem;">
@@ -243,7 +243,7 @@ export async function renderStoreTab(el, session) {
           <span style="font-size:.82rem;color:#64748B;">เมื่อส่งข้อมูลแล้ว แอดมินจะตรวจสอบและแจ้งผลอนุมัติ</span>
           <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;">
             <button class="btn btn-secondary" type="button" id="cf-cancel-edit" style="display:none;padding:0.6rem 1rem;">ยกเลิกการแก้ไข</button>
-            <button class="btn" type="submit" id="cf-submit" style="padding:0.6rem 1.4rem;">📤 ส่งแคมเปญให้แอดมินตรวจสอบ</button>
+            <button class="btn" type="submit" id="cf-submit" style="padding:0.6rem 1.4rem;">ส่งแคมเปญให้แอดมินตรวจสอบ</button>
           </div>
         </div>
       </form>
@@ -252,7 +252,7 @@ export async function renderStoreTab(el, session) {
     <!-- ── 2. My Campaigns Table ── -->
     <div class="partner-table-wrap" style="margin-top:1.5rem;background:#FFF;border:1.5px solid #E2E8F0;border-radius:16px;overflow-x:auto;box-shadow:0 4px 15px rgba(0,0,0,0.03);">
       <div style="padding:1rem 1.25rem;font-weight:700;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #F1F5F9;">
-        <span style="font-size:1.05rem;color:#0F172A;">📋 แคมเปญของฉัน (${campaigns.length})</span>
+        <span style="font-size:1.05rem;color:#0F172A;">แคมเปญของฉัน (${campaigns.length})</span>
         <span style="font-size:0.82rem;color:#64748B;">อนุมัติแล้ว ${approvedCampaigns.length} แคมเปญ</span>
       </div>
       <table class="partner-table" style="width:100%;border-collapse:collapse;">
@@ -270,7 +270,7 @@ export async function renderStoreTab(el, session) {
             const places = (c.campaign_places || []).map(cp => cp.places?.name).filter(Boolean);
             const placesHtml = places.length
               ? `<div style="display:flex;flex-wrap:wrap;gap:0.3rem;font-size:0.82rem;">
-                  ${places.map(pn => `<span style="background:#F1F5F9;border:1px solid #CBD5E1;padding:1px 6px;border-radius:4px;color:#1E293B;">📍 ${esc(pn)}</span>`).join('')}
+                  ${places.map(pn => `<span style="background:#F1F5F9;border:1px solid #CBD5E1;padding:1px 6px;border-radius:4px;color:#1E293B;">${esc(pn)}</span>`).join('')}
                 </div>`
               : '<span class="muted" style="font-size:0.82rem;color:#94A3B8;">(ไม่ได้ระบุสถานที่)</span>';
             const thumb = c.image_url || '/assets/img/Wat Arun (Temple of Dawn).webp';
@@ -280,11 +280,11 @@ export async function renderStoreTab(el, session) {
               </td>
               <td style="padding:0.75rem 1rem;">
                 <strong style="color:#0F172A;font-size:0.92rem;">${esc(c.title)}</strong>
-                ${c.reward_tokens ? `<div style="font-size:0.8rem;color:#D97706;font-weight:600;margin-top:2px;">🪙 รางวัล ${c.reward_tokens} โทเคน</div>` : ''}
+                ${c.reward_tokens ? `<div style="font-size:0.8rem;color:#D97706;font-weight:600;margin-top:2px;">รางวัล ${c.reward_tokens} โทเคน</div>` : ''}
                 <div style="font-size:0.78rem;color:#64748B;margin-top:2px;">${esc((c.description || '').slice(0, 90))}</div>
                 ${(isAdmin || c.created_by === uid) ? `<div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.4rem;">
-                  <button type="button" class="btn btn-small btn-secondary" data-camp-edit="${esc(c.id)}" data-name="${esc(c.title)}">✏️ แก้ไข</button>
-                  <button type="button" class="btn btn-small btn-danger" data-camp-del="${esc(c.id)}" data-name="${esc(c.title)}">🗑️ ลบ</button>
+                  <button type="button" class="btn btn-small btn-secondary" data-camp-edit="${esc(c.id)}" data-name="${esc(c.title)}">แก้ไข</button>
+                  <button type="button" class="btn btn-small btn-danger" data-camp-del="${esc(c.id)}" data-name="${esc(c.title)}">ลบ</button>
                 </div>` : ''}
               </td>
               <td style="padding:0.75rem 1rem;">${placesHtml}</td>
@@ -300,7 +300,7 @@ export async function renderStoreTab(el, session) {
     <div class="add-card" style="margin-top:2rem;background:#FFF;border:1.5px solid #E2E8F0;border-radius:16px;padding:1.5rem;box-shadow:0 4px 15px rgba(0,0,0,0.03);">
       <div class="add-card-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;border-bottom:1px solid #F1F5F9;padding-bottom:0.75rem;">
         <span class="add-card-title" style="font-size:1.15rem;font-weight:700;color:#0F172A;display:flex;align-items:center;gap:0.4rem;">
-          🧸 เพิ่มตัวละครประจำแคมเปญ (Character Submission)
+          เพิ่มตัวละครประจำแคมเปญ (Character Submission)
         </span>
         <span style="font-size:0.75rem;background:#EEF2FF;color:#4F46E5;padding:3px 10px;border-radius:9999px;font-weight:700;">แจกฟรีในแคมเปญ หรือขึ้นร้านค้า</span>
       </div>
@@ -320,7 +320,7 @@ export async function renderStoreTab(el, session) {
             <select id="chf-camp" class="pf-select" required>
               ${campaigns.length ? campaigns.map(c => `
                 <option value="${esc(c.id)}" ${c.approval_status === 'approved' ? 'selected' : ''}>
-                  ${c.approval_status === 'approved' ? '✅ ' : '⏳ '}${esc(c.title)}
+                  ${c.approval_status === 'approved' ? '' : '[รอตรวจสอบ] '}${esc(c.title)}
                 </option>
               `).join('') : '<option value="">-- กรุณาสร้างแคมเปญก่อน --</option>'}
             </select>
@@ -358,24 +358,24 @@ export async function renderStoreTab(el, session) {
           <!-- Character Avatar Option -->
           <div class="pf-field" style="grid-column:1/-1">
             <label class="pf-label" style="display:flex;justify-content:space-between;">
-              <span>🎨 รูปตัวละคร / อวตาร (Avatar Image) <span>*</span></span>
+              <span>รูปตัวละคร / อวตาร (Avatar Image) <span>*</span></span>
               <span style="font-size:0.75rem;color:#64748B;">เลือกภาพมาสค็อต หรืออัปโหลดไฟล์ของร้าน</span>
             </label>
             <div style="display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:0.5rem;">
               ${PRESET_CHAR_AVATARS.map(p => `
                 <button type="button" class="btn btn-secondary btn-small chf-preset-avatar" data-url="${esc(p.url)}" style="font-size:0.78rem;padding:0.25rem 0.6rem;">
-                  🧸 ${esc(p.name)}
+                  ${esc(p.name)}
                 </button>
               `).join('')}
             </div>
             <div style="display:grid;grid-template-columns:1fr auto;gap:0.5rem;">
               <input id="chf-img-url" class="pf-input" placeholder="ระบุ URL รูปภาพ หรือกดปุ่มอัปโหลดด้านขวา">
               <input id="chf-img-file" type="file" accept="image/jpeg,image/png,image/webp" style="display:none;">
-              <button type="button" class="btn btn-secondary btn-small" id="chf-img-btn" style="white-space:nowrap;">📁 เลือกไฟล์รูปภาพ</button>
+              <button type="button" class="btn btn-secondary btn-small" id="chf-img-btn" style="white-space:nowrap;">เลือกไฟล์รูปภาพ</button>
             </div>
             <div id="chf-avatar-preview-box" style="margin-top:0.5rem;display:none;align-items:center;gap:0.75rem;">
               <img id="chf-avatar-preview" src="" alt="Avatar preview" style="width:70px;height:70px;border-radius:12px;border:1.5px solid #CBD5E1;object-fit:cover;">
-              <span style="font-size:0.82rem;color:#059669;font-weight:600;">✓ เลือกรูปตัวละครเรียบร้อย</span>
+              <span style="font-size:0.82rem;color:#059669;font-weight:600;">เลือกรูปตัวละครเรียบร้อย</span>
             </div>
           </div>
 
@@ -385,14 +385,14 @@ export async function renderStoreTab(el, session) {
             <div style="display:grid;grid-template-columns:1fr auto;gap:0.5rem;">
               <input id="chf-model-url" class="pf-input" placeholder="URL ไฟล์โมเดล 3D (ไม่บังคับ)">
               <input id="chf-model-file" type="file" accept=".glb,.gltf,.fbx,.obj,.zip" style="display:none;">
-              <button type="button" class="btn btn-secondary btn-small" id="chf-model-btn" style="white-space:nowrap;">📦 เลือกไฟล์ 3D</button>
+              <button type="button" class="btn btn-secondary btn-small" id="chf-model-btn" style="white-space:nowrap;">เลือกไฟล์ 3D</button>
             </div>
             <div id="chf-model-name" style="font-size:0.8rem;color:#64748B;margin-top:0.25rem;"></div>
           </div>
         </div>
         <div style="margin-top:1.25rem;display:flex;justify-content:space-between;align-items:center;">
           <span style="font-size:.82rem;color:#64748B;">แอดมินจะตรวจสอบตัวละครและนำขึ้นสู่ระบบ</span>
-          <button class="btn" type="submit" id="chf-submit" style="padding:0.6rem 1.4rem;">📤 ส่งตัวละครให้แอดมินตรวจสอบ</button>
+          <button class="btn" type="submit" id="chf-submit" style="padding:0.6rem 1.4rem;">ส่งตัวละครให้แอดมินตรวจสอบ</button>
         </div>
       </form>
     </div>
@@ -400,7 +400,7 @@ export async function renderStoreTab(el, session) {
     <!-- ── 4. My Characters Table ── -->
     <div class="partner-table-wrap" style="margin-top:1.5rem;background:#FFF;border:1.5px solid #E2E8F0;border-radius:16px;overflow-x:auto;box-shadow:0 4px 15px rgba(0,0,0,0.03);">
       <div style="padding:1rem 1.25rem;font-weight:700;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #F1F5F9;">
-        <span style="font-size:1.05rem;color:#0F172A;">🧸 ตัวละครของฉัน (${characters.length})</span>
+        <span style="font-size:1.05rem;color:#0F172A;">ตัวละครของฉัน (${characters.length})</span>
         <span style="font-size:0.82rem;color:#64748B;">แสดงในร้านค้า &amp; คอลเลกชันเมื่ออนุมัติ</span>
       </div>
       <table class="partner-table" style="width:100%;border-collapse:collapse;">
@@ -423,7 +423,7 @@ export async function renderStoreTab(el, session) {
               : rarity === 'epic' ? '<span style="background:#EDE9FE;color:#7C3AED;padding:2px 6px;border-radius:4px;font-weight:700;font-size:0.72rem;">Epic</span>'
               : rarity === 'rare' ? '<span style="background:#E0F2FE;color:#0284C7;padding:2px 6px;border-radius:4px;font-weight:700;font-size:0.72rem;">Rare</span>'
               : '<span style="background:#F1F5F9;color:#475569;padding:2px 6px;border-radius:4px;font-weight:700;font-size:0.72rem;">Common</span>';
-            const has3d = c.model_url ? `<a href="${esc(c.model_url)}" target="_blank" rel="noopener" style="font-size:0.8rem;color:#2563EB;">📦 ดูโมเดล 3D</a>` : '<span style="color:#94A3B8;font-size:0.8rem;">—</span>';
+            const has3d = c.model_url ? `<a href="${esc(c.model_url)}" target="_blank" rel="noopener" style="font-size:0.8rem;color:#2563EB;">ดูโมเดล 3D</a>` : '<span style="color:#94A3B8;font-size:0.8rem;">—</span>';
             return `<tr style="border-bottom:1px solid #F1F5F9;">
               <td style="padding:0.75rem 1rem;width:60px;">
                 <img src="${esc(avatar)}" alt="" style="width:48px;height:48px;border-radius:10px;object-fit:cover;border:1px solid #E2E8F0;" onerror="this.onerror=null;this.src='/assets/img/ray.png'">
@@ -492,8 +492,8 @@ function fillCampaignForm(el, c, isAdmin, scroll = true) {
     }
   }
 
-  if (q('#camp-form-title')) q('#camp-form-title').textContent = '✏️ แก้ไขแคมเปญ';
-  if (q('#cf-submit')) q('#cf-submit').textContent = isAdmin ? '💾 บันทึกการแก้ไข' : '💾 บันทึกการแก้ไขและส่งตรวจสอบ';
+  if (q('#camp-form-title')) q('#camp-form-title').textContent = 'แก้ไขแคมเปญ';
+  if (q('#cf-submit')) q('#cf-submit').textContent = isAdmin ? 'บันทึกการแก้ไข' : 'บันทึกการแก้ไขและส่งตรวจสอบ';
   if (q('#cf-cancel-edit')) q('#cf-cancel-edit').style.display = 'inline-flex';
   if (q('#camp-msg')) q('#camp-msg').innerHTML = '';
   if (scroll) q('#camp-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -510,8 +510,8 @@ function resetCampaignForm(el) {
   if (q('#cf-img-url')) q('#cf-img-url').value = '';
   if (q('#cf-cover-preview-box')) q('#cf-cover-preview-box').style.display = 'none';
   if (q('#cf-cover-preview')) q('#cf-cover-preview').removeAttribute('src');
-  if (q('#camp-form-title')) q('#camp-form-title').textContent = '📣 สร้างแคมเปญการท่องเที่ยวใหม่ (Campaign Proposal)';
-  if (q('#cf-submit')) q('#cf-submit').textContent = '📤 ส่งแคมเปญให้แอดมินตรวจสอบ';
+  if (q('#camp-form-title')) q('#camp-form-title').textContent = 'สร้างแคมเปญการท่องเที่ยวใหม่ (Campaign Proposal)';
+  if (q('#cf-submit')) q('#cf-submit').textContent = 'ส่งแคมเปญให้แอดมินตรวจสอบ';
   if (q('#cf-cancel-edit')) q('#cf-cancel-edit').style.display = 'none';
   if (q('#camp-msg')) q('#camp-msg').innerHTML = '';
 }
@@ -683,7 +683,7 @@ function wire(el, session, campaigns, allPlaces) {
   modelBtn?.addEventListener('click', () => modelFileInput.click());
   modelFileInput?.addEventListener('change', () => {
     const file = modelFileInput.files[0];
-    if (file && modelName) modelName.textContent = `📦 ไฟล์ที่เลือก: ${file.name} (${Math.round(file.size / 1024)} KB)`;
+    if (file && modelName) modelName.textContent = `ไฟล์ที่เลือก: ${file.name} (${Math.round(file.size / 1024)} KB)`;
   });
 
   // ── Campaign Form Submit ─────────────────────────────────────
@@ -703,7 +703,7 @@ function wire(el, session, campaigns, allPlaces) {
     const placePickerAvailable = el.querySelectorAll('.cf-place-chk').length > 0;
 
     btn.disabled = true;
-    out.innerHTML = '<span style="color:#059669;">⏳ กำลังบันทึกแคมเปญ...</span>';
+    out.innerHTML = '<span style="color:#059669;">กำลังบันทึกแคมเปญ...</span>';
 
     const desc = el.querySelector('#cf-desc').value.trim() || null;
     const tokens = Math.max(0, Math.min(1000, parseInt(el.querySelector('#cf-tokens').value, 10) || 0));
@@ -923,7 +923,7 @@ function wire(el, session, campaigns, allPlaces) {
     } catch (e) {}
 
     btn.disabled = false;
-    toast('ส่งแคมเปญให้แอดมินเรียบร้อยแล้ว รอการอนุมัติ 🚀', 'ok');
+    toast('ส่งแคมเปญให้แอดมินเรียบร้อยแล้ว รอการอนุมัติ ', 'ok');
     reload();
   });
 
@@ -964,7 +964,7 @@ function wire(el, session, campaigns, allPlaces) {
     }
 
     btn.disabled = true;
-    out.innerHTML = '<span style="color:#059669;">⏳ กำลังส่งข้อมูลตัวละคร...</span>';
+    out.innerHTML = '<span style="color:#059669;">กำลังส่งข้อมูลตัวละคร...</span>';
 
     let saved = false;
     let savedId = null;
@@ -1037,7 +1037,7 @@ function wire(el, session, campaigns, allPlaces) {
     } catch (e) {}
 
     btn.disabled = false;
-    toast('ส่งตัวละครให้แอดมินตรวจสอบแล้ว 🎉', 'ok');
+    toast('ส่งตัวละครให้แอดมินตรวจสอบแล้ว ', 'ok');
     reload();
   });
 }

@@ -1,7 +1,7 @@
 // planner-mobile.js — local day-by-day trip builder.
 
 import { esc, toast } from './ui.js';
-import { icon } from './icons.js';
+import { icon, iconFor } from './icons.js';
 import {
   fetchPlaces, CATEGORIES, categoryMeta, readJSON, writeJSON,
 } from './mobile-data.js';
@@ -10,10 +10,10 @@ const $ = id => document.getElementById(id);
 const TRIPS_KEY = 'tc_mobile_trips';
 
 const SLOTS = [
-  { id: 'morning', label: 'เช้า', emoji: '🌅', time: '08:30' },
-  { id: 'noon', label: 'บ่าย', emoji: '☀️', time: '13:00' },
-  { id: 'evening', label: 'เย็น', emoji: '🌇', time: '16:30' },
-  { id: 'night', label: 'ค่ำ', emoji: '🌙', time: '19:00' },
+  { id: 'morning', label: 'เช้า', icon: 'sun', time: '08:30' },
+  { id: 'noon', label: 'บ่าย', icon: 'sun', time: '13:00' },
+  { id: 'evening', label: 'เย็น', icon: 'compass', time: '16:30' },
+  { id: 'night', label: 'ค่ำ', icon: 'star', time: '19:00' },
 ];
 
 const PACE = { relaxed: 2, balanced: 3, packed: 4 };
@@ -35,7 +35,7 @@ function renderForm() {
   if (box) {
     box.innerHTML = CATEGORIES.map(c => `
       <button class="pl-chip ${interests.has(c.id) ? 'is-active' : ''}" type="button" data-interest="${c.id}">
-        <span class="emoji">${c.emoji}</span>${esc(c.label)}
+        <span class="emoji">${iconFor(c.emoji, 14)}</span>${esc(c.label)}
       </button>`).join('');
     box.querySelectorAll('[data-interest]').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -88,11 +88,10 @@ function buildTrip() {
       items.push({
         placeId: place.id,
         name: place.name,
-        emoji: place.fallbackEmoji || meta.emoji,
         category: place.category,
         categoryLabel: place.categoryLabel || meta.label,
         slot: slot.label,
-        slotEmoji: slot.emoji,
+        slotIcon: slot.icon,
         time: slot.time,
         minutes: 60 + (items.length % 3) * 30,
         province: place.province,
@@ -141,12 +140,12 @@ function renderTrip(trip) {
         <div class="pl-day__title"><h3>วันที่ ${day.day}</h3><span>${day.items.length} จุดหมาย</span></div>
         ${day.items.map(item => `
           <a class="pl-stop" href="/place-mobile.html?id=${encodeURIComponent(item.placeId)}">
-            <span class="pl-stop__slot"><span class="emoji">${esc(item.slotEmoji)}</span>${esc(item.slot)}</span>
+            <span class="pl-stop__slot"><span class="emoji">${icon(item.slotIcon || 'sun', 13)}</span>${esc(item.slot)}</span>
             <span class="pl-stop__body">
-              <strong>${esc(item.emoji)} ${esc(item.name)}</strong>
+              <strong>${icon('pin', 14)} ${esc(item.name)}</strong>
               <span>${esc(item.time)} · ${esc(item.categoryLabel)} · ${item.minutes} นาที</span>
             </span>
-            <span class="pl-stop__go">ดูสถานที่ →</span>
+            <span class="pl-stop__go">ดูสถานที่ ${icon('arrow-right', 12)}</span>
           </a>`).join('')}
       </div>`).join('')}
     <div class="pl-actions">

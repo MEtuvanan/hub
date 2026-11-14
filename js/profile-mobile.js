@@ -1,7 +1,7 @@
 // profile-mobile.js — explorer avatar, wardrobe/dress-up, stats, and account menu.
 
 import { esc, toast } from './ui.js';
-import { icon } from './icons.js';
+import { icon, iconFor } from './icons.js';
 import {
   CHARACTERS, OUTFIT_OPTIONS, PRESETS, DEFAULT_OUTFIT,
   loadOutfit, saveOutfit, completedQuests, favoritePlaces,
@@ -12,19 +12,19 @@ const $ = id => document.getElementById(id);
 const NAME_KEY = 'tc_mobile_guest_name';
 
 const TABS = [
-  { id: 'hair', label: 'ทรงผม', emoji: '💇', options: 'hair', color: 'hairColor' },
-  { id: 'top', label: 'เสื้อ', emoji: '👕', options: 'top', color: 'topColor' },
-  { id: 'bottom', label: 'กางเกง', emoji: '👖', options: 'bottom', color: 'bottomColor' },
-  { id: 'shoes', label: 'รองเท้า', emoji: '🥾', options: 'shoes', color: 'shoeColor' },
-  { id: 'hat', label: 'หมวก', emoji: '🧢', options: 'hat', color: 'hatColor' },
-  { id: 'accessory', label: 'ของพก', emoji: '🎒', options: 'accessory', color: null },
-  { id: 'skin', label: 'สีผิว', emoji: '🎨', options: null, color: 'skin' },
+  { id: 'hair', label: 'ทรงผม', icon: 'scissors', options: 'hair', color: 'hairColor' },
+  { id: 'top', label: 'เสื้อ', icon: 'shirt', options: 'top', color: 'topColor' },
+  { id: 'bottom', label: 'กางเกง', icon: 'pants', options: 'bottom', color: 'bottomColor' },
+  { id: 'shoes', label: 'รองเท้า', icon: 'boot', options: 'shoes', color: 'shoeColor' },
+  { id: 'hat', label: 'หมวก', icon: 'hat', options: 'hat', color: 'hatColor' },
+  { id: 'accessory', label: 'ของพก', icon: 'backpack', options: 'accessory', color: null },
+  { id: 'skin', label: 'สีผิว', icon: 'palette', options: null, color: 'skin' },
 ];
 
 const PRESET_LABELS = {
   ray: 'เรย์', maya: 'มายา', zael: 'ซาเอล', luna: 'ลูน่า',
 };
-const ACCESSORY_ICONS = { camera: '📷', backpack: '🎒', map: '🗺️', sword: '🗡️', none: '' };
+const ACCESSORY_ICONS = { camera: 'camera', backpack: 'backpack', map: 'map', sword: 'flag', none: '' };
 
 let outfit = loadOutfit();
 let tab = 'hair';
@@ -76,7 +76,7 @@ function applyOutfit(persist = true) {
   };
   Object.entries(vars).forEach(([key, value]) => doll.style.setProperty(key, value));
   const acc = doll.querySelector('.doll__accessory');
-  if (acc) acc.textContent = ACCESSORY_ICONS[outfit.accessory] || '';
+  if (acc) acc.innerHTML = ACCESSORY_ICONS[outfit.accessory] ? icon(ACCESSORY_ICONS[outfit.accessory], 13) : '';
   const hat = doll.querySelector('.doll__hat');
   if (hat) hat.className = `doll__hat doll__hat--${outfit.hat}`;
   if (persist) saveOutfit(outfit);
@@ -91,7 +91,7 @@ function renderPresets() {
   box.innerHTML = Object.keys(PRESETS).map(id => {
     const char = CHARACTERS.find(c => c.id === `char-${id}`);
     return `<button class="pf-preset ${outfit.preset === id ? 'is-active' : ''}" type="button" data-preset="${esc(id)}" title="${esc(char?.name || id)}">
-      <span class="emoji">${char?.image ? '🧭' : '🧑‍🚀'}</span>${esc(PRESET_LABELS[id] || id)}
+      <span class="emoji">${icon('compass', 16)}</span>${esc(PRESET_LABELS[id] || id)}
     </button>`;
   }).join('');
   box.querySelectorAll('[data-preset]').forEach(btn => {
@@ -110,7 +110,7 @@ function renderTabs() {
   if (!box) return;
   box.innerHTML = TABS.map(t => `
     <button class="pf-tab ${tab === t.id ? 'is-active' : ''}" type="button" data-ptab="${t.id}">
-      <span class="emoji">${t.emoji}</span>${t.label}
+      <span class="emoji">${icon(t.icon, 15)}</span>${t.label}
     </button>`).join('');
   box.querySelectorAll('[data-ptab]').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -135,7 +135,7 @@ function renderOptions() {
   const options = OUTFIT_OPTIONS[t.options] || [];
   box.innerHTML = options.map(opt => `
     <button class="pf-option ${outfit[t.options] === opt.id ? 'is-active' : ''}" type="button" data-popt="${esc(opt.id)}">
-      <span class="emoji">${esc(opt.emoji || '•')}</span>${esc(opt.label || opt.id)}
+      <span class="emoji">${iconFor(opt.emoji, 15)}</span>${esc(opt.label || opt.id)}
     </button>`).join('');
   box.querySelectorAll('[data-popt]').forEach(btn => {
     btn.addEventListener('click', () => {

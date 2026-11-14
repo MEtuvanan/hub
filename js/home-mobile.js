@@ -1,7 +1,7 @@
 // home-mobile.js — AR hero map + scrolling adventure feed.
 
 import { esc } from './ui.js';
-import { icon } from './icons.js';
+import { icon, iconFor } from './icons.js';
 import { initARMap } from './ar-map.js';
 import {
   fetchPlaces, fetchQuests, completedQuests, favoritePlaces,
@@ -34,19 +34,19 @@ function imageBlock(src, emoji, alt, cls = '') {
   return `
     <img src="${esc(src || '')}" alt="${esc(alt)}" class="${cls}" loading="lazy"
       onerror="this.style.display='none';this.nextElementSibling.hidden=false">
-    <span class="fallback" hidden>${esc(emoji || '📍')}</span>`;
+    <span class="fallback" hidden>${iconFor(emoji, 22)}</span>`;
 }
 
 function questCard(q) {
   return `
     <article class="hm-quest" data-quest-id="${esc(q.id)}" tabindex="0" role="button" aria-label="${esc(q.title)}">
       <div class="hm-quest__media">
-        ${imageBlock(q.image, q.emoji || '🎯', q.title)}
+        ${imageBlock(q.image, q.emoji || q.icon || 'quest', q.title)}
         <div class="hm-quest__top">
           <span class="g-chip g-chip--mint">${esc(q.typeLabel || 'ภารกิจ')}</span>
           <span class="g-coin">${icon('coin', 13)} +${Number(q.reward || 0)}</span>
         </div>
-        <span class="hm-quest__emoji" aria-hidden="true">${esc(q.emoji || '🎯')}</span>
+        <span class="hm-quest__emoji" aria-hidden="true">${iconFor(q.emoji || q.icon || 'quest', 26)}</span>
       </div>
       <div class="hm-quest__body">
         <h3>${esc(q.title)}</h3>
@@ -63,7 +63,7 @@ function placeCard(p) {
   return `
     <a class="hm-place" href="/place-mobile.html?id=${encodeURIComponent(p.id)}">
       <span class="hm-place__media">
-        ${imageBlock(p.image, p.fallbackEmoji || '📍', p.name)}
+        ${imageBlock(p.image, p.fallbackEmoji || p.icon || 'map', p.name)}
       </span>
       <span class="hm-place__body">
         <h3>${esc(p.name)}</h3>
@@ -196,11 +196,27 @@ async function boot() {
 
   const hero = $('homeMap');
   if (hero) {
+    // Keep the hero map at street level around Bangkok: pick the seven nearest
+    // places so a stray far-away pin cannot zoom the map out to the whole region.
+    const origin = { lat: 13.7563, lng: 100.5018 };
+    const ranked = places
+      .filter(p => Number.isFinite(p.lat) && Number.isFinite(p.lng))
+      .map(p => ({
+        p,
+        d: Math.hypot((p.lat - origin.lat) * 111, (p.lng - origin.lng) * 108),
+      }))
+      .sort((a, b) => a.d - b.d);
+    const local = ranked.filter(x => x.d < 32).slice(0, 7).map(x => x.p);
+    const heroPlaces = local.length >= 3 ? local : ranked.slice(0, 7).map(x => x.p);
+
     map = initARMap(hero, {
-      places: places.slice(0, 7),
+      places: heroPlaces,
       interactive: false,
       autoWalk: true,
       showPins: true,
+      fitPlaces: true,
+      focus: { x: 0, y: 0.1 },
+      zoom: 15,
       onPlaceClick: place => {
         location.href = `/place-mobile.html?id=${encodeURIComponent(place.id)}`;
       },

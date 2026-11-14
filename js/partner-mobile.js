@@ -39,7 +39,7 @@ function showSuccess(business) {
   card.id = 'ptSuccess';
   card.className = 'sup-success';
   card.innerHTML = `
-    <div class="sup-success__badge">✓</div>
+    <div class="sup-success__badge">${icon('check', 20)}</div>
     <h2>ส่งใบสมัครแล้ว</h2>
     <p>ทีมงานจะตรวจสอบข้อมูลของ “${esc(business)}” และติดต่อกลับภายใน 3 วันทำการ</p>
     <div class="sup-actions" style="width:100%;max-width:300px">
@@ -104,7 +104,7 @@ function renderApps() {
   }
   box.innerHTML = `<div class="sup-list">${apps.map(app => `
     <div class="sup-row" style="align-items:flex-start">
-      <span class="sup-row__ico">🏪</span>
+      <span class="sup-row__ico">${icon('store', 16)}</span>
       <span class="sup-row__body">
         <strong>${esc(app.business)}</strong>
         <span>${esc(CATEGORY_LABEL[app.category] || app.category)} · ${esc(app.province)}</span>

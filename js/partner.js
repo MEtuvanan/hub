@@ -3,6 +3,7 @@ import { supabase } from './supabase.js';
 import { getSession, getProfile } from './auth.js';
 import { esc, toast } from './ui.js';
 import { renderStoreTab } from './partner-store.js';
+import { icon } from './icons.js';
 
 const $ = id => document.getElementById(id);
 const root = $('partner-main');
@@ -26,12 +27,12 @@ function fmtDateShort(iso) {
 }
 function badgeHtml(status) {
   const MAP = {
-    pending:  { cls: 'status-pending',  icon: '⏳', label: 'รอดำเนินการ' },
-    approved: { cls: 'status-approved', icon: '✅', label: 'อนุมัติแล้ว' },
-    rejected: { cls: 'status-rejected', icon: '❌', label: 'ไม่ผ่านการอนุมัติ' },
-    draft:    { cls: 'status-draft',    icon: '📝', label: 'แบบร่าง' },
-    published:{ cls: 'status-approved', icon: '🌐', label: 'เผยแพร่แล้ว' },
-    archived: { cls: 'status-rejected', icon: '📦', label: 'เก็บถาวร' },
+    pending:  { cls: 'status-pending',  icon: '', label: 'รอดำเนินการ' },
+    approved: { cls: 'status-approved', icon: '', label: 'อนุมัติแล้ว' },
+    rejected: { cls: 'status-rejected', icon: '', label: 'ไม่ผ่านการอนุมัติ' },
+    draft:    { cls: 'status-draft',    icon: '', label: 'แบบร่าง' },
+    published:{ cls: 'status-approved', icon: '', label: 'เผยแพร่แล้ว' },
+    archived: { cls: 'status-rejected', icon: '', label: 'เก็บถาวร' },
   };
   const m = MAP[status] || MAP.draft;
   return `<span class="status-badge ${m.cls}">${m.icon} ${m.label}</span>`;
@@ -95,7 +96,7 @@ function openMapPicker(defaultLat = 13.7563, defaultLng = 100.5018, onConfirm) {
 function renderApplyView() {
   root.innerHTML = `
     <div class="partner-hero">
-      <div class="partner-hero-badge">🏢 สำหรับผู้ประกอบการ</div>
+      <div class="partner-hero-badge">สำหรับผู้ประกอบการ</div>
       <h1>เพิ่มสถานที่ของคุณ<br>และสร้างเควสท์ดึงดูดนักท่องเที่ยว</h1>
       <p>ลงทะเบียนฟรี ปักหมุดสถานที่บนแผนที่ สร้างเควสท์โฟโต้เช็คอิน รับสถิติผู้มาเยือนจริงแบบเรียลไทม์</p>
     </div>
@@ -106,7 +107,7 @@ function renderApplyView() {
     </div>
     <div class="partner-apply-wrap">
       <div class="partner-card">
-        <h2 class="partner-card-title">📋 สมัครเป็นผู้ประกอบการ</h2>
+        <h2 class="partner-card-title">สมัครเป็นผู้ประกอบการ</h2>
         <p class="partner-card-sub">กรอกข้อมูลส่วนตัวทั่วไปก่อน จากนั้นระบุข้อมูลธุรกิจ แอดมินจะตรวจสอบและอนุมัติก่อนจึงจะเพิ่มสถานที่และเควสท์ได้</p>
         <div id="apply-msg"></div>
         <form id="apply-form" novalidate>
@@ -155,8 +156,8 @@ function renderApplyView() {
             <textarea id="ap-desc" class="pf-textarea" maxlength="1000" placeholder="อธิบายลักษณะธุรกิจ จุดเด่น กิจกรรม หรือสิ่งที่ผู้เยี่ยมชมจะได้รับ..."></textarea>
           </div>
           <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid #E2E8F0;">
-            <p style="font-size:0.82rem;color:#64748B;margin:0 0 1rem;">🔒 ข้อมูลของคุณจะถูกเก็บเป็นความลับ มองเห็นได้เฉพาะแอดมินและตัวคุณเอง</p>
-            <button type="submit" class="btn" id="apply-submit-btn" style="width:100%;justify-content:center;font-size:1rem;padding:0.85rem;">📩 ส่งใบสมัครผู้ประกอบการ</button>
+            <p style="font-size:0.82rem;color:#64748B;margin:0 0 1rem;">ข้อมูลของคุณจะถูกเก็บเป็นความลับ มองเห็นได้เฉพาะแอดมินและตัวคุณเอง</p>
+            <button type="submit" class="btn" id="apply-submit-btn" style="width:100%;justify-content:center;font-size:1rem;padding:0.85rem;">ส่งใบสมัครผู้ประกอบการ</button>
           </div>
         </form>
       </div>
@@ -164,10 +165,10 @@ function renderApplyView() {
       <!-- Benefits section -->
       <div style="margin-top:2rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(180px,100%),1fr));gap:1rem;">
         ${[
-          ['📊', 'แดชบอร์ดสถิติ', 'ดูจำนวนผู้มาเช็คอินและเพิ่มขึ้นเท่าไหร่'],
-          ['📍', 'ปักหมุดสถานที่', 'ปักพิกัดบนแผนที่ให้นักท่องเที่ยวหาเจอ'],
-          ['🎯', 'สร้างเควสท์', 'สร้างภารกิจถ่ายรูปเช็คอินดึงดูดนักท่องเที่ยว'],
-          ['🏆', 'รับโทเคน', 'ผู้มาเช็คอินสะสมโทเคนและปลดล็อกตัวละคร'],
+          ['', 'แดชบอร์ดสถิติ', 'ดูจำนวนผู้มาเช็คอินและเพิ่มขึ้นเท่าไหร่'],
+          ['', 'ปักหมุดสถานที่', 'ปักพิกัดบนแผนที่ให้นักท่องเที่ยวหาเจอ'],
+          ['', 'สร้างเควสท์', 'สร้างภารกิจถ่ายรูปเช็คอินดึงดูดนักท่องเที่ยว'],
+          ['', 'รับโทเคน', 'ผู้มาเช็คอินสะสมโทเคนและปลดล็อกตัวละคร'],
         ].map(([icon, title, desc]) => `
           <div style="background:#fff;border:1px solid #E2E8F0;border-radius:12px;padding:1.1rem;box-shadow:0 2px 8px rgba(0,0,0,0.04);">
             <div style="font-size:1.75rem;margin-bottom:0.5rem;">${icon}</div>
@@ -208,7 +209,7 @@ async function submitApplication(e) {
   }
 
   btn.disabled = true;
-  btn.textContent = '⏳ กำลังส่งใบสมัคร...';
+  btn.textContent = 'กำลังส่งใบสมัคร...';
 
   try {
     const payload = {
@@ -258,7 +259,7 @@ async function submitApplication(e) {
     msgEl.innerHTML = alert(`เกิดข้อผิดพลาด: ${err.message || 'กรุณาลองใหม่'}`, 'error');
   } finally {
     btn.disabled = false;
-    btn.textContent = '📩 ส่งใบสมัครผู้ประกอบการ';
+    btn.textContent = 'ส่งใบสมัครผู้ประกอบการ';
   }
 }
 
@@ -269,17 +270,17 @@ function renderPendingView(app) {
   const isRejected = app.status === 'rejected';
   root.innerHTML = `
     <div class="partner-hero">
-      <div class="partner-hero-badge">🏢 สำหรับผู้ประกอบการ</div>
+      <div class="partner-hero-badge">สำหรับผู้ประกอบการ</div>
       <h1>${isRejected ? 'ใบสมัครไม่ผ่านการอนุมัติ' : 'รอการยืนยันจากแอดมิน'}</h1>
       <p>${isRejected ? 'ดูรายละเอียดด้านล่างและสมัครใหม่หากต้องการ' : 'แอดมินกำลังตรวจสอบข้อมูลของคุณ'}</p>
     </div>
     <div class="partner-steps">
-      <div class="partner-step done"><span class="partner-step-num">✓</span> สมัครสมาชิก</div>
+      <div class="partner-step done"><span class="partner-step-num"></span> สมัครสมาชิก</div>
       <div class="partner-step ${isRejected ? '' : 'active'}"><span class="partner-step-num">2</span> รอยืนยัน</div>
       <div class="partner-step"><span class="partner-step-num">3</span> เพิ่มสถานที่ & เควสท์</div>
     </div>
     <div class="pending-wrap">
-      <div class="pending-icon">${isRejected ? '❌' : '⏳'}</div>
+      <div class="pending-icon">${isRejected ? icon('close', 40) : icon('clock', 40)}</div>
       <h2 class="pending-title">${isRejected ? 'ใบสมัครถูกปฏิเสธ' : 'ใบสมัครอยู่ระหว่างการตรวจสอบ'}</h2>
       <p class="pending-sub">
         ${isRejected
@@ -288,7 +289,7 @@ function renderPendingView(app) {
       </p>
 
       <div class="partner-card" style="text-align:left;">
-        <h3 style="margin:0 0 0.85rem;font-size:0.95rem;color:#374151;">📋 ข้อมูลที่ส่ง</h3>
+        <h3 style="margin:0 0 0.85rem;font-size:0.95rem;color:#374151;">ข้อมูลที่ส่ง</h3>
         <table style="width:100%;font-size:0.88rem;border-collapse:collapse;">
           ${[
             ['ชื่อธุรกิจ', app.business_name],
@@ -309,15 +310,15 @@ function renderPendingView(app) {
       ${isRejected ? `
         ${app.admin_notes ? `
         <div class="rejection-card" style="margin-top:1.25rem;">
-          <h3>📝 หมายเหตุจากแอดมิน</h3>
+          <h3>หมายเหตุจากแอดมิน</h3>
           <p>${esc(app.admin_notes)}</p>
         </div>` : ''}
-        <button class="btn" id="reapply-btn" style="margin-top:1.25rem;width:100%;justify-content:center;">🔄 แก้ไขข้อมูลแล้วสมัครใหม่</button>
+        <button class="btn" id="reapply-btn" style="margin-top:1.25rem;width:100%;justify-content:center;">แก้ไขข้อมูลแล้วสมัครใหม่</button>
       ` : `
         <div class="pending-info-card">
-          <strong>⏰ ระยะเวลาตรวจสอบ:</strong> 1-3 วันทำการ<br>
-          <strong>📧 อีเมลติดต่อ:</strong> admin@travelandchallenge.th<br>
-          <strong>📌 หมายเลขใบสมัคร:</strong> <code style="font-size:0.78rem;background:#fff;padding:0.15rem 0.4rem;border-radius:4px;">${app.id.slice(0, 8).toUpperCase()}</code>
+          <strong>ระยะเวลาตรวจสอบ:</strong> 1-3 วันทำการ<br>
+          <strong>อีเมลติดต่อ:</strong> admin@travelandchallenge.th<br>
+          <strong>หมายเลขใบสมัคร:</strong> <code style="font-size:0.78rem;background:#fff;padding:0.15rem 0.4rem;border-radius:4px;">${app.id.slice(0, 8).toUpperCase()}</code>
         </div>
       `}
     </div>
@@ -336,50 +337,50 @@ let myQuests = [];
 async function renderDashboard() {
   root.innerHTML = `
     <div class="partner-hero" style="padding:2rem 1.5rem 1.5rem;">
-      <div class="partner-hero-badge">✅ ผู้ประกอบการที่ผ่านการรับรอง</div>
+      <div class="partner-hero-badge">ผู้ประกอบการที่ผ่านการรับรอง</div>
       <h1 style="font-size:1.75rem;">สวัสดี, ${esc(partnerApp?.business_name || profile?.display_name || 'คุณ')}!</h1>
       <p>บัญชีผู้ประกอบการของคุณพร้อมแล้ว ดูว่ามีคนมาทำเควสท์เท่าไร และจัดการสถานที่บนแดชบอร์ดนี้</p>
     </div>
     <div class="partner-steps">
-      <div class="partner-step done"><span class="partner-step-num">✓</span> สมัครสมาชิก</div>
-      <div class="partner-step done"><span class="partner-step-num">✓</span> ผ่านการยืนยัน</div>
+      <div class="partner-step done"><span class="partner-step-num"></span> สมัครสมาชิก</div>
+      <div class="partner-step done"><span class="partner-step-num"></span> ผ่านการยืนยัน</div>
       <div class="partner-step active"><span class="partner-step-num">3</span> จัดการสถานที่ & เควสท์</div>
     </div>
     <div class="partner-dashboard">
       <!-- Stats Row -->
       <div class="partner-stats-row" id="partner-stats-row">
         <div class="partner-stat-card">
-          <div class="partner-stat-icon">📍</div>
+          <div class="partner-stat-icon"></div>
           <div class="partner-stat-val" id="ps-places">—</div>
           <div class="partner-stat-label">สถานที่ของฉัน</div>
         </div>
         <div class="partner-stat-card">
-          <div class="partner-stat-icon">🎯</div>
+          <div class="partner-stat-icon"></div>
           <div class="partner-stat-val" id="ps-quests">—</div>
           <div class="partner-stat-label">เควสท์ที่สร้าง</div>
         </div>
         <div class="partner-stat-card">
-          <div class="partner-stat-icon">🏆</div>
+          <div class="partner-stat-icon"></div>
           <div class="partner-stat-val" id="ps-checkins">—</div>
           <div class="partner-stat-label">ยอดเช็คอินทั้งหมด</div>
         </div>
         <div class="partner-stat-card">
-          <div class="partner-stat-icon">📅</div>
+          <div class="partner-stat-icon"></div>
           <div class="partner-stat-val" id="ps-today">—</div>
           <div class="partner-stat-label">เช็คอินวันนี้</div>
         </div>
         <div class="partner-stat-card">
-          <div class="partner-stat-icon">👥</div>
+          <div class="partner-stat-icon"></div>
           <div class="partner-stat-val" id="ps-unique">—</div>
           <div class="partner-stat-label">คนที่มาทำเควสท์</div>
         </div>
         <div class="partner-stat-card">
-          <div class="partner-stat-icon">🪙</div>
+          <div class="partner-stat-icon"></div>
           <div class="partner-stat-val" id="ps-tokens">—</div>
           <div class="partner-stat-label">โทเคนที่แจกไป</div>
         </div>
         <div class="partner-stat-card">
-          <div class="partner-stat-icon">📣</div>
+          <div class="partner-stat-icon"></div>
           <div class="partner-stat-val" id="ps-campaigns">—</div>
           <div class="partner-stat-label">แคมเปญที่อนุมัติ</div>
         </div>
@@ -387,11 +388,11 @@ async function renderDashboard() {
 
       <!-- Tabs -->
       <div class="partner-tabs">
-        <button class="ptab-btn active" data-tab="overview">📊 ภาพรวม</button>
-        <button class="ptab-btn" data-tab="places">📍 สถานที่ของฉัน</button>
-        <button class="ptab-btn" data-tab="quests">🎯 เควสท์ของฉัน</button>
-        <button class="ptab-btn" data-tab="checkins">🏆 ประวัติเช็คอิน</button>
-        <button class="ptab-btn" data-tab="store">📣 แคมเปญ & ตัวละคร</button>
+        <button class="ptab-btn active" data-tab="overview">ภาพรวม</button>
+        <button class="ptab-btn" data-tab="places">สถานที่ของฉัน</button>
+        <button class="ptab-btn" data-tab="quests">เควสท์ของฉัน</button>
+        <button class="ptab-btn" data-tab="checkins">ประวัติเช็คอิน</button>
+        <button class="ptab-btn" data-tab="store">แคมเปญ & ตัวละคร</button>
       </div>
 
       <!-- Tab Panels -->
@@ -547,17 +548,17 @@ function renderOverviewTab() {
     if (pendingPlaces) parts.push(`<strong>${pendingPlaces} สถานที่</strong>`);
     if (pendingQuests) parts.push(`<strong>${pendingQuests} เควสท์</strong>`);
     if (pendingCamps) parts.push(`<strong>${pendingCamps} แคมเปญ</strong>`);
-    alertsHtml += alert(`⏳ คุณมี ${parts.join(' และ ')} ที่รอแอดมินตรวจสอบ`, 'info');
+    alertsHtml += alert(`คุณมี ${parts.join(' และ ')} ที่รอแอดมินตรวจสอบ`, 'info');
   }
   if (approvedCamps.length > 0) {
-    alertsHtml += alert(`🎉 คุณมี <strong>${approvedCamps.length} แคมเปญที่ผ่านการอนุมัติแล้ว</strong> พร้อมเปิดรับนักท่องเที่ยวเข้าร่วม!`, 'success');
+    alertsHtml += alert(`คุณมี <strong>${approvedCamps.length} แคมเปญที่ผ่านการอนุมัติแล้ว</strong> พร้อมเปิดรับนักท่องเที่ยวเข้าร่วม!`, 'success');
   }
   if (rejPlaces + rejQuests + rejCamps > 0) {
     const parts = [];
     if (rejPlaces) parts.push(`<strong>${rejPlaces} สถานที่</strong>`);
     if (rejQuests) parts.push(`<strong>${rejQuests} เควสท์</strong>`);
     if (rejCamps) parts.push(`<strong>${rejCamps} แคมเปญ</strong>`);
-    alertsHtml += alert(`❌ รายการที่ไม่ผ่านการอนุมัติ: ${parts.join(', ')} กรุณาตรวจสอบและแก้ไข`, 'error');
+    alertsHtml += alert(`รายการที่ไม่ผ่านการอนุมัติ: ${parts.join(', ')} กรุณาตรวจสอบและแก้ไข`, 'error');
   }
 
   const recentCheckins = checkins.slice(0, 5).map(c => `
@@ -565,46 +566,46 @@ function renderOverviewTab() {
       ${c.photo_url ? `<img class="checkin-img" src="${esc(c.photo_url)}" alt="checkin">` : `<div class="checkin-avatar">${(c.profiles?.display_name || '?')[0].toUpperCase()}</div>`}
       <div class="checkin-info">
         <div class="checkin-name">${esc(c.profiles?.display_name || 'ผู้ใช้งาน')}</div>
-        <div class="checkin-place">🎯 ${esc(c.quests?.title || 'เควสท์')}</div>
+        <div class="checkin-place">${esc(c.quests?.title || 'เควสท์')}</div>
       </div>
       <div class="checkin-time">${fmtDateShort(c.completed_at)}</div>
     </div>
-  `).join('') || `<div class="partner-empty"><div class="partner-empty-icon">🏆</div><h3>ยังไม่มีการเช็คอิน</h3><p>เมื่อนักท่องเที่ยวทำเควสท์ของคุณสำเร็จ จะแสดงที่นี่</p></div>`;
+  `).join('') || `<div class="partner-empty"><div class="partner-empty-icon"></div><h3>ยังไม่มีการเช็คอิน</h3><p>เมื่อนักท่องเที่ยวทำเควสท์ของคุณสำเร็จ จะแสดงที่นี่</p></div>`;
 
   el.innerHTML = `
     ${alertsHtml}
     <div class="partner-overview-grid">
       <div>
-        <h3 style="font-size:1rem;font-weight:700;margin:0 0 0.85rem;color:#0F172A;">🏆 การเช็คอินล่าสุด</h3>
+        <h3 style="font-size:1rem;font-weight:700;margin:0 0 0.85rem;color:#0F172A;">การเช็คอินล่าสุด</h3>
         <div class="checkin-feed">${recentCheckins}</div>
       </div>
       <div>
-        <h3 style="font-size:1rem;font-weight:700;margin:0 0 0.85rem;color:#0F172A;">📋 สรุปสถานที่และเควสท์</h3>
+        <h3 style="font-size:1rem;font-weight:700;margin:0 0 0.85rem;color:#0F172A;">สรุปสถานที่และเควสท์</h3>
         <div class="partner-card" style="padding:1rem;">
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1rem;">
             <div style="background:#F0FDF4;border-radius:8px;padding:0.85rem;text-align:center;">
               <div style="font-size:1.5rem;font-weight:800;color:#059669;">${myPlaces.filter(p => p.approval_status === 'approved' && p.status === 'published').length}</div>
-              <div style="font-size:0.75rem;color:#065F46;font-weight:600;">📍 เผยแพร่แล้ว</div>
+              <div style="font-size:0.75rem;color:#065F46;font-weight:600;">เผยแพร่แล้ว</div>
             </div>
             <div style="background:#FFFBEB;border-radius:8px;padding:0.85rem;text-align:center;">
               <div style="font-size:1.5rem;font-weight:800;color:#D97706;">${myPlaces.filter(p => p.approval_status === 'pending').length}</div>
-              <div style="font-size:0.75rem;color:#92400E;font-weight:600;">⏳ รอดำเนินการ</div>
+              <div style="font-size:0.75rem;color:#92400E;font-weight:600;">รอดำเนินการ</div>
             </div>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
             <div style="background:#EFF6FF;border-radius:8px;padding:0.85rem;text-align:center;">
               <div style="font-size:1.5rem;font-weight:800;color:#2563EB;">${myQuests.filter(q => q.approval_status === 'approved' && q.status === 'published').length}</div>
-              <div style="font-size:0.75rem;color:#1E40AF;font-weight:600;">🎯 เควสท์ใช้งานได้</div>
+              <div style="font-size:0.75rem;color:#1E40AF;font-weight:600;">เควสท์ใช้งานได้</div>
             </div>
             <div style="background:#F5F3FF;border-radius:8px;padding:0.85rem;text-align:center;">
               <div style="font-size:1.5rem;font-weight:800;color:#7C3AED;">${myQuests.filter(q => q.approval_status === 'pending').length}</div>
-              <div style="font-size:0.75rem;color:#5B21B6;font-weight:600;">⏳ รอตรวจสอบ</div>
+              <div style="font-size:0.75rem;color:#5B21B6;font-weight:600;">รอตรวจสอบ</div>
             </div>
           </div>
         </div>
         <div style="margin-top:1rem;display:grid;gap:0.65rem;">
-          <button class="btn" id="quick-add-place" type="button" style="justify-content:center;">📍 เพิ่มสถานที่ใหม่</button>
-          <button class="btn btn-secondary" id="quick-add-quest" type="button" style="justify-content:center;">🎯 สร้างเควสท์ใหม่</button>
+          <button class="btn" id="quick-add-place" type="button" style="justify-content:center;">เพิ่มสถานที่ใหม่</button>
+          <button class="btn btn-secondary" id="quick-add-quest" type="button" style="justify-content:center;">สร้างเควสท์ใหม่</button>
         </div>
       </div>
 
@@ -613,7 +614,7 @@ function renderOverviewTab() {
         <div class="partner-card" style="padding:1.25rem;">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.85rem;flex-wrap:wrap;gap:0.5rem;">
             <h3 style="font-size:1.05rem;font-weight:700;margin:0;color:#0F172A;display:flex;align-items:center;gap:0.4rem;">
-              📣 แคมเปญของคุณ (${(root._campaigns || []).length})
+              แคมเปญของคุณ (${(root._campaigns || []).length})
             </h3>
             <button class="btn btn-small btn-secondary" id="overview-go-store" type="button">จัดการแคมเปญ & ซื้อตัวละคร →</button>
           </div>
@@ -625,11 +626,11 @@ function renderOverviewTab() {
                   <div style="border:1.5px solid #BBF7D0;background:#F0FDF4;border-radius:10px;padding:0.85rem;">
                     <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:0.5rem;">
                       <strong style="color:#166534;font-size:0.95rem;">${esc(c.title)}</strong>
-                      <span class="status-badge status-approved" style="font-size:0.75rem;">✅ เผยแพร่แล้ว</span>
+                      <span class="status-badge status-approved" style="font-size:0.75rem;">เผยแพร่แล้ว</span>
                     </div>
-                    ${c.reward_tokens ? `<div style="font-size:0.8rem;color:#D97706;margin:0.25rem 0;">🪙 โทเคนรางวัล: ${c.reward_tokens}</div>` : ''}
+                    ${c.reward_tokens ? `<div style="font-size:0.8rem;color:#D97706;margin:0.25rem 0;">โทเคนรางวัล: ${c.reward_tokens}</div>` : ''}
                     <div style="font-size:0.8rem;color:#4B5563;margin-top:0.35rem;">
-                      📍 ${places.length ? places.map(pn => esc(pn)).join(', ') : 'ทุกสถานที่'}
+                      ${places.length ? places.map(pn => esc(pn)).join(', ') : 'ทุกสถานที่'}
                     </div>
                   </div>
                 `;
@@ -637,7 +638,7 @@ function renderOverviewTab() {
             </div>
           ` : `
             <p style="margin:0;font-size:0.85rem;color:#64748B;">
-              ${pendingCamps ? '⏳ แคมเปญของคุณกำลังรอแอดมินตรวจสอบ' : 'ยังไม่มีแคมเปญที่เผยแพร่ คุณสามารถสร้างแคมเปญได้ที่แท็บ "แคมเปญ & ตัวละคร"'}
+              ${pendingCamps ? 'แคมเปญของคุณกำลังรอแอดมินตรวจสอบ' : 'ยังไม่มีแคมเปญที่เผยแพร่ คุณสามารถสร้างแคมเปญได้ที่แท็บ "แคมเปญ & ตัวละคร"'}
             </p>
           `}
         </div>
@@ -692,7 +693,7 @@ function renderPlacesTab(showForm = false) {
         ${(placeCampsMap.get(p.id) || []).map(c => `
           <div style="margin-top:3px;font-size:0.75rem;">
             <span class="status-badge ${c.approval_status === 'approved' ? 'status-approved' : 'status-pending'}" style="font-size:0.72rem;padding:1px 6px;">
-              📣 ${esc(c.title)} (${c.approval_status === 'approved' ? 'อนุมัติแล้ว' : 'รอตรวจ'})
+              ${esc(c.title)} (${c.approval_status === 'approved' ? 'อนุมัติแล้ว' : 'รอตรวจ'})
             </span>
           </div>
         `).join('')}
@@ -701,13 +702,13 @@ function renderPlacesTab(showForm = false) {
       <td>${badgeHtml(p.status)}</td>
       <td style="color:#64748B;font-size:0.82rem;">${fmtDateShort(p.created_at)}</td>
     </tr>
-  `).join('') || `<tr><td colspan="4"><div class="partner-empty"><div class="partner-empty-icon">📍</div><h3>ยังไม่มีสถานที่</h3><p>เพิ่มสถานที่แรกของคุณ</p></div></td></tr>`;
+  `).join('') || `<tr><td colspan="4"><div class="partner-empty"><div class="partner-empty-icon"></div><h3>ยังไม่มีสถานที่</h3><p>เพิ่มสถานที่แรกของคุณ</p></div></td></tr>`;
 
   el.innerHTML = `
     <!-- Add Place Form -->
     <div class="add-card" id="add-place-card" style="${showForm ? '' : ''}">
       <div class="add-card-header">
-        <span class="add-card-title">📍 เพิ่มสถานที่ใหม่</span>
+        <span class="add-card-title">เพิ่มสถานที่ใหม่</span>
         <button class="btn btn-small btn-secondary" id="toggle-place-form" type="button">▼ แสดง/ซ่อนฟอร์ม</button>
       </div>
       <div id="place-form-wrap">
@@ -724,7 +725,7 @@ function renderPlacesTab(showForm = false) {
             </div>
           </div>
           <div style="margin-top:1rem;">
-            <label class="pf-label" style="margin-bottom:0.5rem;display:block;">📍 พิกัดสถานที่ <span style="color:#EF4444;">*</span></label>
+            <label class="pf-label" style="margin-bottom:0.5rem;display:block;">พิกัดสถานที่ <span style="color:#EF4444;">*</span></label>
             <div class="map-pick-row">
               <div class="pf-field">
                 <label class="pf-label">ละติจูด</label>
@@ -734,12 +735,12 @@ function renderPlacesTab(showForm = false) {
                 <label class="pf-label">ลองจิจูด</label>
                 <input id="pf-lng" class="pf-input" type="number" step="any" placeholder="100.5018" readonly>
               </div>
-              <button type="button" class="btn-map-pick" id="open-map-btn">🗺️ เลือกบนแผนที่</button>
+              <button type="button" class="btn-map-pick" id="open-map-btn">เลือกบนแผนที่</button>
             </div>
           </div>
           <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid #F1F5F9;">
-            <p style="font-size:0.82rem;color:#64748B;margin:0 0 0.85rem;">⏳ สถานที่จะถูกส่งไปยังแอดมินเพื่อตรวจสอบ จะแสดงบนแผนที่หลังจากได้รับการอนุมัติ</p>
-            <button type="submit" class="btn" id="place-submit-btn">📤 ส่งขอเพิ่มสถานที่</button>
+            <p style="font-size:0.82rem;color:#64748B;margin:0 0 0.85rem;">สถานที่จะถูกส่งไปยังแอดมินเพื่อตรวจสอบ จะแสดงบนแผนที่หลังจากได้รับการอนุมัติ</p>
+            <button type="submit" class="btn" id="place-submit-btn">ส่งขอเพิ่มสถานที่</button>
           </div>
         </form>
       </div>
@@ -747,7 +748,7 @@ function renderPlacesTab(showForm = false) {
 
     <!-- My Places Table -->
     <div class="partner-table-wrap">
-      <div style="padding:1rem 1rem 0;font-size:1rem;font-weight:700;color:#0F172A;">📋 สถานที่ของฉัน (${myPlaces.length})</div>
+      <div style="padding:1rem 1rem 0;font-size:1rem;font-weight:700;color:#0F172A;">สถานที่ของฉัน (${myPlaces.length})</div>
       <table class="partner-table" style="margin-top:0.5rem;">
         <thead>
           <tr>
@@ -793,7 +794,7 @@ function renderPlacesTab(showForm = false) {
     if (!selectedLat || !selectedLng) { msgEl.innerHTML = alert('กรุณาเลือกพิกัดบนแผนที่ก่อน', 'error'); return; }
 
     btn.disabled = true;
-    btn.textContent = '⏳ กำลังส่ง...';
+    btn.textContent = 'กำลังส่ง...';
 
     try {
       // Need province_id = 1 (Bangkok) as default; fetch it first
@@ -833,8 +834,8 @@ function renderPlacesTab(showForm = false) {
         if (error) throw error;
       }
 
-      toast('ส่งขอเพิ่มสถานที่สำเร็จ! รอแอดมินตรวจสอบ ⏳', 'ok');
-      msgEl.innerHTML = alert('✅ ส่งสำเร็จแล้ว — แอดมินจะตรวจสอบและอนุมัติสถานที่ของคุณ', 'success');
+      toast('ส่งขอเพิ่มสถานที่สำเร็จ! รอแอดมินตรวจสอบ', 'ok');
+      msgEl.innerHTML = alert('ส่งสำเร็จแล้ว — แอดมินจะตรวจสอบและอนุมัติสถานที่ของคุณ', 'success');
       $('place-form').reset();
       selectedLat = selectedLng = null;
       $('pf-lat').value = $('pf-lng').value = '';
@@ -844,7 +845,7 @@ function renderPlacesTab(showForm = false) {
       msgEl.innerHTML = alert(`เกิดข้อผิดพลาด: ${err.message}`, 'error');
     } finally {
       btn.disabled = false;
-      btn.textContent = '📤 ส่งขอเพิ่มสถานที่';
+      btn.textContent = 'ส่งขอเพิ่มสถานที่';
     }
   });
 }
@@ -858,10 +859,10 @@ function renderQuestsTab(showForm = false) {
       <td><strong>${esc(q.title)}</strong></td>
       <td>${badgeHtml(q.approval_status)}</td>
       <td>${badgeHtml(q.status)}</td>
-      <td>🪙 ${q.reward_tokens}</td>
+      <td>${q.reward_tokens}</td>
       <td style="color:#64748B;font-size:0.82rem;">${fmtDateShort(q.created_at)}</td>
     </tr>
-  `).join('') || `<tr><td colspan="5"><div class="partner-empty"><div class="partner-empty-icon">🎯</div><h3>ยังไม่มีเควสท์</h3><p>สร้างเควสท์แรกเพื่อดึงดูดนักท่องเที่ยว</p></div></td></tr>`;
+  `).join('') || `<tr><td colspan="5"><div class="partner-empty"><div class="partner-empty-icon"></div><h3>ยังไม่มีเควสท์</h3><p>สร้างเควสท์แรกเพื่อดึงดูดนักท่องเที่ยว</p></div></td></tr>`;
 
   const placeOptions = myPlaces
     .filter(p => p.approval_status !== 'rejected')
@@ -871,11 +872,11 @@ function renderQuestsTab(showForm = false) {
     <!-- Add Quest Form -->
     <div class="add-card">
       <div class="add-card-header">
-        <span class="add-card-title">🎯 สร้างเควสท์ถ่ายรูปเช็คอินใหม่</span>
+        <span class="add-card-title">สร้างเควสท์ถ่ายรูปเช็คอินใหม่</span>
         <button class="btn btn-small btn-secondary" id="toggle-quest-form" type="button">▼ แสดง/ซ่อนฟอร์ม</button>
       </div>
       <div id="quest-form-wrap">
-        ${!placeOptions ? `<div class="partner-alert info">⚠️ กรุณาเพิ่มสถานที่ก่อน จึงจะสร้างเควสท์ได้ เควสท์และสถานที่จะอยู่ในสถานะรอดำเนินการจนกว่าแอดมินจะอนุมัติ</div>` : ''}
+        ${!placeOptions ? `<div class="partner-alert info">กรุณาเพิ่มสถานที่ก่อน จึงจะสร้างเควสท์ได้ เควสท์และสถานที่จะอยู่ในสถานะรอดำเนินการจนกว่าแอดมินจะอนุมัติ</div>` : ''}
         <div id="quest-msg"></div>
         <form id="quest-form" novalidate>
           <div class="pf-grid">
@@ -903,9 +904,9 @@ function renderQuestsTab(showForm = false) {
             <div class="pf-field">
               <label class="pf-label">ระดับความยาก</label>
               <select id="qf-diff" class="pf-select">
-                <option value="easy">🟢 ง่าย</option>
-                <option value="medium">🟡 ปานกลาง</option>
-                <option value="hard">🔴 ท้าทาย</option>
+                <option value="easy">ง่าย</option>
+                <option value="medium">ปานกลาง</option>
+                <option value="hard">ท้าทาย</option>
               </select>
             </div>
             <div class="pf-field">
@@ -914,8 +915,8 @@ function renderQuestsTab(showForm = false) {
             </div>
           </div>
           <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid #F1F5F9;">
-            <p style="font-size:0.82rem;color:#64748B;margin:0 0 0.85rem;">⏳ เควสท์จะถูกส่งไปยังแอดมินเพื่อตรวจสอบ จะเปิดให้เล่นหลังจากได้รับการอนุมัติ</p>
-            <button type="submit" class="btn" id="quest-submit-btn" ${!placeOptions ? 'disabled' : ''}>📤 ส่งขอสร้างเควสท์</button>
+            <p style="font-size:0.82rem;color:#64748B;margin:0 0 0.85rem;">เควสท์จะถูกส่งไปยังแอดมินเพื่อตรวจสอบ จะเปิดให้เล่นหลังจากได้รับการอนุมัติ</p>
+            <button type="submit" class="btn" id="quest-submit-btn" ${!placeOptions ? 'disabled' : ''}>ส่งขอสร้างเควสท์</button>
           </div>
         </form>
       </div>
@@ -923,7 +924,7 @@ function renderQuestsTab(showForm = false) {
 
     <!-- My Quests Table -->
     <div class="partner-table-wrap">
-      <div style="padding:1rem 1rem 0;font-size:1rem;font-weight:700;color:#0F172A;">📋 เควสท์ของฉัน (${myQuests.length})</div>
+      <div style="padding:1rem 1rem 0;font-size:1rem;font-weight:700;color:#0F172A;">เควสท์ของฉัน (${myQuests.length})</div>
       <table class="partner-table" style="margin-top:0.5rem;">
         <thead>
           <tr><th>ชื่อเควสท์</th><th>สถานะอนุมัติ</th><th>สถานะ</th><th>โทเคน</th><th>วันที่สร้าง</th></tr>
@@ -954,7 +955,7 @@ function renderQuestsTab(showForm = false) {
     if (!desc) { msgEl.innerHTML = alert('กรุณาระบุคำอธิบายเควสท์', 'error'); return; }
 
     btn.disabled = true;
-    btn.textContent = '⏳ กำลังส่ง...';
+    btn.textContent = 'กำลังส่ง...';
 
     try {
       // 1. Try secure RPC first (bypasses RLS violation on quests table)
@@ -1034,7 +1035,7 @@ function renderQuestsTab(showForm = false) {
       msgEl.innerHTML = alert(`เกิดข้อผิดพลาด: ${err.message}`, 'error');
     } finally {
       btn.disabled = false;
-      btn.textContent = '📤 ส่งขอสร้างเควสท์';
+      btn.textContent = 'ส่งขอสร้างเควสท์';
     }
   });
 }
@@ -1054,15 +1055,15 @@ function renderCheckinsTab() {
       </td>
       <td>${esc(c.quests?.title || '—')}</td>
       <td>${c.gps_dist != null ? (c.gps_dist >= 1000 ? (c.gps_dist / 1000).toFixed(1) + ' กม.' : Math.round(c.gps_dist) + ' ม.') : '—'}</td>
-      <td>🪙 ${c.quests?.reward_tokens || 0}</td>
+      <td>${c.quests?.reward_tokens || 0}</td>
       <td style="color:#64748B;font-size:0.82rem;">${fmtDate(c.completed_at)}</td>
     </tr>
-  `).join('') || `<tr><td colspan="5"><div class="partner-empty"><div class="partner-empty-icon">🏆</div><h3>ยังไม่มีการเช็คอิน</h3><p>เมื่อนักท่องเที่ยวเช็คอินเควสท์ของคุณ จะแสดงที่นี่</p></div></td></tr>`;
+  `).join('') || `<tr><td colspan="5"><div class="partner-empty"><div class="partner-empty-icon"></div><h3>ยังไม่มีการเช็คอิน</h3><p>เมื่อนักท่องเที่ยวเช็คอินเควสท์ของคุณ จะแสดงที่นี่</p></div></td></tr>`;
 
   el.innerHTML = `
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.85rem;">
-      <h3 style="margin:0;font-size:1rem;font-weight:700;">🏆 ประวัติการเช็คอินทั้งหมด (${checkins.length} ครั้ง)</h3>
-      <button class="btn btn-small btn-secondary" id="refresh-checkins" type="button">🔄 รีเฟรช</button>
+      <h3 style="margin:0;font-size:1rem;font-weight:700;">ประวัติการเช็คอินทั้งหมด (${checkins.length} ครั้ง)</h3>
+      <button class="btn btn-small btn-secondary" id="refresh-checkins" type="button">รีเฟรช</button>
     </div>
     <div class="partner-table-wrap">
       <table class="partner-table">
@@ -1075,9 +1076,9 @@ function renderCheckinsTab() {
   `;
 
   $('refresh-checkins')?.addEventListener('click', async () => {
-    $('refresh-checkins').textContent = '⏳';
+    $('refresh-checkins').textContent = 'กำลังโหลด…';
     await loadDashboardData();
-    $('refresh-checkins').textContent = '🔄 รีเฟรช';
+    $('refresh-checkins').textContent = 'รีเฟรช';
   });
 }
 

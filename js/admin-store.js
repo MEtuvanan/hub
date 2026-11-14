@@ -108,17 +108,17 @@ async function loadCampaigns() {
     rows.map(c => {
       const places = (c.campaign_places || []).map(cp => cp.places?.name).filter(Boolean);
       const placesLabel = places.length
-        ? `<div style="display:flex;flex-wrap:wrap;gap:0.25rem;font-size:0.8rem;">${places.map(p => `<span style="background:#F1F5F9;padding:1px 5px;border-radius:4px;border:1px solid #CBD5E1;">📍 ${esc(p)}</span>`).join('')}</div>`
+        ? `<div style="display:flex;flex-wrap:wrap;gap:0.25rem;font-size:0.8rem;">${places.map(p => `<span style="background:#F1F5F9;padding:1px 5px;border-radius:4px;border:1px solid #CBD5E1;">${esc(p)}</span>`).join('')}</div>`
         : '<span class="muted" style="font-size:0.8rem;">(ไม่ได้ระบุ)</span>';
 
       const actions = (c.approval_status === 'pending'
-        ? '<button class="btn btn-small" data-sact="camp-ok" data-id="' + esc(c.id) + '">✅ อนุมัติ</button> ' +
-          '<button class="btn btn-small btn-danger" data-sact="camp-no" data-id="' + esc(c.id) + '">❌ ปฏิเสธ</button> '
+        ? '<button class="btn btn-small" data-sact="camp-ok" data-id="' + esc(c.id) + '">อนุมัติ</button> ' +
+          '<button class="btn btn-small btn-danger" data-sact="camp-no" data-id="' + esc(c.id) + '">ปฏิเสธ</button> '
         : '') +
-        '<button class="btn btn-small btn-secondary" data-sact="camp-edit" data-id="' + esc(c.id) + '">✏️ แก้ไข</button> ' +
-        '<button class="btn btn-small btn-danger" data-sact="camp-del" data-id="' + esc(c.id) + '" data-name="' + esc(c.title) + '">🗑️ ลบ</button>';
+        '<button class="btn btn-small btn-secondary" data-sact="camp-edit" data-id="' + esc(c.id) + '">แก้ไข</button> ' +
+        '<button class="btn btn-small btn-danger" data-sact="camp-del" data-id="' + esc(c.id) + '" data-name="' + esc(c.title) + '">ลบ</button>';
       return '<tr><td><strong>' + esc(c.title) + '</strong>' +
-        (c.reward_tokens ? '<div style="font-size:0.8rem;color:#D97706;">🪙 ' + c.reward_tokens + ' โทเคน</div>' : '') +
+        (c.reward_tokens ? '<div style="font-size:0.8rem;color:#D97706;">' + c.reward_tokens + ' โทเคน</div>' : '') +
         '<div class="meta">' + esc(c.description || '') + '</div></td>' +
         '<td>' + placesLabel + '</td>' +
         '<td>' + badge(c.approval_status) + '</td><td>' + esc(c.status) + '</td><td>' + actions + '</td></tr>';
@@ -316,7 +316,7 @@ async function startEditCampaign(id) {
   $('ac-start').value = toLocalInput(c.starts_at);
   $('ac-end').value = toLocalInput(c.ends_at);
   $('ac-tokens').value = Number(c.reward_tokens) || 0;
-  $('ac-form-title').textContent = '✏️ แก้ไขแคมเปญ';
+  $('ac-form-title').textContent = 'แก้ไขแคมเปญ';
   $('ac-submit').textContent = 'บันทึกการแก้ไข';
   $('ac-cancel-edit').style.display = 'inline-flex';
   $('ac-msg').innerHTML = '';
@@ -326,7 +326,7 @@ async function startEditCampaign(id) {
 function resetAdminCampaignForm() {
   editingCampaignId = null;
   $('ac-form')?.reset();
-  if ($('ac-form-title')) $('ac-form-title').textContent = '📣 สร้างแคมเปญ (แอดมิน)';
+  if ($('ac-form-title')) $('ac-form-title').textContent = 'สร้างแคมเปญ (แอดมิน)';
   if ($('ac-submit')) $('ac-submit').textContent = 'สร้างแคมเปญ';
   if ($('ac-cancel-edit')) $('ac-cancel-edit').style.display = 'none';
   if ($('ac-msg')) $('ac-msg').innerHTML = '';
@@ -548,15 +548,15 @@ async function loadDesigns() {
   el.innerHTML = '<table class="table"><thead><tr><th>อวตาร</th><th>ชื่อตัวละคร</th><th>ตัวคูณ</th><th>โมเดล 3D</th><th>ราคาโทเคน (ถ้ามี)</th><th>การจัดการ</th></tr></thead><tbody>' +
     rows.map(d => {
       const avatar = d.image_url || '/assets/img/ray.png';
-      const model = d.model_url ? '<a href="' + esc(d.model_url) + '" target="_blank" rel="noopener">📦 โมเดล 3D</a>' : '—';
+      const model = d.model_url ? '<a href="' + esc(d.model_url) + '" target="_blank" rel="noopener">โมเดล 3D</a>' : '—';
       return '<tr>' +
         '<td style="width:55px;"><img src="' + esc(avatar) + '" alt="" style="width:40px;height:40px;border-radius:8px;object-fit:cover;" onerror="this.onerror=null;this.src=\'/assets/img/ray.png\'"></td>' +
         '<td><strong>' + esc(d.name) + '</strong><div class="meta">' + esc(d.description || '') + '</div></td>' +
         '<td>×' + esc(d.token_multiplier || 2) + '</td>' +
         '<td>' + model + '</td>' +
         '<td><input type="number" min="0" placeholder="0 = ฟรี" class="pf-input" style="width:90px" id="price-' + esc(d.id) + '" value="' + (d.unlock_cost || '') + '"></td>' +
-        '<td><button class="btn btn-small" data-dact="des-ok" data-id="' + esc(d.id) + '">✅ อนุมัติ</button> ' +
-        '<button class="btn btn-small btn-danger" data-dact="des-no" data-id="' + esc(d.id) + '">❌ ปฏิเสธ</button></td></tr>';
+        '<td><button class="btn btn-small" data-dact="des-ok" data-id="' + esc(d.id) + '">อนุมัติ</button> ' +
+        '<button class="btn btn-small btn-danger" data-dact="des-no" data-id="' + esc(d.id) + '">ปฏิเสธ</button></td></tr>';
     }).join('') + '</tbody></table>';
 }
 
@@ -670,7 +670,7 @@ async function addCharacter(e) {
       saved = true;
     } catch (e) {}
 
-    toast('เพิ่มตัวละครเข้าระบบเรียบร้อยแล้ว 🧸', 'ok');
+    toast('เพิ่มตัวละครเข้าระบบเรียบร้อยแล้ว ', 'ok');
     $('sc-form').reset();
     loadDesigns();
   } catch (err) {
@@ -736,7 +736,7 @@ async function loadTopups() {
       return '<tr>' +
         '<td><strong>' + esc(who) + '</strong><div class="meta">' + esc(String(r.user_id || '').slice(0, 8)) + '</div></td>' +
         '<td>' + esc(r.package || 'เติมโทเคน') + (r.payment_method ? '<div class="meta">' + esc(r.payment_method) + '</div>' : '') + '</td>' +
-        '<td><strong style="color:#D97706;">🪙 ' + Number(r.tokens || 0).toLocaleString() + '</strong></td>' +
+        '<td><strong style="color:#D97706;">' + Number(r.tokens || 0).toLocaleString() + '</strong></td>' +
         '<td>฿' + Number(r.amount || 0).toLocaleString() + '</td>' +
         '<td>' + slip + '</td>' +
         '<td>' + badge(r.status) + '</td>' +

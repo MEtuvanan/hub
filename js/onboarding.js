@@ -2,6 +2,7 @@
 // Provides a step-by-step visual onboarding guide with illustrations, rich explanations, and controls
 
 const STORAGE_KEY = 'tc_tutorial_seen';
+import { icon } from './icons.js';
 
 // Vector SVG Illustrations for each step
 const STEP_GRAPHICS = [
@@ -27,14 +28,14 @@ const STEP_GRAPHICS = [
       <circle cx="25" cy="25" r="25" fill="#10B981"/>
       <path d="M25 50 L18 35 C15 30 35 30 32 35 Z" fill="#10B981"/>
       <circle cx="25" cy="22" r="16" fill="#FFFFFF"/>
-      <text x="25" y="28" font-size="18" text-anchor="middle">📍</text>
+      
     </g>
     <!-- GPS Navigation Pulse Tag -->
     <g transform="translate(180, 130)">
       <rect width="115" height="34" rx="17" fill="#0F172A" filter="drop-shadow(0 4px 10px rgba(0,0,0,0.15))"/>
       <circle cx="18" cy="17" r="7" fill="#10B981"/>
       <circle cx="18" cy="17" r="11" stroke="#10B981" stroke-width="1.5" opacity="0.6"/>
-      <text x="36" y="22" fill="#FFFFFF" font-size="12" font-weight="bold" font-family="sans-serif">🧭 นำทาง GPS</text>
+      <text x="36" y="22" fill="#FFFFFF" font-size="12" font-weight="bold" font-family="sans-serif">นำทาง GPS</text>
     </g>
   </svg>`,
 
@@ -45,10 +46,10 @@ const STEP_GRAPHICS = [
     <rect x="50" y="30" width="220" height="145" rx="14" fill="#FFFFFF" filter="drop-shadow(0 8px 20px rgba(37,99,235,0.12))"/>
     <!-- Header banner -->
     <rect x="50" y="30" width="220" height="42" rx="14" fill="#2563EB"/>
-    <text x="70" y="56" fill="#FFFFFF" font-size="15" font-weight="bold" font-family="sans-serif">🎯 ภารกิจถ่ายรูปเช็คอิน</text>
-    <!-- Difficulty stars -->
+    <text x="70" y="56" fill="#FFFFFF" font-size="15" font-weight="bold" font-family="sans-serif">ภารกิจถ่ายรูปเช็คอิน</text>
+    <!-- Difficulty badge -->
     <rect x="200" y="42" width="60" height="20" rx="10" fill="#1D4ED8"/>
-    <text x="230" y="56" fill="#FDE047" font-size="11" font-weight="bold" text-anchor="middle">★★★ ง่าย</text>
+    <text x="230" y="56" fill="#FDE047" font-size="11" font-weight="bold" text-anchor="middle">ระดับง่าย</text>
     <!-- Quest lines -->
     <rect x="70" y="88" width="120" height="10" rx="5" fill="#E2E8F0"/>
     <rect x="70" y="106" width="160" height="8" rx="4" fill="#F1F5F9"/>
@@ -56,11 +57,11 @@ const STEP_GRAPHICS = [
     <!-- Token Reward Badge -->
     <g transform="translate(170, 138)">
       <rect width="90" height="28" rx="14" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.5"/>
-      <text x="45" y="18" fill="#B45309" font-size="12" font-weight="bold" font-family="sans-serif" text-anchor="middle">🪙 +75 Tokens</text>
+      <text x="45" y="18" fill="#B45309" font-size="12" font-weight="bold" font-family="sans-serif" text-anchor="middle">+75 Tokens</text>
     </g>
     <!-- Floating camera pin -->
     <circle cx="270" cy="50" r="26" fill="#10B981" filter="drop-shadow(0 6px 14px rgba(16,185,129,0.35))"/>
-    <text x="270" y="58" font-size="22" text-anchor="middle">📸</text>
+    
   </svg>`,
 
   // Step 3: Smart GPS & Camera Check-in
@@ -80,10 +81,10 @@ const STEP_GRAPHICS = [
     <path d="M194 130 L194 138 L186 138" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"/>
     <!-- Target icon in center -->
     <circle cx="160" cy="90" r="18" fill="none" stroke="#10B981" stroke-width="2"/>
-    <text x="160" y="96" font-size="16" text-anchor="middle">⛩️</text>
+    
     <!-- Verified Green Check pill -->
     <rect x="122" y="142" width="76" height="18" rx="9" fill="#10B981"/>
-    <text x="160" y="155" fill="#FFFFFF" font-size="9" font-weight="bold" font-family="sans-serif" text-anchor="middle">✓ ในรัศมี 35m</text>
+    <text x="160" y="155" fill="#FFFFFF" font-size="9" font-weight="bold" font-family="sans-serif" text-anchor="middle">ในรัศมี 35m</text>
     <!-- Distance Meter Floater -->
     <g transform="translate(20, 75)" filter="drop-shadow(0 4px 10px rgba(0,0,0,0.1))">
       <rect width="80" height="48" rx="10" fill="#FFFFFF"/>
@@ -105,13 +106,13 @@ const STEP_GRAPHICS = [
     <!-- Golden TC Token (Offset) -->
     <circle cx="185" cy="85" r="28" fill="#F59E0B" filter="drop-shadow(0 6px 12px rgba(245,158,11,0.25))"/>
     <circle cx="185" cy="85" r="23" fill="#FDE047"/>
-    <text x="185" y="92" fill="#92400E" font-size="16" font-weight="bold" font-family="sans-serif" text-anchor="middle">🪙</text>
+    
     <!-- Character unlock badge -->
     <g transform="translate(60, 142)">
       <rect width="200" height="34" rx="17" fill="#FFFFFF" stroke="#FDE68A" stroke-width="2" filter="drop-shadow(0 4px 10px rgba(0,0,0,0.06))"/>
-      <text x="80" y="21" fill="#78350F" font-size="12" font-weight="bold" font-family="sans-serif">🔓 ปลดล็อก Tuk-Tuk Pal!</text>
+      <text x="80" y="21" fill="#78350F" font-size="12" font-weight="bold" font-family="sans-serif">ปลดล็อก Tuk-Tuk Pal!</text>
       <circle cx="20" cy="17" r="12" fill="#FEF3C7"/>
-      <text x="20" y="22" font-size="14" text-anchor="middle">🛺</text>
+      
     </g>
     <!-- Sparkles -->
     <polygon points="70,40 73,48 81,51 73,54 70,62 67,54 59,51 67,48" fill="#F59E0B"/>
@@ -132,7 +133,7 @@ const STEP_GRAPHICS = [
       <!-- Left page photo polaroid -->
       <rect x="25" y="30" width="65" height="75" rx="6" fill="#F1F5F9" stroke="#E2E8F0" stroke-width="1.5" transform="rotate(-6 55 65)"/>
       <rect x="30" y="35" width="55" height="50" rx="3" fill="#6EE7B7" transform="rotate(-6 55 65)"/>
-      <text x="50" y="70" font-size="20" text-anchor="middle" transform="rotate(-6 55 65)">🏯</text>
+      
       <!-- Right page diary text lines -->
       <rect x="125" y="35" width="70" height="7" rx="3.5" fill="#E2E8F0"/>
       <rect x="125" y="50" width="60" height="6" rx="3" fill="#F1F5F9"/>
@@ -141,11 +142,11 @@ const STEP_GRAPHICS = [
       <!-- Passport Stamp -->
       <circle cx="165" cy="115" r="22" fill="none" stroke="#8B5CF6" stroke-width="2" stroke-dasharray="3 3"/>
       <text x="165" y="112" fill="#7C3AED" font-size="9" font-weight="bold" font-family="sans-serif" text-anchor="middle">BANGKOK</text>
-      <text x="165" y="124" fill="#7C3AED" font-size="8" font-family="sans-serif" text-anchor="middle">PASSED ✓</text>
+      <text x="165" y="124" fill="#7C3AED" font-size="8" font-family="sans-serif" text-anchor="middle">PASSED</text>
     </g>
     <!-- Floating Pencil / Stamp badge -->
     <circle cx="265" cy="45" r="22" fill="#9333EA" filter="drop-shadow(0 4px 10px rgba(147,51,234,0.3))"/>
-    <text x="265" y="53" font-size="18" text-anchor="middle">📖</text>
+    
   </svg>`
 ];
 
@@ -153,33 +154,33 @@ const STEP_GRAPHICS = [
 const TUTORIAL_STEPS = [
   {
     badge: 'ขั้นตอนที่ 1 : ค้นหา & นำทาง',
-    title: 'สำรวจที่เที่ยวทั่วไทย พร้อมนำทาง GPS 🧭',
-    desc: 'เลือกดูสถานที่ท่องเที่ยวยอดนิยมในกรุงเทพฯ และทั่วประเทศ ดูภาพถ่าย จุดเด่น ข้อมูลเวลาเปิด-ปิด และกดปุ่ม "🧭 นำทาง GPS" เพื่อรับเส้นทางเดินรถและคำนวณระยะทางได้ทันที',
-    tip: '💡 เคล็ดลับ: แตะปักหมุดบนแผนที่ Interactive เพื่อดูระยะห่างและเปิดเส้นทางนำทาง',
+    title: 'สำรวจที่เที่ยวทั่วไทย พร้อมนำทาง GPS',
+    desc: 'เลือกดูสถานที่ท่องเที่ยวยอดนิยมในกรุงเทพฯ และทั่วประเทศ ดูภาพถ่าย จุดเด่น ข้อมูลเวลาเปิด-ปิด และกดปุ่ม "นำทาง GPS" เพื่อรับเส้นทางเดินรถและคำนวณระยะทางได้ทันที',
+    tip: 'เคล็ดลับ: แตะปักหมุดบนแผนที่ Interactive เพื่อดูระยะห่างและเปิดเส้นทางนำทาง',
   },
   {
     badge: 'ขั้นตอนที่ 2 : ภารกิจท้าทาย',
-    title: 'รับเควสท์ & ภารกิจถ่ายรูปเช็คอิน 🎯',
+    title: 'รับเควสท์ & ภารกิจถ่ายรูปเช็คอิน',
     desc: 'เปลี่ยนการท่องเที่ยวธรรมดาให้เป็นการผจญภัยสุดตื่นเต้น! มีทั้งเควสท์ถ่ายรูปเช็คอินตามจุดแลนด์มาร์ค, เควสท์สำรวจวัฒนธรรม, และตอบคำถามประวัติศาสตร์ แต่ละเควสท์มีระดับความยากและรางวัลโทเคนต่างกัน',
-    tip: '💡 เคล็ดลับ: เลือกเควสท์ระดับง่าย (Easy) เพื่อเก็บสะสมโทเคนเริ่มต้นอย่างรวดเร็ว',
+    tip: 'เคล็ดลับ: เลือกเควสท์ระดับง่าย (Easy) เพื่อเก็บสะสมโทเคนเริ่มต้นอย่างรวดเร็ว',
   },
   {
     badge: 'ขั้นตอนที่ 3 : เช็คอินสถานที่จริง',
-    title: 'ตรวจจับพิกัด GPS อัตโนมัติ & ถ่ายภาพ 📸',
-    desc: 'เมื่อเดินทางไปยังสถานที่จริง กดปุ่ม "📡 ตรวจสอบพิกัด GPS" ระบบจะคำนวณระยะห่างผ่านดาวเทียม หากอยู่ในรัศมีที่กำหนด (เช่น ภายใน 100 เมตร) ให้ถ่ายภาพมุมมองตามเบาะแสเพื่อผ่านภารกิจทันที!',
-    tip: '💡 เคล็ดลับ: เปิดใช้งาน Location (GPS) บนสมาร์ทโฟนหรือเบราว์เซอร์เพื่อความแม่นยำสูงสุด',
+    title: 'ตรวจจับพิกัด GPS อัตโนมัติ & ถ่ายภาพ',
+    desc: 'เมื่อเดินทางไปยังสถานที่จริง กดปุ่ม "ตรวจสอบพิกัด GPS" ระบบจะคำนวณระยะห่างผ่านดาวเทียม หากอยู่ในรัศมีที่กำหนด (เช่น ภายใน 100 เมตร) ให้ถ่ายภาพมุมมองตามเบาะแสเพื่อผ่านภารกิจทันที!',
+    tip: 'เคล็ดลับ: เปิดใช้งาน Location (GPS) บนสมาร์ทโฟนหรือเบราว์เซอร์เพื่อความแม่นยำสูงสุด',
   },
   {
     badge: 'ขั้นตอนที่ 4 : สะสมโทเคน & ไต่อันดับ',
-    title: 'รับเหรียญ TC Tokens & ปลดล็อกตัวละคร 🪙',
+    title: 'รับเหรียญ TC Tokens & ปลดล็อกตัวละคร',
     desc: 'ทุกเควสท์ที่ทำสำเร็จจะได้รับเหรียญ TC Tokens นำไปสะสมเพื่อไต่อันดับบนตาราง Leaderboard และปลดล็อกเพื่อนคู่หูร่วมเดินทางสุดน่ารัก เช่น Tuk-Tuk Pal, Little Yak, และ Kinnaree Star',
-    tip: '💡 เคล็ดลับ: เช็คอินให้ครบหลายๆ หมวดหมู่เพื่อปลดล็อกตราสัญลักษณ์พิเศษ (Achievements)',
+    tip: 'เคล็ดลับ: เช็คอินให้ครบหลายๆ หมวดหมู่เพื่อปลดล็อกตราสัญลักษณ์พิเศษ (Achievements)',
   },
   {
     badge: 'ขั้นตอนที่ 5 : ไดอารี่การเดินทาง',
-    title: 'บันทึกความทรงจำใน Travel Journal 📖',
+    title: 'บันทึกความทรงจำใน Travel Journal',
     desc: 'เก็บภาพถ่าย ความประทับใจ และเรื่องราวในแต่ละวันไว้ในสมุดบันทึกส่วนตัว ย้อนดูเส้นทางความทรงจำบนปฏิทินท่องเที่ยว และแบ่งปันเรื่องราวของคุณกับเพื่อนๆ ได้ทุกเวลา',
-    tip: '💡 เคล็ดลับ: คุณสามารถกดปุ่ม "📖 บันทึกไดอารี่" ได้ทันทีหลังจากเช็คอินสถานที่นั้นๆ',
+    tip: 'เคล็ดลับ: คุณสามารถกดปุ่ม "บันทึกไดอารี่" ได้ทันทีหลังจากเช็คอินสถานที่นั้นๆ',
   }
 ];
 
@@ -229,9 +230,9 @@ function createModalStructure() {
     <!-- Top Step Bar -->
     <div class="ob-header">
       <span class="ob-step-label" id="ob-step-label">
-        <span style="font-size:1.1rem;">🚀</span> คำแนะนำผู้เล่นใหม่
+        คำแนะนำผู้เล่นใหม่
       </span>
-      <button type="button" class="ob-skip-btn" id="ob-btn-skip">ข้ามคำแนะนำ ✕</button>
+      <button type="button" class="ob-skip-btn" id="ob-btn-skip">ข้ามคำแนะนำ ${icon('close', 12)}</button>
     </div>
     <div class="ob-progress-track">
       <div class="ob-progress-fill" id="ob-progress-fill" style="width:20%"></div>
@@ -261,8 +262,8 @@ function createModalStructure() {
           `).join('')}
         </div>
         <div class="ob-actions">
-          <button type="button" class="ob-btn ob-btn-prev" id="ob-btn-prev" disabled>⬅ ก่อนหน้า</button>
-          <button type="button" class="ob-btn ob-btn-next" id="ob-btn-next">ถัดไป ➔</button>
+          <button type="button" class="ob-btn ob-btn-prev" id="ob-btn-prev" disabled>${icon('arrow-right', 13)} ก่อนหน้า</button>
+          <button type="button" class="ob-btn ob-btn-next" id="ob-btn-next">ถัดไป ${icon('arrow-right', 13)}</button>
         </div>
       </div>
     </div>
@@ -326,7 +327,7 @@ function goToStep(index) {
   // Update Header step label
   const stepLabel = modalEl.querySelector('#ob-step-label');
   if (stepLabel) {
-    stepLabel.innerHTML = `<span>🚀</span> ขั้นตอนที่ ${currentStep + 1} จาก ${total}`;
+    stepLabel.innerHTML = `${icon('navigate', 14)} ขั้นตอนที่ ${currentStep + 1} จาก ${total}`;
   }
 
   // Update Action Buttons
@@ -340,10 +341,10 @@ function goToStep(index) {
   if (nextBtn) {
     if (currentStep === total - 1) {
       nextBtn.className = 'ob-btn ob-btn-start';
-      nextBtn.innerHTML = '🚀 เริ่มออกเดินทางเลย!';
+      nextBtn.innerHTML = `${icon('navigate', 14)} เริ่มออกเดินทางเลย!`;
     } else {
       nextBtn.className = 'ob-btn ob-btn-next';
-      nextBtn.innerHTML = 'ถัดไป ➔';
+      nextBtn.innerHTML = `ถัดไป ${icon('arrow-right', 13)}`;
     }
   }
 }

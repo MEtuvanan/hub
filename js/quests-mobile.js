@@ -1,7 +1,7 @@
 // quests-mobile.js — swipeable quest deck with saved and completed lists.
 
 import { esc, toast } from './ui.js';
-import { icon } from './icons.js';
+import { icon, iconFor } from './icons.js';
 import { createSwipeDeck } from './swipe-deck.js';
 import {
   fetchQuests, readJSON, writeJSON,
@@ -40,7 +40,7 @@ function renderCard(q) {
       <div class="swipe-card__media g-media">
         <img src="${esc(q.image || '')}" alt="${esc(q.title)}" loading="lazy"
           onerror="this.style.display='none';this.parentElement.classList.add('is-fallback')">
-        <span class="media-emoji">${esc(q.emoji || '🎯')}</span>
+        <span class="media-emoji">${iconFor(q.emoji, 30)}</span>
         <div class="swipe-card__top">
           <div class="app-wrap">
             <span class="g-chip g-chip--gold">${esc(q.typeLabel || 'ภารกิจ')}</span>
@@ -106,7 +106,7 @@ function renderLiked() {
   if (!items.length) {
     box.innerHTML = `
       <div class="qm-empty">
-        <div class="emoji">💚</div>
+        <div class="emoji">${icon('heart', 30)}</div>
         <h3>ยังไม่มีเควสท์ที่ถูกใจ</h3>
         <p>กลับไปที่การ์ดแล้วปัดขวาเพื่อเก็บเควสท์ที่อยากทำไว้ที่นี่</p>
         <button class="g-btn g-btn--sm g-btn--mint" type="button" data-go-deck>ไปปัดการ์ด</button>
@@ -116,7 +116,7 @@ function renderLiked() {
       <article class="qm-saved">
         <span class="qm-saved__media">
           <img src="${esc(q.image || '')}" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.hidden=false">
-          <span class="fallback" hidden>${esc(q.emoji || '🎯')}</span>
+          <span class="fallback" hidden>${iconFor(q.emoji, 20)}</span>
         </span>
         <div class="qm-saved__body">
           <h3>${esc(q.title)}</h3>
@@ -155,7 +155,7 @@ function renderDone() {
   if (!items.length) {
     box.innerHTML = `
       <div class="qm-empty">
-        <div class="emoji">🏅</div>
+        <div class="emoji">${icon('trophy', 30)}</div>
         <h3>ยังไม่มีเควสท์ที่สำเร็จ</h3>
         <p>เลือกเควสท์จากการ์ด ทำภารกิจ และกรอกรหัสเช็คอินเพื่อรับโทเคน</p>
         <button class="g-btn g-btn--sm g-btn--mint" type="button" data-go-deck>เริ่มทำเควสท์</button>
@@ -171,7 +171,7 @@ function renderDone() {
       </div>
       ${items.map(q => `
         <article class="qm-done">
-          <span class="qm-done__badge">✓</span>
+          <span class="qm-done__badge">${icon('check', 14)}</span>
           <div class="qm-done__body">
             <strong>${esc(q.title)}</strong>
             <span>${esc(q.placeName || '')}</span>
@@ -187,9 +187,9 @@ function renderFilters() {
   if (!box) return;
   const types = [...new Map(quests.map(q => [q.type, q.typeLabel || q.type])).entries()];
   box.innerHTML = `
-    <button class="qm-filter ${filter === 'all' ? 'is-active' : ''}" type="button" data-qfilter="all"><span class="emoji">✨</span>ทั้งหมด</button>
+    <button class="qm-filter ${filter === 'all' ? 'is-active' : ''}" type="button" data-qfilter="all">${icon('quest', 13)}ทั้งหมด</button>
     ${types.map(([id, label]) => `
-      <button class="qm-filter ${filter === id ? 'is-active' : ''}" type="button" data-qfilter="${esc(id)}"><span class="emoji">${esc(questEmoji(id))}</span>${esc(label)}</button>
+      <button class="qm-filter ${filter === id ? 'is-active' : ''}" type="button" data-qfilter="${esc(id)}">${icon(questIcon(id), 13)}${esc(label)}</button>
     `).join('')}`;
   box.querySelectorAll('[data-qfilter]').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -200,8 +200,8 @@ function renderFilters() {
   });
 }
 
-function questEmoji(type) {
-  return ({ photo: '📸', quiz: '🧠', culture: '🏛️', exploration: '🧭', nature: '⛰️' })[type] || '🎯';
+function questIcon(type) {
+  return ({ photo: 'camera', quiz: 'ai', culture: 'building', exploration: 'compass', nature: 'leaf' })[type] || 'quest';
 }
 
 function syncDeck() {
@@ -234,7 +234,7 @@ function bootDeck() {
     passLabel: 'ข้าม',
     emptyHTML: () => `
       <div class="qm-deck-empty">
-        <div class="emoji">🗺️</div>
+        <div class="emoji">${icon('map', 30)}</div>
         <h3>การ์ดครบแล้ว</h3>
         <p>คุณปัดครบทุกเควสท์ในหมวดนี้แล้ว ลองเปลี่ยนหมวดหรือเริ่มสับการ์ดใหม่</p>
         <button class="g-btn g-btn--mint g-btn--sm" type="button" data-reset-deck">สับการ์ดใหม่</button>

@@ -4,6 +4,7 @@ import { createMap, setMarkers } from './maps.js';
 import { esc, debounce, stateEmpty } from './ui.js';
 import { requireAuth } from './auth.js';
 import { initAIPlannerModal } from './ai-planner-modal.js';
+import { iconFor } from './icons.js';
 
 const $ = id => document.getElementById(id);
 const state = { map: null, markers: [] };
@@ -45,9 +46,9 @@ function renderList(places) {
         </h2>
         <div class="badges" style="margin-bottom:6px;">
           <span class="badge badge-muted">${esc(catName)}</span>
-          <span class="badge badge-muted">📍 ${esc(locName)}</span>
-          ${indicators.quests.has(p.id) ? '<span class="badge" style="background:#DCFCE7;color:#166534;">🎯 มีเควสท์</span>' : ''}
-          ${indicators.campaigns.has(p.id) ? '<span class="badge" style="background:#FEF3C7;color:#92400E;">🏆 แคมเปญ</span>' : ''}
+          <span class="badge badge-muted">${esc(locName)}</span>
+          ${indicators.quests.has(p.id) ? '<span class="badge" style="background:#DCFCE7;color:#166534;">มีเควสท์</span>' : ''}
+          ${indicators.campaigns.has(p.id) ? '<span class="badge" style="background:#FEF3C7;color:#92400E;">แคมเปญ</span>' : ''}
           ${boostBadge(p)}
         </div>
         <p class="meta" style="color:#475569;font-size:0.86rem;line-height:1.5;margin:0 0 8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">
@@ -55,12 +56,12 @@ function renderList(places) {
         </p>
         ${highlights.length ? `
           <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px;">
-            ${highlights.map(h => `<span style="font-size:0.75rem;background:#F1F5F9;color:#334155;padding:2px 8px;border-radius:4px;border:1px solid #E2E8F0;">${esc(h.icon)} ${esc(h.title)}</span>`).join('')}
+            ${highlights.map(h => `<span style="font-size:0.75rem;background:#F1F5F9;color:#334155;padding:2px 8px;border-radius:4px;border:1px solid #E2E8F0;display:inline-flex;align-items:center;gap:4px;">${iconFor(h.icon, 13)} ${esc(h.title)}</span>`).join('')}
           </div>
         ` : ''}
         <div style="display:flex;gap:8px;align-items:center;">
-          <a href="/place.html?id=${encodeURIComponent(p.id)}" class="btn btn-secondary" style="font-size:0.82rem;padding:5px 12px;text-decoration:none;">📖 รายละเอียด</a>
-          <a href="/navigate.html?lat=${p.lat}&lng=${p.lng}&name=${encodeURIComponent(title)}&id=${encodeURIComponent(p.id)}" class="btn" style="font-size:0.82rem;padding:5px 12px;background:linear-gradient(135deg,#00A86B,#007A4D);color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:4px;">🧭 นำทาง GPS</a>
+          <a href="/place.html?id=${encodeURIComponent(p.id)}" class="btn btn-secondary" style="font-size:0.82rem;padding:5px 12px;text-decoration:none;">รายละเอียด</a>
+          <a href="/navigate.html?lat=${p.lat}&lng=${p.lng}&name=${encodeURIComponent(title)}&id=${encodeURIComponent(p.id)}" class="btn" style="font-size:0.82rem;padding:5px 12px;background:linear-gradient(135deg,#00A86B,#007A4D);color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:4px;">นำทาง GPS</a>
         </div>
       </div>
     </li>`;
@@ -88,7 +89,7 @@ async function refresh() {
     const boostedCount = places.filter(p => isBoosted(p)).length;
     renderList(places);
     $('status').textContent = places.length
-      ? `${places.length} สถานที่${boostedCount ? ` • 🚀 AI ดันสถานที่ใหม่ ${boostedCount} รายการ` : ''}`
+      ? `${places.length} สถานที่${boostedCount ? ` • AI ดันสถานที่ใหม่ ${boostedCount} รายการ` : ''}`
       : '';
     if (!places.length) $('list').innerHTML = stateEmpty('No published destinations match your search.');
     if (state.map) setMarkers(state.map, state, places, select);

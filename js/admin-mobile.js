@@ -45,7 +45,7 @@ function activityRows() {
   const rows = [];
   readJSON('tc_mobile_journal', []).forEach(e => rows.push({
     at: Number(e.at) || 0,
-    icon: '📖',
+    icon: 'book',
     label: `ไดอารี่: ${e.title || 'บันทึก'}`,
     value: e.province || 'ไม่ระบุจังหวัด',
   }));
@@ -53,20 +53,20 @@ function activityRows() {
     const quest = DEMO_QUESTS.find(q => q.id === l.questId);
     rows.push({
       at: Number(l.at) || 0,
-      icon: '🎯',
+      icon: 'quest',
       label: `เควสท์: ${quest?.title || l.questId}`,
       value: `+${Number(quest?.reward || 0)} โทเคน`,
     });
   });
   readJSON('tc_mobile_topups', []).forEach(t => rows.push({
     at: Number(t.at) || 0,
-    icon: '🪙',
+    icon: 'coin',
     label: `เติมโทเคน: ${t.label || 'แพ็กโทเคน'}`,
     value: `+${formatNum(t.tokens)}`,
   }));
   readJSON('tc_mobile_partner_apps', []).forEach(a => rows.push({
     at: Number(a.at) || 0,
-    icon: '🏪',
+    icon: 'store',
     label: `พาร์ทเนอร์: ${a.business}`,
     value: a.province || 'รอตรวจสอบ',
   }));
@@ -84,7 +84,7 @@ function renderActivity() {
   box.innerHTML = `<div class="sup-table">${rows.map(row => {
     const when = row.at ? new Date(row.at).toLocaleDateString('th-TH', { day: 'numeric', month: 'short' }) : '—';
     return `<div class="sup-table__row">
-      <span>${row.icon} ${esc(row.label)}<br><small>${esc(when)}</small></span>
+      <span>${icon(row.icon, 14)} ${esc(row.label)}<br><small>${esc(when)}</small></span>
       <b>${esc(row.value)}</b>
     </div>`;
   }).join('')}</div>`;

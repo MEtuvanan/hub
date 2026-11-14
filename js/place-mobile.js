@@ -1,7 +1,7 @@
 // place-mobile.js — place detail with highlights, AR mini map, and quest picker.
 
 import { esc, toast } from './ui.js';
-import { icon } from './icons.js';
+import { icon, iconFor } from './icons.js';
 import { initARMap } from './ar-map.js';
 import {
   findPlace, fetchPlaces, fetchQuests, categoryMeta,
@@ -37,7 +37,7 @@ function fallbackQuest(p) {
     reward: 60,
     minutes: 20,
     image: p.image,
-    emoji: p.fallbackEmoji || '📸',
+    emoji: p.fallbackEmoji || 'camera',
     summary: `เดินสำรวจ ${p.name} ถ่ายภาพมุมที่คุณชอบที่สุด และบันทึกความรู้สึกไว้ในไดอารี่นักเดินทาง`,
     steps: [
       `เดินชมจุดสำคัญของ ${p.name}`,
@@ -58,7 +58,7 @@ function questCards() {
       <button class="pm-quest ${isDone ? 'is-done' : ''}" type="button" data-quest="${esc(q.id)}">
         <span class="pm-quest__media">
           <img src="${esc(q.image || '')}" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.hidden=false">
-          <span class="fallback" hidden>${esc(q.emoji || '🎯')}</span>
+          <span class="fallback" hidden>${icon('image', 20)}</span>
         </span>
         <span class="pm-quest__body">
           <span class="pm-quest__meta">
@@ -106,7 +106,7 @@ function renderNearby() {
     <a class="pm-near" href="/place-mobile.html?id=${encodeURIComponent(p.id)}">
       <span class="pm-near__media">
         <img src="${esc(p.image || '')}" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.hidden=false">
-        <span class="fallback" hidden>${esc(p.fallbackEmoji || '📍')}</span>
+        <span class="fallback" hidden>${icon('image', 20)}</span>
       </span>
       <span class="pm-near__body">
         <h3>${esc(p.name)}</h3>
@@ -135,9 +135,9 @@ function renderPlace() {
     img.alt = place.name;
     img.onerror = () => { img.hidden = true; if (fb) fb.hidden = false; };
   }
-  if (fb) fb.textContent = place.fallbackEmoji || meta.emoji;
+  if (fb) fb.hidden = true;
 
-  $('pmCategory').textContent = `${meta.emoji} ${place.categoryLabel || meta.label}`;
+  $('pmCategory').innerHTML = `${icon('pin', 12)} ${esc(place.categoryLabel || meta.label)}`;
   $('pmCategory').style.borderColor = `${meta.color}66`;
   $('pmCategory').style.color = meta.color;
   $('pmName').textContent = place.name;
@@ -170,7 +170,7 @@ function renderPlace() {
       section.hidden = false;
       high.innerHTML = rows.map(h => `
         <div class="pm-highlight">
-          <span class="pm-highlight__ico">${esc(h.icon || '✨')}</span>
+          <span class="pm-highlight__ico">${iconFor(h.icon, 16)}</span>
           <div><strong>${esc(h.title || '')}</strong><p>${esc(h.desc || '')}</p></div>
         </div>`).join('');
     } else {
@@ -200,6 +200,8 @@ function renderPlace() {
       interactive: false,
       autoWalk: true,
       showPins: true,
+      center: { lat: place.lat, lng: place.lng },
+      zoom: 16,
     });
   }
 
@@ -256,7 +258,7 @@ function missing(message) {
   if (!root) return;
   root.innerHTML = `
     <div class="pm-missing">
-      <div class="emoji">🗺️</div>
+      ${icon('map', 26)}
       <h1>ไม่พบสถานที่นี้</h1>
       <p>${esc(message || 'ลิงก์อาจเก่าหรือสถานที่ถูกนำออกแล้ว ลองค้นหาสถานที่ใหม่ได้เลย')}</p>
       <a class="g-btn g-btn--mint" href="/search-mobile.html">ไปหน้าค้นหา</a>

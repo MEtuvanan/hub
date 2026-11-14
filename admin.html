@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="/css/mobile.css">
 <link rel="stylesheet" href="/css/pages/admin.css?v=4">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="/css/theme.css">
 </head>
 <body data-protected="true">
 <nav id="site-nav" aria-label="Main"></nav>
@@ -159,7 +160,7 @@
         <div class="stat-big stat-red"><div class="stat-big-icon"><svg class="ic" width="24" height="24"><use href="/assets/icons/sprite.svg#i-pin"></use></svg></div><div class="stat-big-val" id="ps-pending-places">—</div><div class="stat-big-label">สถานที่รอตรวจ</div></div>
         <div class="stat-big stat-orange"><div class="stat-big-icon"><svg class="ic" width="24" height="24"><use href="/assets/icons/sprite.svg#i-quest"></use></svg></div><div class="stat-big-val" id="ps-pending-quests">—</div><div class="stat-big-label">เควสท์รอตรวจ</div></div>
         <div class="stat-big stat-purple"><div class="stat-big-icon"><svg class="ic" width="24" height="24"><use href="/assets/icons/sprite.svg#i-trophy"></use></svg></div><div class="stat-big-val" id="ps-pending-campaigns">—</div><div class="stat-big-label">แคมเปญรอตรวจ</div></div>
-        <div class="stat-big stat-gold"><div class="stat-big-icon">🧸</div><div class="stat-big-val" id="ps-pending-characters">—</div><div class="stat-big-label">ตัวละครรอตรวจ</div></div>
+        <div class="stat-big stat-gold"><div class="stat-big-icon"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><use href="/assets/icons/sprite.svg#i-user"></use></svg></div><div class="stat-big-val" id="ps-pending-characters">—</div><div class="stat-big-label">ตัวละครรอตรวจ</div></div>
       </div>
 
       <!-- Subtabs -->
@@ -168,7 +169,7 @@
         <button class="ptab-btn" data-ptab="pending-places" style="padding:0.7rem 1.1rem;border:none;background:none;font:600 0.9rem/1 inherit;color:#64748B;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;"><svg class="ic" width="14" height="14"><use href="/assets/icons/sprite.svg#i-pin"></use></svg> สถานที่รอตรวจ</button>
         <button class="ptab-btn" data-ptab="pending-quests" style="padding:0.7rem 1.1rem;border:none;background:none;font:600 0.9rem/1 inherit;color:#64748B;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;"><svg class="ic" width="14" height="14"><use href="/assets/icons/sprite.svg#i-quest"></use></svg> เควสท์รอตรวจ</button>
         <button class="ptab-btn" data-ptab="pending-campaigns" style="padding:0.7rem 1.1rem;border:none;background:none;font:600 0.9rem/1 inherit;color:#64748B;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;"><svg class="ic" width="14" height="14"><use href="/assets/icons/sprite.svg#i-trophy"></use></svg> แคมเปญรอตรวจ <span id="ps-pending-campaigns-badge" style="background:#EF4444;color:#fff;border-radius:9999px;padding:1px 6px;font-size:0.7rem;margin-left:4px;display:none;">0</span></button>
-        <button class="ptab-btn" data-ptab="pending-characters" style="padding:0.7rem 1.1rem;border:none;background:none;font:600 0.9rem/1 inherit;color:#64748B;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;">🧸 ตัวละครรอตรวจ <span id="ps-pending-characters-badge" style="background:#EF4444;color:#fff;border-radius:9999px;padding:1px 6px;font-size:0.7rem;margin-left:4px;display:none;">0</span></button>
+        <button class="ptab-btn" data-ptab="pending-characters" style="padding:0.7rem 1.1rem;border:none;background:none;font:600 0.9rem/1 inherit;color:#64748B;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><use href="/assets/icons/sprite.svg#i-user"></use></svg> ตัวละครรอตรวจ <span id="ps-pending-characters-badge" style="background:#EF4444;color:#fff;border-radius:9999px;padding:1px 6px;font-size:0.7rem;margin-left:4px;display:none;">0</span></button>
         <button class="ptab-btn" data-ptab="partner-checkins" style="padding:0.7rem 1.1rem;border:none;background:none;font:600 0.9rem/1 inherit;color:#64748B;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;"><svg class="ic" width="14" height="14"><use href="/assets/icons/sprite.svg#i-chart"></use></svg> สถิติเช็คอิน</button>
       </div>
 
@@ -315,7 +316,7 @@
       </div>
 
       <div class="add-card" style="margin-bottom:1rem;">
-        <div class="add-card-header"><span class="add-card-title">⚙️ ตั้งค่าร้านค้า</span></div>
+        <div class="add-card-header"><span class="add-card-title"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><use href="/assets/icons/sprite.svg#i-settings"></use></svg> ตั้งค่าร้านค้า</span></div>
         <div class="pf-grid pf-grid-2">
           <div class="pf-field"><label class="pf-label">ราคาต่อตัว (บาท)</label><input id="ss-price" class="pf-input" type="number" min="1"></div>
           <div class="pf-field"><label class="pf-label">หมายเหตุการชำระเงิน</label><input id="ss-note" class="pf-input" maxlength="300"></div>
@@ -327,12 +328,12 @@
       </div>
 
       <div class="add-card" style="margin-bottom:1rem;">
-        <div class="add-card-header"><span class="add-card-title">💰 คำขอเติมโทเคน (จากผู้ใช้)</span></div>
+        <div class="add-card-header"><span class="add-card-title"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><use href="/assets/icons/sprite.svg#i-coin"></use></svg> คำขอเติมโทเคน (จากผู้ใช้)</span></div>
         <div id="admin-topup-list"></div>
       </div>
 
       <div class="add-card" style="margin-bottom:1rem;">
-        <div class="add-card-header"><span class="add-card-title" id="ac-form-title">📣 สร้างแคมเปญ (แอดมิน)</span></div>
+        <div class="add-card-header"><span class="add-card-title" id="ac-form-title"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><use href="/assets/icons/sprite.svg#i-volume"></use></svg> สร้างแคมเปญ (แอดมิน)</span></div>
         <form id="ac-form" novalidate>
           <div class="pf-grid pf-grid-2">
             <div class="pf-field" style="grid-column:1/-1"><label class="pf-label">ชื่อแคมเปญ *</label><input id="ac-title" class="pf-input" maxlength="200" required></div>

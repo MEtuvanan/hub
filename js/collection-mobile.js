@@ -1,7 +1,7 @@
 // collection-mobile.js — characters, medals, and province stamps.
 
 import { esc, toast } from './ui.js';
-import { icon } from './icons.js';
+import { icon, iconFor } from './icons.js';
 import {
   CHARACTERS, PRESETS, DEMO_QUESTS,
   fetchPlaces, readJSON, saveOutfit, loadOutfit,
@@ -40,16 +40,16 @@ function medals(owned, visited) {
   const countType = type => DEMO_QUESTS.filter(q => q.type === type && done.has(q.id)).length;
   const provinceTotal = [...new Set(places.map(p => p.province).filter(Boolean))].length || 1;
   return [
-    { id: 'first', emoji: '🥾', name: 'ก้าวแรกนักสำรวจ', desc: 'ทำเควสท์แรกสำเร็จ', value: done.size, target: 1 },
-    { id: 'five', emoji: '🎯', name: 'นักล่าเควสท์', desc: 'ทำเควสท์สำเร็จ 5 รายการ', value: done.size, target: 5 },
-    { id: 'photo', emoji: '📸', name: 'ช่างภาพนักเดินทาง', desc: 'ทำเควสท์ถ่ายภาพ 3 รายการ', value: countType('photo'), target: 3 },
-    { id: 'culture', emoji: '🏛️', name: 'ผู้พิทักษ์วัฒนธรรม', desc: 'ทำเควสท์วัฒนธรรม 2 รายการ', value: countType('culture'), target: 2 },
-    { id: 'nature', emoji: '⛰️', name: 'เพื่อนของธรรมชาติ', desc: 'ทำเควสท์ธรรมชาติ 2 รายการ', value: countType('nature'), target: 2 },
-    { id: 'fav', emoji: '💚', name: 'นักสะสมสถานที่', desc: 'บันทึกสถานที่โปรด 3 แห่ง', value: favs.size, target: 3 },
-    { id: 'prov3', emoji: '🗺️', name: 'นักเดินทางสามจังหวัด', desc: 'เก็บตราประทับ 3 จังหวัด', value: visited.size, target: 3 },
-    { id: 'provAll', emoji: '🇹🇭', name: 'ทั่วไทยในแผนที่', desc: `เก็บตราประทับครบ ${provinceTotal} จังหวัด`, value: visited.size, target: provinceTotal },
-    { id: 'collector', emoji: '🧙', name: 'นักสะสมตัวละคร', desc: 'ปลดล็อกตัวละครครบทุกคน', value: owned.size, target: CHARACTERS.length },
-    { id: 'star', emoji: '⭐', name: 'ดาวนำทาง 7 วัน', desc: 'เช็คอินดาวประจำวัน 7 ครั้ง', value: readJSON(STAR_KEY, []).length, target: 7 },
+    { id: 'first', icon: 'boot', name: 'ก้าวแรกนักสำรวจ', desc: 'ทำเควสท์แรกสำเร็จ', value: done.size, target: 1 },
+    { id: 'five', icon: 'quest', name: 'นักล่าเควสท์', desc: 'ทำเควสท์สำเร็จ 5 รายการ', value: done.size, target: 5 },
+    { id: 'photo', icon: 'camera', name: 'ช่างภาพนักเดินทาง', desc: 'ทำเควสท์ถ่ายภาพ 3 รายการ', value: countType('photo'), target: 3 },
+    { id: 'culture', icon: 'building', name: 'ผู้พิทักษ์วัฒนธรรม', desc: 'ทำเควสท์วัฒนธรรม 2 รายการ', value: countType('culture'), target: 2 },
+    { id: 'nature', icon: 'leaf', name: 'เพื่อนของธรรมชาติ', desc: 'ทำเควสท์ธรรมชาติ 2 รายการ', value: countType('nature'), target: 2 },
+    { id: 'fav', icon: 'heart', name: 'นักสะสมสถานที่', desc: 'บันทึกสถานที่โปรด 3 แห่ง', value: favs.size, target: 3 },
+    { id: 'prov3', icon: 'map', name: 'นักเดินทางสามจังหวัด', desc: 'เก็บตราประทับ 3 จังหวัด', value: visited.size, target: 3 },
+    { id: 'provAll', icon: 'map', name: 'ทั่วไทยในแผนที่', desc: `เก็บตราประทับครบ ${provinceTotal} จังหวัด`, value: visited.size, target: provinceTotal },
+    { id: 'collector', icon: 'user', name: 'นักสะสมตัวละคร', desc: 'ปลดล็อกตัวละครครบทุกคน', value: owned.size, target: CHARACTERS.length },
+    { id: 'star', icon: 'star', name: 'ดาวนำทาง 7 วัน', desc: 'เช็คอินดาวประจำวัน 7 ครั้ง', value: readJSON(STAR_KEY, []).length, target: 7 },
   ].map(m => ({ ...m, done: m.value >= m.target, pct: Math.min(100, Math.round((m.value / m.target) * 100)) }));
 }
 
@@ -59,7 +59,7 @@ function renderHero(owned, visited, medalList) {
   const lv = Math.max(1, Math.floor(score / 400) + 1);
   $('clScore').textContent = formatNum(score);
   $('clRank').textContent = `Lv.${lv}`;
-  $('clHeroMedal').textContent = doneMedals >= medalList.length ? '👑' : doneMedals >= 5 ? '🏆' : doneMedals >= 2 ? '🥈' : '🏅';
+  $('clHeroMedal').innerHTML = icon('trophy', 22);
   $('clScoreNote').textContent = doneMedals
     ? `ปลดล็อกแล้ว ${doneMedals}/${medalList.length} เหรียญตรา`
     : 'เริ่มสะสมได้จากเควสท์แรกของคุณ';
@@ -78,14 +78,14 @@ function renderChars() {
     const id = presetIdFor(c.id);
     const isOwned = owned.has(c.id);
     const equipped = isOwned && outfit.preset === id;
-    const emoji = c.rarity === 'legendary' ? '🧙' : c.rarity === 'rare' ? '🧝' : '🧭';
+    const charIcon = c.rarity === 'legendary' ? 'user' : 'compass';
     return `
       <article class="cl-char ${isOwned ? '' : 'is-locked'} ${equipped ? 'is-equipped' : ''}" style="--char-glow:${c.color}33">
         ${equipped ? `<span class="cl-char__equip">กำลังใช้งาน</span>` : ''}
         <div class="cl-char__media">
           <img src="${esc(c.image)}" alt="${esc(c.name)}" loading="lazy"
             onerror="this.style.display='none';this.nextElementSibling.hidden=false">
-          <span class="cl-char__emoji" hidden>${emoji}</span>
+          <span class="cl-char__emoji" hidden>${icon(charIcon, 40)}</span>
           ${isOwned ? '' : `<span class="cl-char__lock">${icon('lock', 26)}</span>`}
         </div>
         <div class="cl-char__body">
@@ -121,7 +121,7 @@ function renderMedals(medalList) {
   if (!box) return;
   box.innerHTML = medalList.map(m => `
     <article class="cl-medal ${m.done ? 'is-done' : ''}">
-      <span class="cl-medal__ico">${m.emoji}</span>
+      <span class="cl-medal__ico">${icon(m.icon || 'star', 20)}</span>
       <div class="cl-medal__body">
         <strong>${esc(m.name)}</strong>
         <span>${esc(m.desc)}</span>
@@ -144,7 +144,7 @@ function renderProvinces(visited) {
     const seen = visited.has(province);
     return `
       <div class="cl-province ${seen ? 'is-visited' : ''}">
-        <span class="cl-province__stamp">${seen ? '✓' : icon('pin', 15)}</span>
+        <span class="cl-province__stamp">${seen ? icon('check', 14) : icon('pin', 15)}</span>
         <span class="cl-province__body">
           <strong>${esc(province)}</strong>
           <span>${seen ? `ประทับแล้ว · ${list.length} สถานที่` : `ยังไม่ไป · ${list.length} สถานที่`}</span>

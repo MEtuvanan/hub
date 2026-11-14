@@ -1,6 +1,7 @@
 // navigate-mobile.js — resolve a place from URL, show OSM map and distance.
 
 import { toast } from './ui.js';
+import { iconFor } from './icons.js';
 import { findPlace, fetchPlaces } from './mobile-data.js';
 
 const $ = id => document.getElementById(id);
@@ -34,7 +35,7 @@ function applyTarget() {
   const name = target.name || 'สถานที่ท่องเที่ยว';
   document.title = `นำทางไป ${name} — Travel and Challenge`;
   $('navName').textContent = name;
-  $('navEmoji').textContent = target.fallbackEmoji || target.emoji || '📍';
+  $('navEmoji').innerHTML = iconFor(target.fallbackEmoji || target.emoji || 'pin', 24);
   $('navMeta').textContent = [target.district, target.province].filter(Boolean).join(' · ') ||
     target.summary || 'สถานที่ท่องเที่ยว';
   $('navSub').textContent = `เส้นทางและระยะทางไปยัง ${name}`;
@@ -123,10 +124,10 @@ async function boot() {
       || places.find(p => name && p.name.includes(name))
       || null;
     if (!target && hasCoords) {
-      target = { id: '', name: name || 'จุดหมายของคุณ', lat, lng, fallbackEmoji: '📍' };
+      target = { id: '', name: name || 'จุดหมายของคุณ', lat, lng, fallbackEmoji: 'pin' };
     }
     if (!target) {
-      target = places[0] || { id: '', name: 'วัดอรุณราชวราราม', lat: 13.7437, lng: 100.4889, fallbackEmoji: '🛕' };
+      target = places[0] || { id: '', name: 'วัดอรุณราชวราราม', lat: 13.7437, lng: 100.4889, fallbackEmoji: 'building' };
       $('navSub').textContent = 'ยังไม่ได้เลือกสถานที่ — กำลังแสดงตัวอย่าง';
     }
   }

@@ -56,5 +56,5 @@ export function rankPlaces(list, signalsOf = () => ({}), now = Date.now()) {
 export function boostBadge(place, now = Date.now()) {
   const left = boostDaysLeft(place, now);
   if (!left) return '';
-  return `<span class="badge" style="background:linear-gradient(135deg,#F2A81D,#D08B10);color:#2A1600;font-weight:700;box-shadow:0 2px 6px rgba(242,168,29,.35);" title="โดน AI ดันให้คนเห็นมากขึ้น — สถานที่เพิ่มเข้าระบบอายุ ≤ 7 วัน">🚀 ใหม่ • AI จัดอันดับ (อีก ${left} วัน)</span>`;
+  return `<span class="badge" style="background:linear-gradient(135deg,#F2A81D,#D08B10);color:#2A1600;font-weight:700;box-shadow:0 2px 6px rgba(242,168,29,.35);" title="โดน AI ดันให้คนเห็นมากขึ้น — สถานที่เพิ่มเข้าระบบอายุ ≤ 7 วัน">ใหม่ • AI จัดอันดับ (อีก ${left} วัน)</span>`;
 }

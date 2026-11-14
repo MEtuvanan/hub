@@ -17,6 +17,7 @@ import { AI_CONFIG } from './config.local.js';
 import { loadAiCatalog, buildTravelAiSystemPrompt, groundItinerary } from './ai-catalog.js';
 import { createMap, setMarkers, drawPath } from './maps.js';
 import { esc, toast, confirmDialog } from './ui.js';
+import { icon } from './icons.js';
 
 const $ = id => document.getElementById(id);
 
@@ -262,7 +263,7 @@ function showTypingIndicator() {
   row.className = 'chat-row ai-row';
   row.id = 'ai-typing-indicator';
   row.innerHTML = `
-    <div class="chat-avatar">✨</div>
+    <div class="chat-avatar"></div>
     <div class="chat-bubble">
       <div class="typing-dots">
         <span class="typing-dot"></span>
@@ -293,7 +294,7 @@ function appendAIMessage(cleanText, itinerary = null) {
   }
 
   row.innerHTML = `
-    <div class="chat-avatar">✨</div>
+    <div class="chat-avatar"></div>
     <div class="chat-bubble">
       ${formattedHtml}
       ${itineraryHtml}
@@ -326,7 +327,7 @@ function renderItineraryCard(plan) {
     <div class="itinerary-card" data-plan-json="${esc(JSON.stringify(plan))}">
       <div class="itinerary-card-header">
         <div class="itinerary-badge-row">
-          <span class="badge" style="background:#0d9488;color:#fff;">🗺️ แผนการเดินทาง</span>
+          <span class="badge" style="background:#0d9488;color:#fff;">แผนการเดินทาง</span>
           <span class="badge" style="background:rgba(13,148,136,0.15);color:#0d9488;">${totalDays} วัน</span>
         </div>
         <h4 class="itinerary-card-title">${esc(plan.trip_title || 'แผนท่องเที่ยว')}</h4>
@@ -351,21 +352,21 @@ function renderItineraryCard(plan) {
                 <div class="stop-number-badge">${si + 1}</div>
                 <div class="stop-details-body">
                   <div class="stop-meta-line">
-                    <span>⏰ ${esc(s.arrival_time || 'เวลาแนะนำ')}</span>
+                    <span style="display:inline-flex;align-items:center;gap:4px;">${icon('clock', 13)} ${esc(s.arrival_time || 'เวลาแนะนำ')}</span>
                     ${s.duration_minutes ? `<span>· ~${Number(s.duration_minutes)} นาที</span>` : ''}
                   </div>
                   <h5 class="stop-title">${esc(s.name)}</h5>
                   ${s.why ? `<div class="stop-why">${esc(s.why)}</div>` : ''}
-                  ${s.notes ? `<div class="stop-notes">💡 ${esc(s.notes)}</div>` : ''}
+                  ${s.notes ? `<div class="stop-notes">${esc(s.notes)}</div>` : ''}
                   <div class="stop-actions-row">
                     ${s.lat && s.lng ? `
                       <a href="/navigate.html?lat=${s.lat}&lng=${s.lng}&name=${encodeURIComponent(s.name)}" class="btn-stop-action btn-stop-nav" title="เปิดระบบนำทาง GPS จริง">
-                        🧭 นำทาง GPS
+                        นำทาง GPS
                       </a>
                     ` : ''}
                     ${s.place_id ? `
-                      <a href="/place.html?id=${encodeURIComponent(s.place_id)}" class="btn-stop-action btn-stop-info">
-                        ℹ️ ข้อมูลสถานที่
+                      <a href="/place.html?id=${encodeURIComponent(s.place_id)}" class="btn-stop-action btn-stop-info" style="display:inline-flex;align-items:center;gap:4px;">
+                        ${icon('info', 13)} ข้อมูลสถานที่
                       </a>
                     ` : ''}
                   </div>
@@ -378,10 +379,10 @@ function renderItineraryCard(plan) {
 
       <div class="itinerary-card-footer">
         <button class="btn-itinerary-save" type="button" title="บันทึกลงบัญชีเพื่อเรียกดูภายหลัง">
-          💾 บันทึกทริปนี้
+          บันทึกทริปนี้
         </button>
         <button class="btn-itinerary-map" type="button" title="ดูภาพรวมเส้นทางบนแผนที่">
-          🗺️ แสดงแผนที่เส้นทาง
+          แสดงแผนที่เส้นทาง
         </button>
       </div>
     </div>
@@ -451,13 +452,13 @@ function bindItineraryEvents(container, plan) {
       }
 
       toast('บันทึกทริปสำเร็จแล้ว! ดูได้ใน "ทริปที่บันทึกไว้"');
-      btnSave.textContent = '✅ บันทึกแล้ว';
+      btnSave.textContent = 'บันทึกแล้ว';
       updateSavedCount();
     } catch (e) {
       console.error(e);
       toast('ไม่สามารถบันทึกทริปได้: ' + (e.message || ''), 'error');
       btnSave.disabled = false;
-      btnSave.textContent = '💾 บันทึกทริปนี้';
+      btnSave.textContent = 'บันทึกทริปนี้';
     }
   });
 
@@ -472,7 +473,7 @@ function bindItineraryEvents(container, plan) {
 async function openMapModal(plan) {
   const modal = $('itinerary-map-modal');
   modal.hidden = false;
-  $('map-modal-title').textContent = `🗺️ แผนที่เส้นทาง: ${plan.trip_title || 'ทริปท่องเที่ยว'}`;
+  $('map-modal-title').textContent = `แผนที่เส้นทาง: ${plan.trip_title || 'ทริปท่องเที่ยว'}`;
 
   const allStops = (plan.daily_plan || []).flatMap(d => d.stops || []).filter(s => s.lat && s.lng);
 
@@ -535,7 +536,7 @@ async function openSavedDrawer() {
           <a href="#" data-open-saved="${esc(t.id)}">${esc(t.title)}</a>
           <span class="meta">${t.total_days || 1} วัน · ${new Date(t.created_at).toLocaleDateString('th-TH')}</span>
         </div>
-        <button class="btn-del-trip" data-del-saved="${esc(t.id)}" type="button" title="ลบทริป">🗑️</button>
+        <button class="btn-del-trip" data-del-saved="${esc(t.id)}" type="button" title="ลบทริป"></button>
       </li>
     `).join('');
 

@@ -1,7 +1,7 @@
 // journal-mobile.js — moods, travel notes, calendar, and completed quest log.
 
 import { esc, toast, confirmDialog } from './ui.js';
-import { icon } from './icons.js';
+import { icon, iconFor } from './icons.js';
 import {
   fetchPlaces, DEMO_QUESTS, completedQuests, readJSON, writeJSON, getPlace,
 } from './mobile-data.js';
@@ -13,12 +13,12 @@ const QUEST_LOG_KEY = 'tc_mobile_quest_log';
 const STAR_KEY = 'tc_mobile_star_days';
 
 const MOODS = [
-  { id: 'happy', emoji: '😄', label: 'มีความสุข' },
-  { id: 'excited', emoji: '🤩', label: 'ตื่นเต้น' },
-  { id: 'love', emoji: '🥰', label: 'ประทับใจ' },
-  { id: 'calm', emoji: '😌', label: 'สงบใจ' },
-  { id: 'tired', emoji: '🥱', label: 'เหนื่อยแต่คุ้ม' },
-  { id: 'adventure', emoji: '🧗', label: 'ผจญภัย' },
+  { id: 'happy', icon: 'smile', label: 'มีความสุข' },
+  { id: 'excited', icon: 'star', label: 'ตื่นเต้น' },
+  { id: 'love', icon: 'heart', label: 'ประทับใจ' },
+  { id: 'calm', icon: 'sun', label: 'สงบใจ' },
+  { id: 'tired', icon: 'clock', label: 'เหนื่อยแต่คุ้ม' },
+  { id: 'adventure', icon: 'compass', label: 'ผจญภัย' },
 ];
 
 let places = [];
@@ -46,7 +46,7 @@ function renderMoods() {
   if (!box) return;
   box.innerHTML = MOODS.map(m => `
     <button class="jr-mood ${m.id === mood ? 'is-active' : ''}" type="button" data-mood="${m.id}" aria-pressed="${m.id === mood}">
-      <span class="emoji">${m.emoji}</span>${esc(m.label)}
+      <span class="emoji">${icon(m.icon, 16)}</span>${esc(m.label)}
     </button>`).join('');
   box.querySelectorAll('[data-mood]').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -119,20 +119,26 @@ function renderCalendar() {
 
 function questEntries() {
   const done = completedQuests();
-  const logs = new Map(questLog().map(l => [l.questId, l.at]));
-  return DEMO_QUESTS.filter(q => done.has(q.id)).map(q => ({
-    id: `quest-${q.id}`,
-    questId: q.id,
-    type: 'quest',
-    at: logs.get(q.id) || 0,
-    title: q.title,
-    note: q.summary,
-    placeId: q.placeId,
-    placeName: q.placeName,
-    province: q.province,
-    reward: q.reward,
-    emoji: q.emoji || '🎯',
-  }));
+  const logMap = new Map(questLog().map(l => [l.questId, l]));
+  return DEMO_QUESTS.filter(q => done.has(q.id)).map(q => {
+    const l = logMap.get(q.id);
+    return {
+      id: `quest-${q.id}`,
+      questId: q.id,
+      type: 'quest',
+      at: l?.at || 0,
+      photo: l?.photo || null,
+      caption: l?.caption || null,
+      distance: l?.distance || null,
+      title: q.title,
+      note: l?.caption || q.summary,
+      placeId: q.placeId,
+      placeName: q.placeName,
+      province: q.province,
+      reward: q.reward,
+      emoji: q.emoji || q.icon || 'quest',
+    };
+  });
 }
 
 function journalEntries() {
@@ -145,15 +151,21 @@ function entryHTML(e) {
     return `
       <article class="jr-entry jr-entry--quest">
         <div class="jr-entry__date">
-          <b>${date ? date.getDate() : '✓'}</b>
+          <b>${date ? date.getDate() : icon('check', 14)}</b>
           <span>${date ? date.toLocaleDateString('th-TH', { month: 'short' }) : 'สำเร็จ'}</span>
         </div>
         <div class="jr-entry__body">
-          <h3>${esc(e.emoji)} ${esc(e.title)}</h3>
+          <h3>${icon('quest', 15)} ${esc(e.title)}</h3>
           <p>${esc(e.note || '')}</p>
+          ${e.photo ? `
+            <div class="jr-entry__photo" style="margin:10px 0 6px;border-radius:14px;overflow:hidden;max-height:160px;border:1px solid var(--line);box-shadow:var(--shadow-1)">
+              <img src="${esc(e.photo)}" alt="รูปถ่ายเช็คอิน" style="width:100%;height:100%;object-fit:cover;display:block">
+            </div>
+          ` : ''}
           <div class="jr-entry__meta">
             <span>${icon('pin', 11)} ${esc(e.placeName || e.province || 'สถานที่')}</span>
             <span class="g-coin">${icon('coin', 11)} +${Number(e.reward || 0)}</span>
+            <span class="g-chip g-chip--mint" style="font-size:9.5px;padding:2px 7px">${icon('compass', 10)} GPS ยืนยันแล้ว</span>
           </div>
         </div>
         <div class="jr-entry__side">
@@ -180,7 +192,7 @@ function entryHTML(e) {
         </div>
       </div>
       <div class="jr-entry__side">
-        <span class="jr-entry__mood" title="${esc(m.label)}">${m.emoji}</span>
+        <span class="jr-entry__mood" title="${esc(m.label)}">${icon(m.icon || 'smile', 18)}</span>
         <button class="jr-entry__del" type="button" data-del="${esc(e.id)}" aria-label="ลบบันทึก">${icon('trash', 12)}</button>
       </div>
     </article>`;
@@ -198,7 +210,7 @@ function renderList() {
   if (!rows.length) {
     box.innerHTML = `
       <div class="jr-empty">
-        <span class="emoji">${filter === 'quest' ? '🎯' : '📖'}</span>
+        <span class="emoji">${icon(filter === 'quest' ? 'quest' : 'journal', 30)}</span>
         <h3>${filter === 'quest' ? 'ยังไม่มีเควสท์ที่พิชิต' : 'ยังไม่มีบันทึก'}</h3>
         <p>${filter === 'quest' ? 'ไปทำเควสท์แรก แล้วเรื่องราวจะถูกบันทึกที่นี่' : 'เริ่มเขียนความทรงจำแรกจากทริปของคุณด้านบน'}</p>
         <a class="g-btn g-btn--sm g-btn--ghost" href="${filter === 'quest' ? '/quests-mobile.html' : '/explore-mobile.html'}">${filter === 'quest' ? 'หาเควสท์' : 'เปิดแผนที่'}</a>

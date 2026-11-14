@@ -101,14 +101,14 @@ export class ExploreAIChatbot {
     if (!wrap || !this.catalog.length) return;
     const [a, b, c] = this.catalog;
     const pills = [];
-    if (a) pills.push([`ℹ️ ${a.name}`, `${a.name} มีจุดเด่นอะไร เปิดกี่โมง แต่งตัวยังไง และเดินทางยังไง จากข้อมูลในเว็บ`]);
-    if (b) pills.push(['🗺️ ทริป 1 วัน', `จัดทริปเที่ยว 1 วันจากสถานที่ที่มีในเว็บนี้ โดยเริ่มที่ ${b.name}`]);
+    if (a) pills.push([`ℹ${a.name}`, `${a.name} มีจุดเด่นอะไร เปิดกี่โมง แต่งตัวยังไง และเดินทางยังไง จากข้อมูลในเว็บ`]);
+    if (b) pills.push(['ทริป 1 วัน', `จัดทริปเที่ยว 1 วันจากสถานที่ที่มีในเว็บนี้ โดยเริ่มที่ ${b.name}`]);
     if (this.catalog.some(p => p.quests?.length)) {
-      pills.push(['📸 เควสท์ในเว็บ', 'มีเควสท์อะไรในเว็บนี้บ้าง แนะนำจากสถานที่ที่มีเควสท์ในระบบเท่านั้น']);
+      pills.push(['เควสท์ในเว็บ', 'มีเควสท์อะไรในเว็บนี้บ้าง แนะนำจากสถานที่ที่มีเควสท์ในระบบเท่านั้น']);
     } else if (c && a) {
-      pills.push(['⚖️ เปรียบเทียบ', `เปรียบเทียบ ${a.name} กับ ${c.name} จากข้อมูลในเว็บนี้เท่านั้น`]);
+      pills.push(['เปรียบเทียบ', `เปรียบเทียบ ${a.name} กับ ${c.name} จากข้อมูลในเว็บนี้เท่านั้น`]);
     }
-    wrap.innerHTML = `<span class="dock-pills-label">💡 ลองถาม:</span>` + pills.map(([label, q]) =>
+    wrap.innerHTML = `<span class="dock-pills-label">ลองถาม:</span>` + pills.map(([label, q]) =>
       `<button class="dock-pill-btn" type="button" data-q="${esc(q)}">${esc(label)}</button>`
     ).join('');
     wrap.querySelectorAll('.dock-pill-btn').forEach(btn => {
@@ -133,15 +133,15 @@ export class ExploreAIChatbot {
     dock.innerHTML = `
       <header class="ai-dock-header">
         <div class="ai-dock-title-wrap">
-          <span class="ai-dock-sparkle">✨</span>
+          <span class="ai-dock-sparkle"></span>
           <span class="ai-dock-title">AI ผู้ช่วยท่องเที่ยว & วางแผน</span>
           <span class="ai-dock-badge">พร้อมตอบ</span>
         </div>
         <div class="ai-dock-actions">
           <button class="ai-dock-btn-reset" id="btn-dock-reset" type="button" title="เริ่มสนทนาใหม่" hidden>
-            <span>🔄</span> แชทใหม่
+            <span></span> แชทใหม่
           </button>
-          <button class="ai-dock-btn-close" id="btn-dock-close" type="button" aria-label="ย่อเป็นปุ่มลอย" title="ย่อเป็นปุ่มลอย">✕</button>
+          <button class="ai-dock-btn-close" id="btn-dock-close" type="button" aria-label="ย่อเป็นปุ่มลอย" title="ย่อเป็นปุ่มลอย"></button>
         </div>
       </header>
 
@@ -150,10 +150,10 @@ export class ExploreAIChatbot {
 
       <!-- Suggestion Pills (Shown ONLY on first entry) -->
       <div class="ai-dock-pills-wrap" id="dock-pills">
-        <span class="dock-pills-label">💡 ลองถาม:</span>
-        <button class="dock-pill-btn" type="button" data-q="มีสถานที่อะไรในเว็บบ้าง แนะนำจากรายการในระบบ">📍 สถานที่ในเว็บ</button>
-        <button class="dock-pill-btn" type="button" data-q="จัดทริป 1 วันจากสถานที่ที่มีในเว็บนี้">🗺️ จัดทริป 1 วัน</button>
-        <button class="dock-pill-btn" type="button" data-q="มีเควสท์อะไรในเว็บนี้บ้าง">📸 เควสท์ในเว็บ</button>
+        <span class="dock-pills-label">ลองถาม:</span>
+        <button class="dock-pill-btn" type="button" data-q="มีสถานที่อะไรในเว็บบ้าง แนะนำจากรายการในระบบ">สถานที่ในเว็บ</button>
+        <button class="dock-pill-btn" type="button" data-q="จัดทริป 1 วันจากสถานที่ที่มีในเว็บนี้">จัดทริป 1 วัน</button>
+        <button class="dock-pill-btn" type="button" data-q="มีเควสท์อะไรในเว็บนี้บ้าง">เควสท์ในเว็บ</button>
       </div>
 
       <!-- Dock Input Bar -->
@@ -179,7 +179,7 @@ export class ExploreAIChatbot {
     fab.setAttribute('aria-label', 'เปิด AI ผู้ช่วยท่องเที่ยว');
     fab.setAttribute('title', 'เปิด AI ผู้ช่วยท่องเที่ยว');
     fab.innerHTML = `
-      <span class="ai-fab-sparkle">✨</span>
+      <span class="ai-fab-sparkle"></span>
       <span class="ai-fab-round-badge">AI</span>
     `;
     document.body.appendChild(fab);
@@ -380,7 +380,7 @@ export class ExploreAIChatbot {
     row.className = 'dock-msg-row ai';
     row.id = 'dock-typing-row';
     row.innerHTML = `
-      <div class="dock-msg-avatar">✨</div>
+      <div class="dock-msg-avatar"></div>
       <div class="dock-msg-bubble">
         <div class="dock-typing">
           <span class="dock-typing-dot"></span>
@@ -407,7 +407,7 @@ export class ExploreAIChatbot {
       itinHtml = `
         <div class="dock-itinerary-card">
           <div class="dock-itinerary-header">
-            <div class="dock-itinerary-title">🗺️ ${esc(itinerary.trip_title || 'แผนท่องเที่ยวแนะนำ')}</div>
+            <div class="dock-itinerary-title">${esc(itinerary.trip_title || 'แผนท่องเที่ยวแนะนำ')}</div>
             <p class="dock-itinerary-summary">${esc(itinerary.summary || '')}</p>
           </div>
           <div class="dock-stops-list">
@@ -420,10 +420,10 @@ export class ExploreAIChatbot {
                   <div class="dock-stop-actions">
                     ${s.lat && s.lng ? `
                       <a href="/navigate.html?lat=${s.lat}&lng=${s.lng}&name=${encodeURIComponent(s.name)}" class="btn-dock-nav">
-                        🧭 นำทาง GPS
+                        นำทาง GPS
                       </a>
                       <button type="button" class="btn-dock-map" data-lat="${s.lat}" data-lng="${s.lng}" data-name="${esc(s.name)}">
-                        📍 ดูบนแผนที่
+                        ดูบนแผนที่
                       </button>
                     ` : ''}
                   </div>
@@ -436,7 +436,7 @@ export class ExploreAIChatbot {
     }
 
     row.innerHTML = `
-      <div class="dock-msg-avatar">✨</div>
+      <div class="dock-msg-avatar"></div>
       <div class="dock-msg-bubble">
         ${parseMarkdown(cleanText)}
         ${itinHtml}

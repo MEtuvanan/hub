@@ -22,31 +22,42 @@ export function createSwipeDeck({
   mount.innerHTML = `
     <div class="swipe-stage" data-stage></div>
     <div class="swipe-actions">
-      <button class="swipe-action swipe-action--undo" type="button" data-deck="undo" aria-label="ย้อนกลับ" title="ย้อนกลับ">↺</button>
-      <button class="swipe-action swipe-action--nope" type="button" data-deck="pass" aria-label="${passLabel}">
+      <button class="swipe-action swipe-action--undo" type="button" data-deck="undo" aria-label="ย้อนกลับ" title="ย้อนกลับ">
+        <svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10h10a5 5 0 0 1 5 5v2M3 10l6-6M3 10l6 6"/></svg>
+      </button>
+      <button class="swipe-action swipe-action--nope" type="button" data-deck="pass" aria-label="${passLabel}" title="${passLabel}">
         <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
       </button>
-      <button class="swipe-action swipe-action--info" type="button" data-deck="info" aria-label="รายละเอียด">
+      <button class="swipe-action swipe-action--info" type="button" data-deck="info" aria-label="รายละเอียด" title="ดูรายละเอียด">
         <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 11v5M12 8h.01" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
       </button>
-      <button class="swipe-action swipe-action--like" type="button" data-deck="like" aria-label="${likeLabel}">
+      <button class="swipe-action swipe-action--like" type="button" data-deck="like" aria-label="${likeLabel}" title="${likeLabel}">
         <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21.2l7.8-7.7 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg>
       </button>
-      <span style="width:48px"></span>
     </div>
-    <div class="swipe-progress"><span data-count>0 / 0</span><span class="bar"><i data-bar style="width:0%"></i></span><span>ปัดซ้าย/ขวา</span></div>`;
+    <div class="swipe-guide" aria-label="วิธีปัดการ์ด">
+      <div class="swipe-guide__item swipe-guide__pass">
+        <svg class="ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        <span>ปัดซ้าย <b>ข้าม</b></span>
+      </div>
+      <div class="swipe-guide__divider"></div>
+      <div class="swipe-guide__item swipe-guide__tap">
+        <svg class="ic" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
+        <span>แตะ <b>ดูเควสท์</b></span>
+      </div>
+      <div class="swipe-guide__divider"></div>
+      <div class="swipe-guide__item swipe-guide__like">
+        <span>ปัดขวา <b>บันทึก</b></span>
+        <svg class="ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+    </div>`;
 
   const stage = mount.querySelector('[data-stage]');
-  const countEl = mount.querySelector('[data-count]');
-  const barEl = mount.querySelector('[data-bar]');
   const undoBtn = mount.querySelector('[data-deck="undo"]');
 
   const total = () => queue.length + history.length;
   const updateProgress = () => {
     const done = history.length;
-    const all = Math.max(1, total());
-    if (countEl) countEl.textContent = `${done} / ${total()}`;
-    if (barEl) barEl.style.width = `${Math.min(100, (done / all) * 100)}%`;
     if (undoBtn) undoBtn.disabled = history.length === 0;
     onProgress?.({ done, remaining: queue.length, total: total() });
   };
@@ -67,7 +78,7 @@ export function createSwipeDeck({
   function render() {
     if (!queue.length) {
       const html = typeof emptyHTML === 'function' ? emptyHTML() : emptyHTML;
-      stage.innerHTML = html || `<div class="swipe-empty"><div class="emoji">✨</div><h3>ครบทุกใบแล้ว</h3><p>กลับมาดูอีกครั้งภายหลัง หรือกดย้อนกลับเพื่อทบทวนการ์ดก่อนหน้า</p></div>`;
+      stage.innerHTML = html || `<div class="swipe-empty"><div class="emoji" aria-hidden="true"><svg class="ic" width="30" height="30" viewBox="0 0 24 24" fill="none"><use href="/assets/icons/sprite.svg#i-quest"></use></svg></div><h3>ครบทุกใบแล้ว</h3><p>กลับมาดูอีกครั้งภายหลัง หรือกดย้อนกลับเพื่อทบทวนการ์ดก่อนหน้า</p></div>`;
       updateProgress();
       return;
     }

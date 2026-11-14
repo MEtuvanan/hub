@@ -56,16 +56,16 @@ $('forgot')?.addEventListener('click', async () => {
 function translateAuthError(err) {
   const raw = err?.message || String(err || '');
   if (raw.includes('Invalid login credentials')) {
-    return '❌ <strong>อีเมลหรือรหัสผ่านไม่ถูกต้อง</strong><br><span style="font-size:0.875rem">หากท่านยังไม่เคยสร้างบัญชี กรุณากดแท็บ <strong>"สมัครสมาชิก"</strong> ด้านบน หรือเข้าสู่ระบบด้วยปุ่ม <strong>"Google"</strong> ครับ</span>';
+    return '<strong>อีเมลหรือรหัสผ่านไม่ถูกต้อง</strong><br><span style="font-size:0.875rem">หากท่านยังไม่เคยสร้างบัญชี กรุณากดแท็บ <strong>"สมัครสมาชิก"</strong> ด้านบน หรือเข้าสู่ระบบด้วยปุ่ม <strong>"Google"</strong> ครับ</span>';
   }
   if (raw.includes('rate limit') || raw.includes('over_email_send_rate_limit')) {
-    return '⚠️ <strong>ระบบส่งอีเมลยืนยันของ Supabase มีการเรียกใช้ถี่เกินไป</strong><br><span style="font-size:0.875rem">กรุณารอสักครู่ หรือเข้าสู่ระบบด้วย Google แทนได้ทันที</span>';
+    return '<strong>ระบบส่งอีเมลยืนยันของ Supabase มีการเรียกใช้ถี่เกินไป</strong><br><span style="font-size:0.875rem">กรุณารอสักครู่ หรือเข้าสู่ระบบด้วย Google แทนได้ทันที</span>';
   }
   if (raw.includes('Email not confirmed')) {
-    return '⚠️ <strong>บัญชียังไม่ได้รับการยืนยันอีเมล</strong><br><span style="font-size:0.875rem">กรุณากดลิงก์ยืนยันในอีเมลของคุณ หรือเข้าสู่ระบบผ่าน Google</span>';
+    return '<strong>บัญชียังไม่ได้รับการยืนยันอีเมล</strong><br><span style="font-size:0.875rem">กรุณากดลิงก์ยืนยันในอีเมลของคุณ หรือเข้าสู่ระบบผ่าน Google</span>';
   }
   if (raw.includes('User already registered')) {
-    return 'ℹ️ อีเมลนี้เคยสมัครสมาชิกแล้ว กรุณากดแท็บ <strong>"เข้าสู่ระบบ"</strong> หรือกดลืมรหัสผ่าน';
+    return 'ℹอีเมลนี้เคยสมัครสมาชิกแล้ว กรุณากดแท็บ <strong>"เข้าสู่ระบบ"</strong> หรือกดลืมรหัสผ่าน';
   }
   if (raw.includes('Password should be at least')) {
     return 'รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร';
@@ -86,7 +86,7 @@ $('form')?.addEventListener('submit', async e => {
       const { data, error } = await signUp(email, password, $('name').value.trim() || email.split('@')[0]);
       if (error) throw error;
       if (!data.session) {
-        show('✅ สร้างบัญชีสำเร็จ! กรุณาตรวจสอบกล่องข้อความในอีเมลของคุณเพื่อยืนยันบัญชี หรือเข้าสู่ระบบได้ทันที', 'ok');
+        show('สร้างบัญชีสำเร็จ! กรุณาตรวจสอบกล่องข้อความในอีเมลของคุณเพื่อยืนยันบัญชี หรือเข้าสู่ระบบได้ทันที', 'ok');
         setMode('signin');
         return;
       }

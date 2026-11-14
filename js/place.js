@@ -4,6 +4,7 @@ import { listQuestsForPlace } from './quests.js';
 import { supabase } from './supabase.js';
 import { esc, isUuid } from './ui.js';
 import { requireAuth } from './auth.js';
+import { icon, iconFor } from './icons.js';
 
 const $ = id => document.getElementById(id);
 const id = new URLSearchParams(location.search).get('id');
@@ -11,7 +12,7 @@ const id = new URLSearchParams(location.search).get('id');
 async function init() {
   const session = await requireAuth();
   if (!session) return;
-  if (!isUuid(id)) { $('status').textContent = 'ลิงก์สถานที่ท่องเที่ยวไม่ถูกต้อง'; return; }
+  if (!id) { $('status').textContent = 'ลิงก์สถานที่ท่องเที่ยวไม่ถูกต้อง'; return; }
   
   let p;
   try {
@@ -48,9 +49,9 @@ async function init() {
     const prov = p.provinces?.name_en || 'กรุงเทพฯ';
     const loc = [dist, prov].filter(Boolean).join(', ');
     badgesEl.innerHTML = `
-      <span class="badge badge-muted" style="font-size:0.85rem;padding:0.35rem 0.75rem;">🏷️ ${esc(cat)}</span>
-      <span class="badge badge-muted" style="font-size:0.85rem;padding:0.35rem 0.75rem;">📍 ${esc(loc)}</span>
-      ${p.verified ? '<span class="badge" style="background:#DCFCE7;color:#166534;font-size:0.85rem;padding:0.35rem 0.75rem;">✓ ตรวจสอบแล้ว</span>' : ''}
+      <span class="badge badge-muted" style="font-size:0.85rem;padding:0.35rem 0.75rem;">${esc(cat)}</span>
+      <span class="badge badge-muted" style="font-size:0.85rem;padding:0.35rem 0.75rem;">${esc(loc)}</span>
+      ${p.verified ? '<span class="badge" style="background:#DCFCE7;color:#166534;font-size:0.85rem;padding:0.35rem 0.75rem;">ตรวจสอบแล้ว</span>' : ''}
     `;
   }
 
@@ -72,7 +73,7 @@ async function init() {
       hlContainer.hidden = false;
       hlGrid.innerHTML = highlights.map(h => `
         <div class="highlight-card">
-          <div class="highlight-icon">${h.icon}</div>
+          <div class="highlight-icon">${iconFor(h.icon, 24)}</div>
           <h3 class="highlight-title">${esc(h.title)}</h3>
           <p class="highlight-desc">${esc(h.desc)}</p>
         </div>
@@ -89,15 +90,15 @@ async function init() {
   const visitorList = $('visitor-list');
   if (visitorList) {
     const items = [
-      { icon: '⏰', label: 'เวลาเปิด-ปิดทำการ', val: p.opening_hours_display || p.opening_hours || 'เปิดทุกวัน (โปรดตรวจสอบก่อนเดินทาง)' },
-      { icon: '🎟️', label: 'อัตราค่าเข้าชม', val: p.entry_fee_display || p.entry_fee || 'เข้าชมฟรี' },
-      { icon: '👗', label: 'ข้อควรปฏิบัติ & ระเบียบการแต่งกาย', val: p.visitor_info_display || p.visitor_info || 'แต่งกายสุภาพตามกาลเทศะ' },
-      { icon: '🌅', label: 'ช่วงเวลาที่แนะนำในการท่องเที่ยว', val: p.best_time_display || 'ช่วงเช้าตรู่ หรือช่วงบ่ายแก่ๆ แดดร่มลมตก' },
+      { icon: 'clock', label: 'เวลาเปิด-ปิดทำการ', val: p.opening_hours_display || p.opening_hours || 'เปิดทุกวัน (โปรดตรวจสอบก่อนเดินทาง)' },
+      { icon: 'coin', label: 'อัตราค่าเข้าชม', val: p.entry_fee_display || p.entry_fee || 'เข้าชมฟรี' },
+      { icon: 'info', label: 'ข้อควรปฏิบัติ & ระเบียบการแต่งกาย', val: p.visitor_info_display || p.visitor_info || 'แต่งกายสุภาพตามกาลเทศะ' },
+      { icon: 'sun', label: 'ช่วงเวลาที่แนะนำในการท่องเที่ยว', val: p.best_time_display || 'ช่วงเช้าตรู่ หรือช่วงบ่ายแก่ๆ แดดร่มลมตก' },
     ];
 
     visitorList.innerHTML = items.map(it => `
       <div class="visitor-item">
-        <div class="visitor-item-icon">${it.icon}</div>
+        <div class="visitor-item-icon">${icon(it.icon, 20)}</div>
         <div>
           <div class="visitor-item-label">${esc(it.label)}</div>
           <div class="visitor-item-val">${esc(it.val)}</div>
@@ -129,7 +130,7 @@ async function init() {
     const questsList = $('quests');
     if (qs.length) {
       questsList.innerHTML = qs.map(q => {
-        const diffBadge = q.difficulty === 'easy' ? '🟢 ง่าย' : q.difficulty === 'medium' ? '🟡 ปานกลาง' : '🔴 ยาก';
+        const diffBadge = q.difficulty === 'easy' ? 'ง่าย' : q.difficulty === 'medium' ? 'ปานกลาง' : 'ยาก';
         return `
           <li>
             <a href="/quests.html#${encodeURIComponent(q.id)}" class="place-quest-item">
@@ -137,7 +138,7 @@ async function init() {
                 <strong>${esc(q.title)}</strong>
                 <div style="font-size:0.8rem;color:#64748B;margin-top:2px;">ระดับ: ${diffBadge}</div>
               </div>
-              <span class="badge" style="background:#FEF3C7;color:#92400E;font-size:0.85rem;font-weight:700;">+${Number(q.reward_tokens || 50)} 🪙</span>
+              <span class="badge" style="background:#FEF3C7;color:#92400E;font-size:0.85rem;font-weight:700;">+${Number(q.reward_tokens || 50)} โทเคน</span>
             </a>
           </li>
         `;
@@ -179,7 +180,7 @@ async function init() {
         <li class="place-quest-item" style="display:flex;align-items:center;justify-content:space-between;gap:0.75rem;padding:0.75rem 1rem;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:12px;margin-bottom:0.5rem;">
           <div>
             <div style="font-weight:700;color:#0F172A;font-size:0.95rem;display:flex;align-items:center;gap:0.35rem;">
-              <span>🏆 ${esc(c.title)}</span>
+              <span>${esc(c.title)}</span>
               ${c.reward_tokens ? `<span style="font-size:0.75rem;background:#FEF3C7;color:#D97706;padding:2px 7px;border-radius:9999px;font-weight:700;">+${c.reward_tokens} โทเคน</span>` : ''}
             </div>
             ${c.description ? `<p style="font-size:0.82rem;color:#64748B;margin:0.25rem 0 0;">${esc(c.description.slice(0, 100))}</p>` : ''}

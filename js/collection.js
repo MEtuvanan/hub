@@ -150,13 +150,13 @@ async function load() {
   if ($('characters')) {
     $('characters').innerHTML = mergedChars.map(c => {
       const has = ownedIds.has(c.id);
-      const art = c.image_url ? `<img src="${esc(c.image_url)}" alt="${esc(c.name)}">` : '★';
+      const art = c.image_url ? `<img src="${esc(c.image_url)}" alt="${esc(c.name)}">` : '';
       const mult = c.token_multiplier > 1 ? `<span class="badge" style="background:rgba(242,168,29,0.18);color:#B45309;font-weight:700;">×${Number(c.token_multiplier)} โทเคน</span>` : '';
       return `<article class="card char-card ${has ? 'owned' : 'locked'}" style="${has ? 'border-color:var(--color-emerald);box-shadow:0 4px 16px rgba(16,185,129,0.15);' : ''}">
         <div class="avatar" aria-hidden="true">${art}</div>
         <h3 class="card-title">${esc(c.name)}</h3>
         <div style="display:flex;gap:0.4rem;align-items:center;flex-wrap:wrap;margin-bottom:0.5rem;">
-          <span class="badge ${has ? 'badge-quest' : 'badge-muted'}" style="${has ? 'font-weight:700;color:var(--color-emerald-deep);' : ''}">${has ? '✓ ครอบครองแล้ว (Owned)' : '🔒 ยังไม่ปลดล็อก'}</span>
+          <span class="badge ${has ? 'badge-quest' : 'badge-muted'}" style="${has ? 'font-weight:700;color:var(--color-emerald-deep);' : ''}">${has ? 'ครอบครองแล้ว (Owned)' : 'ยังไม่ปลดล็อก'}</span>
           <span class="badge badge-muted">${esc(c.rarity || 'Common')}</span>
           ${mult}
         </div>
@@ -176,7 +176,7 @@ async function load() {
     $('achievements').innerHTML = achData.map(a => {
       const has = unlockedIds.has(a.id);
       return `<article class="card ${has ? '' : 'char-card locked'}"><h3 class="card-title">${esc(a.title)}</h3>
-        <span class="badge ${has ? 'badge-quest' : 'badge-muted'}">${has ? '✓ ปลดล็อกแล้ว' : '🔒 ล็อคอยู่'}</span>
+        <span class="badge ${has ? 'badge-quest' : 'badge-muted'}">${has ? 'ปลดล็อกแล้ว' : 'ล็อคอยู่'}</span>
         <p class="meta">${esc(a.description)} รางวัล: ${Number(a.token_reward)} โทเคน</p></article>`;
     }).join('');
   }
@@ -196,7 +196,7 @@ async function loadStore() {
   const storeChars = EXTRA_CHARACTERS.filter(c => c.unlock_cost);
   el.innerHTML = storeChars.map(c => {
     const mult = c.token_multiplier > 1 ? `<span class="badge" style="background:#FEF3C7;color:#92400E;font-weight:700;">×${Number(c.token_multiplier)} โทเคน</span>` : '';
-    const art = c.image_url ? `<img src="${esc(c.image_url)}" alt="${esc(c.name)}">` : '★';
+    const art = c.image_url ? `<img src="${esc(c.image_url)}" alt="${esc(c.name)}">` : '';
     return `<article class="card char-card" style="border:1.5px solid rgba(242,168,29,0.3);">
       <div class="avatar" aria-hidden="true">${art}</div>
       <h3 class="card-title">${esc(c.name)} ${mult}</h3>
@@ -230,7 +230,7 @@ document.addEventListener('click', async e => {
   // Try DB rpc if available
   try { await supabase.rpc('unlock_character', { p_character_id: id }); } catch {}
 
-  toast(`🎉 ปลดล็อกตัวละคร "${name}" สำเร็จ!`);
+  toast(`ปลดล็อกตัวละคร "${name}" สำเร็จ!`);
   load().catch(console.error);
 });
 

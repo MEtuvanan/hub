@@ -46,7 +46,7 @@ function setMode(nextMode) {
   if ($('authSub')) $('authSub').textContent = reset
     ? 'กรอกอีเมลเพื่อรับลิงก์ตั้งรหัสผ่านใหม่'
     : signup ? 'สร้างบัญชีเพื่อเก็บความคืบหน้าการเดินทาง' : 'ซิงก์โปรไฟล์ โทเคน และประวัติการเดินทางของคุณ';
-  if ($('authHeroIco')) $('authHeroIco').textContent = reset ? '🔑' : signup ? '🧭' : '🔐';
+  if ($('authHeroIco')) $('authHeroIco').innerHTML = icon(reset ? 'lock' : signup ? 'compass' : 'lock', 24);
   if ($('authHeroTitle')) $('authHeroTitle').textContent = reset ? 'ตั้งรหัสผ่านใหม่' : signup ? 'เริ่มการผจญภัย' : 'ยินดีต้อนรับกลับ นักสำรวจ';
   if ($('authHeroText')) $('authHeroText').textContent = reset
     ? 'เราจะส่งลิงก์ปลอดภัยไปยังอีเมลของคุณ'
@@ -136,7 +136,7 @@ function renderSignedIn(session, profile) {
   const email = session?.user?.email || session?.user?.user_metadata?.email || 'บัญชีนักสำรวจ';
   $('authTitle').textContent = 'บัญชีของฉัน';
   $('authSub').textContent = 'คุณเข้าสู่ระบบอยู่แล้ว';
-  $('authHeroIco').textContent = '✅';
+  $('authHeroIco').innerHTML = icon('check-circle', 24);
   $('authHeroTitle').textContent = `สวัสดี ${name}`;
   $('authHeroText').textContent = 'ความคืบหน้าของคุณถูกซิงก์กับบัญชีนี้';
   area.innerHTML = `
