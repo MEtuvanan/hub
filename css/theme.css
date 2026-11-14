@@ -2673,8 +2673,9 @@ body.app-phone .pm-hero #pmVerified svg {
   z-index: 3 !important;
 }
 
-/* Remove explore map title row */
-.ex-title-row {
+/* Remove explore map title row and legend */
+.ex-title-row,
+.ex-legend {
   display: none !important;
 }
 
