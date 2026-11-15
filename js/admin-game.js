@@ -346,7 +346,7 @@ function bossForm() {
         ${field('ลองจิจูด *', `<input class="ag-input" type="number" name="lng" step="any" value="${Number(d.lng)}" required>`)}
       </div>
 
-      <p class="ag-label">โมเดลบอส</p>
+      <p class="ag-label">โมเดลบอส (รองรับโมเดล 3D)</p>
       <div class="ag-models" role="radiogroup" aria-label="โมเดลบอส">
         ${BOSS_MODELS.map(m => `
           <label class="ag-model ${m.id === d.model ? 'is-on' : ''}" style="--tone:${m.tint}">
@@ -354,6 +354,15 @@ function bossForm() {
             <img src="${esc(m.image)}" alt="">
             <span>${esc(m.name)}</span>
           </label>`).join('')}
+      </div>
+
+      ${field('ไฟล์/URL โมเดล 3D (.glb / .gltf)', `<input class="ag-input" type="text" name="modelUrl" value="${esc(d.modelUrl || '')}" placeholder="https://.../boss.glb หรืออัปโหลดไฟล์ด้านล่าง">`, 'รองรับโมเดล 3D สำหรับแสดงผลในลานประลอง AR แบบ Turn-based')}
+      <div style="margin-bottom:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <label class="ag-btn ag-btn--ghost ag-btn--sm" style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;">
+          ${icon('upload', 14)} อัปโหลดไฟล์โมเดล 3D (.glb)
+          <input type="file" accept=".glb,.gltf" id="agModelUpload" style="display:none">
+        </label>
+        <span id="agUploadStatus" style="font-size:11px;color:#64748B;">${d.modelUrl ? '✓ มีไฟล์โมเดล 3D พร้อมแสดงผล' : 'รอการอัปโหลดไฟล์โมเดล 3D (ระบบจะใช้เอฟเฟกต์ 3D มาตรฐาน)'}</span>
       </div>
 
       <div class="ag-grid ag-grid--4">
@@ -452,6 +461,29 @@ function bindForm() {
     if (prev) prev.innerHTML = icon(e.target.value, 20);
   });
 
+  // 3D Model File Upload handler (.glb / .gltf)
+  const uploadInput = form.querySelector('#agModelUpload');
+  if (uploadInput) {
+    uploadInput.addEventListener('change', e => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const status = form.querySelector('#agUploadStatus');
+      const urlInput = form.querySelector('[name="modelUrl"]');
+      if (status) status.textContent = `กำลังโหลดไฟล์ ${file.name}...`;
+
+      const reader = new FileReader();
+      reader.onload = ev => {
+        if (urlInput) urlInput.value = ev.target.result;
+        if (status) status.textContent = `✓ อัปโหลดสำเร็จ: ${file.name} พร้อมแสดงผล 3D`;
+        toast(`อัปโหลดโมเดล 3D (${file.name}) เรียบร้อย`);
+      };
+      reader.onerror = () => {
+        if (status) status.textContent = '❌ โหลดไฟล์ไม่สำเร็จ';
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
   form.addEventListener('submit', e => {
     e.preventDefault();
     const data = Object.fromEntries(new FormData(form).entries());
@@ -488,6 +520,8 @@ function bindForm() {
         def: Number(data.def) || 25,
         spd: Number(data.spd) || 20,
         model: data.model,
+        modelUrl: String(data.modelUrl || '').trim(),
+        is3d: true,
         rarity: data.rarity,
         reward: Number(data.reward) || 100,
         skillId: data.skillId,

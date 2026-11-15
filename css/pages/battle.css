@@ -892,3 +892,38 @@ html.btl-open {
   border-radius: 12px;
   font-size: 13.5px;
 }
+
+/* 3D Boss Model & Stage */
+.btl__boss-3d-model {
+  display: block;
+  margin: 0 auto;
+  pointer-events: auto;
+  filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.65));
+}
+
+.btl__boss-3d-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.btl__3d-badge {
+  font-family: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(0, 230, 118, 0.2);
+  border: 1px solid #00E676;
+  color: #00E676;
+  text-shadow: 0 0 8px rgba(0, 230, 118, 0.6);
+  margin-bottom: 6px;
+  animation: pulse3d 2s ease-in-out infinite;
+}
+
+@keyframes pulse3d {
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}

@@ -2,6 +2,24 @@ import { getProfile, signOut, getSession, watchSession } from './auth.js';
 import { esc } from './ui.js';
 import { getLang, toggleLang, t } from './i18n.js';
 import { icon } from './icons.js';
+import { initCloudSync } from './supabase-sync.js';
+
+// Auth gate: Require registration / login before using the application
+const PUBLIC_PAGES = ['/login.html', '/help.html'];
+const isPublicPage = PUBLIC_PAGES.some(p => location.pathname.endsWith(p));
+
+async function checkAuthGate() {
+  const session = await getSession();
+  if (!session && !isPublicPage) {
+    location.replace(`/login.html?next=${encodeURIComponent(location.pathname + location.search)}`);
+    return false;
+  }
+  if (session) {
+    initCloudSync();
+  }
+  return true;
+}
+checkAuthGate();
 
 const NAV = [
   ['/explore.html',    'nav_explore',    '/explore',    'map'],

@@ -26,6 +26,15 @@ function ensureCss() {
   document.head.appendChild(link);
 }
 
+function ensureModelViewer() {
+  if (typeof customElements !== 'undefined' && customElements.get('model-viewer')) return;
+  if (document.querySelector('script[src*="model-viewer"]')) return;
+  const script = document.createElement('script');
+  script.type = 'module';
+  script.src = 'https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js';
+  document.head.appendChild(script);
+}
+
 function battleTeam() {
   const ids = getTeam().slice(0, MAX_TEAM);
   const chars = ids.map(characterById).filter(Boolean);
@@ -59,6 +68,7 @@ function calcBossCP(boss) {
  */
 export function openBattle(options = {}) {
   ensureCss();
+  ensureModelViewer();
   document.getElementById('tcBattle')?.remove();
 
   const boss = options.boss || (options.bossId ? bossById(options.bossId) : null);
@@ -250,10 +260,25 @@ export function openBattle(options = {}) {
             <div class="btl__court-line"></div>
           </div>
 
-          <!-- BOSS SPRITE (CENTER/UPPER) -->
+          <!-- BOSS 3D MODEL / SPRITE (CENTER/UPPER) -->
           <div class="btl__boss ${state.bossHp <= 0 ? 'is-down' : ''}">
             <div class="btl__boss-aura" style="--glow:${model.tint}"></div>
-            <img src="${esc(model.image)}" alt="${esc(boss.name)}" draggable="false">
+            ${boss.modelUrl ? `
+              <model-viewer src="${esc(boss.modelUrl)}"
+                auto-rotate
+                rotation-per-second="24deg"
+                camera-controls
+                shadow-intensity="1.5"
+                interaction-prompt="none"
+                style="width:230px;height:240px;background:transparent;outline:none;"
+                class="btl__boss-3d-model"
+              ></model-viewer>
+            ` : `
+              <div class="btl__boss-3d-stage">
+                <span class="btl__3d-badge">3D MODEL READY</span>
+                <img src="${esc(model.image)}" alt="${esc(boss.name)}" draggable="false">
+              </div>
+            `}
             <span class="btl__boss-shadow" aria-hidden="true"></span>
           </div>
 

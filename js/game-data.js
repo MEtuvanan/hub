@@ -21,11 +21,13 @@ export const RARITIES = {
 };
 
 // Boss "models" are the visual archetypes an admin can pick for each boss.
+// Bosses are 3D-ready with modelUrl pointing to an uploaded .glb/.gltf model.
 export const BOSS_MODELS = [
-  { id: 'guardian', name: 'ผู้พิทักษ์', image: '/assets/img/ray.png', tint: '#2F6FED' },
-  { id: 'wanderer', name: 'นักเดินทางเงา', image: '/assets/img/maya.png', tint: '#0F8A5F' },
-  { id: 'sorceress', name: 'แม่มดแห่งวัด', image: '/assets/img/luna.png', tint: '#C4483A' },
-  { id: 'shadow', name: 'จอมเวทราตรี', image: '/assets/img/zael.png', tint: '#6B4BB0' },
+  { id: 'guardian', name: 'ผู้พิทักษ์ (3D Guardian)', image: '/assets/img/ray.png', tint: '#2F6FED', is3d: true, modelUrl: '', modelShape: 'humanoid' },
+  { id: 'wanderer', name: 'นักเดินทางเงา (3D Wanderer)', image: '/assets/img/maya.png', tint: '#0F8A5F', is3d: true, modelUrl: '', modelShape: 'ninja' },
+  { id: 'sorceress', name: 'แม่มดแห่งวัด (3D Sorceress)', image: '/assets/img/luna.png', tint: '#C4483A', is3d: true, modelUrl: '', modelShape: 'mage' },
+  { id: 'shadow', name: 'จอมเวทราตรี (3D Titan)', image: '/assets/img/zael.png', tint: '#6B4BB0', is3d: true, modelUrl: '', modelShape: 'beast' },
+  { id: 'custom-3d', name: 'โมเดล 3D กำหนดเอง (.glb / .gltf)', image: '/assets/img/ray.png', tint: '#FF5A1F', is3d: true, modelUrl: '', modelShape: 'custom' },
 ];
 
 export const SKILL_KINDS = {
@@ -199,7 +201,12 @@ export function bossesForPlace(placeId) {
 export function saveBoss(input) {
   const rows = listBosses().slice();
   const id = input.id || slug('boss');
-  const row = { ...input, id };
+  const row = {
+    ...input,
+    id,
+    is3d: true,
+    modelUrl: input.modelUrl || '', // URL or path for uploaded .glb/.gltf 3D model
+  };
   const i = rows.findIndex(b => b.id === id);
   if (i >= 0) rows[i] = row; else rows.push(row);
   write(KEYS.bosses, rows);

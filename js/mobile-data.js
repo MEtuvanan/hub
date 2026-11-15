@@ -468,7 +468,12 @@ export function readJSON(key, fallback) {
 }
 
 export function writeJSON(key, value) {
-  try { localStorage.setItem(key, JSON.stringify(value)); } catch {}
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('tc-game-changed', { detail: { key } }));
+    }
+  } catch {}
   return value;
 }
 

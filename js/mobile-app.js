@@ -111,10 +111,22 @@ async function loadAuth() {
   try {
     const auth = await import('./auth.js');
     session = await auth.getSession();
+
+    // Mobile auth gate: require registration / login before using the app
+    const publicMobile = ['/login-mobile.html', '/help-mobile.html'];
+    const isPublic = publicMobile.some(p => location.pathname.endsWith(p));
+    if (!session && !isPublic) {
+      location.replace(`/login-mobile.html?next=${encodeURIComponent(location.pathname + location.search)}`);
+      return;
+    }
+
     if (session) {
       profile = await auth.getProfile();
       renderProfilePill();
       renderMoreUser();
+
+      // Cloud sync to/from Supabase for outfits, bosses, characters, quests, liked places, tokens
+      import('./supabase-sync.js').then(m => m.initCloudSync()).catch(() => {});
     }
   } catch (e) {
     console.warn('mobile shell: auth unavailable', e?.message || e);
