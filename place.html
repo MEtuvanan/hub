@@ -65,19 +65,18 @@
           </section>
 
           <!-- Action Buttons -->
-          <div style="display:flex;flex-wrap:wrap;gap:0.75rem;margin-top:0.5rem;">
-            <a class="btn" id="btn-nav" href="#" style="background:linear-gradient(135deg,#00A86B,#007A4D);font-size:1rem;padding:0.75rem 1.4rem;">
+          <div class="place-actions-row" style="display:flex;flex-wrap:wrap;gap:0.75rem;margin-top:0.5rem;">
+            <a class="btn" id="btn-nav" href="#">
               <svg class="ic" width="18" height="18" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-compass"></use></svg> นำทาง GPS ไปที่นี่
             </a>
-            <a class="btn" id="btn-trip" href="/planner.html" style="font-size:1rem;padding:0.75rem 1.4rem;">
+            <a class="btn" id="btn-trip" href="/planner.html">
               <svg class="ic" width="18" height="18" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-calendar"></use></svg> วางแผนทริป
             </a>
-            <a class="btn btn-secondary" id="btn-write-journal" href="/journal.html" style="font-size:1rem;padding:0.75rem 1.4rem;">
+            <a class="btn btn-secondary" id="btn-write-journal" href="/journal.html">
               <svg class="ic" width="18" height="18" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-journal"></use></svg> บันทึกไดอารี่
             </a>
             <!-- Boss battle button — shown by place.js when this place has a boss -->
-            <button type="button" id="btn-boss" hidden
-              style="font-size:1rem;padding:0.75rem 1.4rem;background:linear-gradient(135deg,#AB47BC,#7B1FA2);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:700;display:inline-flex;align-items:center;gap:6px;">
+            <button type="button" id="btn-boss" hidden>
               ⚔️ ท้าบอสประจำสถานที่
             </button>
           </div>
@@ -88,12 +87,12 @@
           <div style="position:sticky;top:80px;">
             <div id="map-error" class="alert alert-error" role="alert" hidden></div>
             <div id="map" class="place-map"></div>
-            <div style="margin-top:1rem;background:#FFFFFF;padding:1.25rem;border-radius:14px;border:1px solid #E2E8F0;box-shadow:0 2px 8px rgba(0,0,0,0.04);">
-              <h3 style="font-size:1rem;font-weight:700;margin:0 0 0.5rem;color:#0F172A;display:flex;align-items:center;gap:0.35rem;"><svg class="ic" width="16" height="16" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-pin"></use></svg> พิกัดทางภูมิศาสตร์</h3>
-              <p id="coords" class="meta" style="font-size:0.9rem;color:#475569;margin:0;"></p>
-              <div id="transportation-box" style="margin-top:0.85rem;padding-top:0.85rem;border-top:1px solid #F1F5F9;" hidden>
-                <strong style="font-size:0.85rem;color:#059669;display:block;margin-bottom:0.25rem;">การเดินทางสาธารณะ:</strong>
-                <p id="transportation-text" style="font-size:0.88rem;color:#334155;margin:0;line-height:1.45;"></p>
+            <div class="place-coords-card">
+              <h3 style="font-size:1rem;font-weight:700;margin:0 0 0.5rem;color:#18221E;display:flex;align-items:center;gap:0.35rem;"><svg class="ic" width="16" height="16" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-pin"></use></svg> พิกัดทางภูมิศาสตร์</h3>
+              <p id="coords" class="meta" style="margin:0;"></p>
+              <div id="transportation-box" hidden>
+                <strong>การเดินทางสาธารณะ:</strong>
+                <p id="transportation-text"></p>
               </div>
             </div>
           </div>

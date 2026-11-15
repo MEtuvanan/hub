@@ -1,221 +1,523 @@
 /* =====================================================================
-   Place Details Page Styles
-   Rich Cultural Experience & Destination Guide
+   Place Details Page — Adventure Explorer & AR Map Vibe
+   Design Rules:
+   - Palette: Warm off-white (#F7F6F2) & Deep Slate (#18221E)
+   - Layout & Hierarchy: Crisp 1.5px solid borders (#1E2923), 4px to 8px sharp-to-rounded corners
+   - No blurry shadows: Solid crisp drop shadows (3px 3px 0 #1E2923)
+   - Monospace accents: JetBrains Mono / SFMono for coordinates, tags, distances, badges
+   - Subtle animated topographic SVG contour line pattern background
+   - Tactile collectible floating animation on key cards & images
+   - Vibrant Expedition Orange (#FF5A1F) hover snap on buttons, cards, links
+   - No generic AI purple or blue gradients or glowing neon blobs
    ===================================================================== */
 
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap');
+
+/* Topographic Animated Background */
+body[data-protected],
+main.section {
+  position: relative;
+  background-color: #F7F6F2 !important;
+  color: #18221E;
+  min-height: 100vh;
+}
+
+main.section::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.055;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='480' height='480' viewBox='0 0 480 480'%3E%3Cg fill='none' stroke='%2318221E' stroke-width='1.5' stroke-linecap='round'%3E%3Cpath d='M20,60 C90,20 180,90 280,40 C380,-10 440,70 480,80'/%3E%3Cpath d='M0,140 C110,120 170,180 270,130 C370,80 430,160 480,150'/%3E%3Cpath d='M0,230 C80,260 190,200 290,240 C390,280 430,220 480,230'/%3E%3Cpath d='M0,320 C120,300 200,380 300,330 C400,280 450,360 480,340'/%3E%3Cpath d='M0,420 C90,440 210,390 310,430 C410,470 450,410 480,420'/%3E%3Cpath d='M80,0 C60,90 130,180 90,280 C50,380 110,440 100,480'/%3E%3Cpath d='M220,0 C200,110 270,190 230,290 C190,390 250,450 240,480'/%3E%3Cpath d='M360,0 C340,100 410,190 370,290 C330,390 390,440 380,480'/%3E%3Cpath d='M140,160 C170,140 210,150 220,180 C230,210 200,240 170,240 C140,240 120,210 120,190 Z'/%3E%3Cpath d='M310,270 C340,250 380,260 390,290 C400,320 370,350 340,350 C310,350 290,320 290,300 Z'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 420px 420px;
+  animation: topoShift 75s linear infinite;
+}
+
+@keyframes topoShift {
+  0% { background-position: 0 0; }
+  50% { background-position: 210px 210px; }
+  100% { background-position: 420px 420px; }
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+}
+
+/* Hero Section */
 .place-hero {
-  margin-bottom: 1.5rem;
+  position: relative;
+  margin-bottom: 2rem;
+  padding: 1.5rem 1.75rem;
+  background: #FFFFFF;
+  border: 1.5px solid #1E2923;
+  border-radius: 6px;
+  box-shadow: 3px 3px 0 #1E2923;
 }
-.place-title-th {
-  font-size: 2.2rem;
+
+.place-hero::before {
+  content: 'FIELD DOSSIER // EXPLORE AR';
+  display: block;
+  font-family: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #FF5A1F;
+  margin-bottom: 0.5rem;
+}
+
+.place-hero::after {
+  content: '✛';
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  font-family: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
+  font-size: 13px;
   font-weight: 800;
-  color: #0F172A;
-  margin: 0 0 0.35rem;
-  line-height: 1.25;
+  color: #1E2923;
+  opacity: 0.4;
+  pointer-events: none;
 }
+
+.place-title-th {
+  font-size: 2.35rem;
+  font-weight: 800;
+  color: #18221E;
+  margin: 0 0 0.35rem;
+  line-height: 1.22;
+  letter-spacing: -0.02em;
+}
+
 .place-title-en {
   font-size: 1.15rem;
   font-weight: 600;
-  color: #64748B;
-  margin: 0 0 1rem;
+  color: #556B60;
+  font-family: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
+  margin: 0 0 1.1rem;
+  letter-spacing: 0.02em;
 }
 
+/* Badges */
 .place-badges-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
 }
 
+.place-badges-row .badge,
+.badge {
+  font-family: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace !important;
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  padding: 0.35rem 0.75rem !important;
+  border-radius: 5px !important;
+  border: 1.5px solid #1E2923 !important;
+  background: #FAF9F5 !important;
+  color: #18221E !important;
+  box-shadow: 2px 2px 0 #1E2923 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  letter-spacing: 0.02em;
+  transition: all 0.18s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+
+.place-badges-row .badge:hover {
+  transform: translate(-1px, -1px);
+  border-color: #FF5A1F !important;
+  box-shadow: 3px 3px 0 #FF5A1F !important;
+  color: #FF5A1F !important;
+}
+
+/* Photo Gallery with Collectible Exploration Card vibe */
 .gallery {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1rem;
-  margin: 0 0 2rem;
+  gap: 1.25rem;
+  margin: 0 0 2.25rem;
 }
-.gallery img {
-  width: 100%;
-  aspect-ratio: 16/10;
-  object-fit: cover;
-  border-radius: 14px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-  transition: transform 0.25s ease;
-}
-.gallery img:hover {
-  transform: scale(1.02);
-}
+
 .gallery:empty {
   display: none;
 }
 
-/* Highlights Grid */
-.highlights-section {
-  background: #FFFFFF;
-  border: 1px solid #E2E8F0;
-  border-radius: 16px;
-  padding: 1.5rem;
-  margin-bottom: 1.75rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+.gallery img {
+  width: 100%;
+  aspect-ratio: 16/10;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1.5px solid #1E2923;
+  background: #EFECE4;
+  box-shadow: 3px 3px 0 #1E2923;
+  transition: transform 0.22s cubic-bezier(0.2, 0.9, 0.3, 1.2), box-shadow 0.22s ease, border-color 0.22s ease;
+  position: relative;
 }
-.highlights-section h2 {
-  font-size: 1.25rem;
+
+/* Subtle floating animation on primary collectible card */
+.gallery img:first-child {
+  animation: floatCollect 4.5s ease-in-out infinite;
+}
+
+@keyframes floatCollect {
+  0%, 100% {
+    transform: translateY(0);
+    box-shadow: 3px 3px 0 #1E2923;
+  }
+  50% {
+    transform: translateY(-5px);
+    box-shadow: 3px 8px 0 #1E2923;
+  }
+}
+
+.gallery img:hover {
+  transform: translate(-2px, -3px) !important;
+  border-color: #FF5A1F !important;
+  box-shadow: 5px 6px 0 #FF5A1F !important;
+}
+
+/* Highlights Section */
+.highlights-section {
+  position: relative;
+  background: #FFFFFF;
+  border: 1.5px solid #1E2923;
+  border-radius: 6px;
+  padding: 1.5rem 1.75rem;
+  margin-bottom: 2rem;
+  box-shadow: 3px 3px 0 #1E2923;
+}
+
+.highlights-section::before,
+.place-about-card::before,
+.visitor-card::before,
+.place-quests-card::before,
+.place-coords-card::before {
+  content: '✛';
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-family: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
+  font-size: 11px;
   font-weight: 800;
-  margin: 0 0 1rem;
-  color: #0F172A;
+  color: #1E2923;
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.highlights-section h2,
+.place-about-card h2,
+.visitor-card h2,
+.place-quests-card h2 {
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin: 0 0 1.2rem;
+  color: #18221E;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  letter-spacing: -0.01em;
 }
+
 .highlights-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1rem;
 }
+
 .highlight-card {
-  background: #F8FAFC;
-  border: 1px solid #F1F5F9;
-  border-radius: 12px;
-  padding: 1rem;
-  transition: all 0.2s ease;
+  background: #FAF9F5;
+  border: 1.5px solid #1E2923;
+  border-radius: 6px;
+  padding: 1.15rem;
+  box-shadow: 2px 2px 0 #1E2923;
+  transition: all 0.2s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+  position: relative;
 }
+
 .highlight-card:hover {
-  background: #ECFDF5;
-  border-color: #A7F3D0;
-  transform: translateY(-2px);
+  background: #FFFDF9;
+  border-color: #FF5A1F;
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 #FF5A1F;
 }
+
 .highlight-icon {
-  font-size: 1.75rem;
-  margin-bottom: 0.4rem;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #FF5A1F;
 }
+
 .highlight-title {
   font-size: 0.95rem;
   font-weight: 700;
-  color: #0F172A;
-  margin: 0 0 0.25rem;
+  color: #18221E;
+  margin: 0 0 0.3rem;
 }
+
 .highlight-desc {
-  font-size: 0.84rem;
-  color: #64748B;
+  font-size: 0.85rem;
+  color: #4A5D54;
   margin: 0;
-  line-height: 1.45;
+  line-height: 1.5;
 }
 
 /* Place Narrative About */
 .place-about-card {
+  position: relative;
   background: #FFFFFF;
-  border: 1px solid #E2E8F0;
-  border-radius: 16px;
+  border: 1.5px solid #1E2923;
+  border-radius: 6px;
   padding: 1.75rem;
-  margin-bottom: 1.75rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  margin-bottom: 2rem;
+  box-shadow: 3px 3px 0 #1E2923;
 }
-.place-about-card h2 {
-  font-size: 1.25rem;
-  font-weight: 800;
-  margin: 0 0 1rem;
-  color: #0F172A;
-}
+
 .place-about-card p {
-  font-size: 1rem;
-  line-height: 1.75;
-  color: #334155;
+  font-size: 0.98rem;
+  line-height: 1.8;
+  color: #2D3D35;
   white-space: pre-line;
   margin: 0;
 }
 
 /* Visitor Information Card */
 .visitor-card {
+  position: relative;
   background: #FFFFFF;
-  border: 1px solid #E2E8F0;
-  border-radius: 16px;
-  padding: 1.5rem;
-  margin-bottom: 1.75rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  border: 1.5px solid #1E2923;
+  border-radius: 6px;
+  padding: 1.6rem 1.75rem;
+  margin-bottom: 2rem;
+  box-shadow: 3px 3px 0 #1E2923;
 }
-.visitor-card h2 {
-  font-size: 1.25rem;
-  font-weight: 800;
-  margin: 0 0 1.25rem;
-  color: #0F172A;
-}
+
 .visitor-list {
   display: grid;
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1.1rem;
 }
+
 .visitor-item {
   display: flex;
   gap: 0.75rem;
   align-items: flex-start;
-}
-.visitor-item-icon {
-  font-size: 1.35rem;
-  line-height: 1;
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-.visitor-item-label {
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: #64748B;
-  margin-bottom: 2px;
-}
-.visitor-item-val {
-  font-size: 0.94rem;
-  font-weight: 600;
-  color: #0F172A;
+  padding: 0.9rem;
+  background: #FAF9F5;
+  border: 1.5px solid #1E2923;
+  border-radius: 6px;
+  box-shadow: 2px 2px 0 #1E2923;
+  transition: all 0.18s cubic-bezier(0.2, 0.9, 0.3, 1.2);
 }
 
-/* Quests Section */
-.place-quests-card {
-  background: #FFFFFF;
-  border: 1px solid #E2E8F0;
-  border-radius: 16px;
-  padding: 1.5rem;
-  margin-bottom: 1.75rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+.visitor-item:hover {
+  border-color: #FF5A1F;
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 #FF5A1F;
 }
-.place-quests-card h2 {
+
+.visitor-item-icon {
   font-size: 1.25rem;
-  font-weight: 800;
-  margin: 0 0 1rem;
-  color: #0F172A;
+  color: #FF5A1F;
+  flex-shrink: 0;
+  margin-top: 1px;
 }
+
+.visitor-item-label {
+  font-family: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #5C7066;
+  margin-bottom: 3px;
+}
+
+.visitor-item-val {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #18221E;
+  line-height: 1.4;
+}
+
+/* Quests & Campaigns Section */
+.place-quests-card {
+  position: relative;
+  background: #FFFFFF;
+  border: 1.5px solid #1E2923;
+  border-radius: 6px;
+  padding: 1.6rem 1.75rem;
+  margin-bottom: 2rem;
+  box-shadow: 3px 3px 0 #1E2923;
+}
+
 .place-quests-list {
   list-style: none;
   padding: 0;
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.85rem;
 }
+
 .place-quest-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.85rem 1rem;
-  background: #F8FAFC;
-  border: 1px solid #E2E8F0;
-  border-radius: 10px;
+  padding: 0.95rem 1.15rem;
+  background: #FAF9F5;
+  border: 1.5px solid #1E2923;
+  border-radius: 6px;
   text-decoration: none;
   color: inherit;
-  transition: all 0.2s ease;
-}
-.place-quest-item:hover {
-  background: #ECFDF5;
-  border-color: #10B981;
+  box-shadow: 2px 2px 0 #1E2923;
+  transition: all 0.2s cubic-bezier(0.2, 0.9, 0.3, 1.2);
 }
 
-/* Map */
+.place-quest-item:hover {
+  background: #FFFFFF;
+  border-color: #FF5A1F;
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 #FF5A1F;
+}
+
+/* Interactive Action Buttons with Vibrant Expedition Orange Hover */
+.place-actions-row,
+.stack > div[style*="flex"] {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem !important;
+  margin-top: 1.25rem !important;
+}
+
+.btn,
+#btn-nav,
+#btn-trip,
+#btn-write-journal,
+#btn-boss {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  font-family: inherit !important;
+  font-size: 0.92rem !important;
+  font-weight: 700 !important;
+  padding: 0.75rem 1.4rem !important;
+  border-radius: 6px !important;
+  border: 1.5px solid #1E2923 !important;
+  box-shadow: 3px 3px 0 #1E2923 !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+  transition: all 0.18s cubic-bezier(0.2, 0.9, 0.3, 1.2) !important;
+}
+
+#btn-nav {
+  background: #18221E !important;
+  color: #FFFFFF !important;
+}
+
+#btn-trip {
+  background: #FAF9F5 !important;
+  color: #18221E !important;
+}
+
+#btn-write-journal {
+  background: #FAF9F5 !important;
+  color: #18221E !important;
+}
+
+#btn-boss {
+  background: #18221E !important;
+  color: #FF5A1F !important;
+}
+
+.btn:hover,
+#btn-nav:hover,
+#btn-trip:hover,
+#btn-write-journal:hover,
+#btn-boss:hover {
+  transform: translate(-2px, -2px) !important;
+  border-color: #FF5A1F !important;
+  box-shadow: 5px 5px 0 #FF5A1F !important;
+}
+
+#btn-boss:hover {
+  background: #FF5A1F !important;
+  color: #FFFFFF !important;
+  box-shadow: 5px 5px 0 #1E2923 !important;
+}
+
+/* Map & Location Sidebar */
 .place-map {
   height: 380px;
-  border-radius: 16px;
-  border: 1px solid #E2E8F0;
+  border-radius: 6px !important;
+  border: 1.5px solid #1E2923 !important;
+  box-shadow: 3px 3px 0 #1E2923 !important;
   overflow: hidden;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+  background: #E8F0EC;
+}
+
+.place-coords-card {
+  position: relative;
+  margin-top: 1.25rem !important;
+  background: #FFFFFF !important;
+  padding: 1.25rem !important;
+  border-radius: 6px !important;
+  border: 1.5px solid #1E2923 !important;
+  box-shadow: 3px 3px 0 #1E2923 !important;
+}
+
+.place-coords-card::before {
+  content: '✛';
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-family: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
+  font-size: 11px;
+  color: #1E2923;
+  opacity: 0.35;
+}
+
+#coords {
+  font-family: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace !important;
+  font-size: 0.85rem !important;
+  color: #18221E !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.02em !important;
+  background: #FAF9F5;
+  padding: 6px 10px;
+  border: 1.5px solid #1E2923;
+  border-radius: 4px;
+  display: inline-block;
+  margin: 0.35rem 0 0 !important;
+}
+
+#transportation-box {
+  margin-top: 1rem !important;
+  padding-top: 0.85rem !important;
+  border-top: 1.5px dashed #1E2923 !important;
+}
+
+#transportation-box strong {
+  font-family: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  color: #FF5A1F !important;
+  letter-spacing: 0.05em;
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+#transportation-text {
+  font-size: 0.88rem;
+  color: #2D3D35;
+  line-height: 1.5;
+  margin: 0;
 }
 
 @media (max-width: 768px) {
-  .place-title-th { font-size: 1.65rem; }
+  .place-title-th { font-size: 1.75rem; }
   .place-title-en { font-size: 1rem; }
   .gallery { grid-template-columns: 1fr; }
+  .visitor-list { grid-template-columns: 1fr; }
 }
