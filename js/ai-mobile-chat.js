@@ -206,16 +206,33 @@ class MobileAIChat {
 
   open() {
     this.isOpen = true;
-    document.getElementById('aiMfab').classList.add('is-hidden');
+    document.getElementById('aiMfab')?.classList.add('is-hidden');
     document.getElementById('aiMchatBackdrop').hidden = false;
     const sheet = document.getElementById('aiMchat');
     sheet.classList.add('is-open');
     sheet.setAttribute('aria-hidden', 'false');
     document.body.classList.add('ai-mchat-lock');
+
+    // Hide bottom navigation menu completely so user can type on virtual keyboard
+    const tabbar = document.querySelector('.app-tabbar');
+    if (tabbar) {
+      tabbar.classList.add('is-hidden');
+      tabbar.style.display = 'none';
+    }
+    const moreSheet = document.getElementById('appMoreSheet');
+    if (moreSheet) {
+      moreSheet.classList.remove('is-open');
+      moreSheet.hidden = true;
+    }
+
     setTimeout(() => {
       const box = document.getElementById('aiMchatMsgs');
       if (box) box.scrollTop = box.scrollHeight;
-    }, 120);
+      const input = document.getElementById('aiMchatInput');
+      if (input) {
+        input.focus();
+      }
+    }, 150);
   }
 
   close() {
@@ -225,8 +242,15 @@ class MobileAIChat {
     sheet.style.transform = '';
     sheet.setAttribute('aria-hidden', 'true');
     document.getElementById('aiMchatBackdrop').hidden = true;
-    document.getElementById('aiMfab').classList.remove('is-hidden');
+    document.getElementById('aiMfab')?.classList.remove('is-hidden');
     document.body.classList.remove('ai-mchat-lock');
+
+    // Restore bottom navigation menu
+    const tabbar = document.querySelector('.app-tabbar');
+    if (tabbar) {
+      tabbar.classList.remove('is-hidden');
+      tabbar.style.display = '';
+    }
   }
 
   resetChat() {

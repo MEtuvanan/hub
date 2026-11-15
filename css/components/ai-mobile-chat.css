@@ -62,29 +62,46 @@
 }
 
 /* Keep the AR page's right-side controls clear of the floating button. */
-body[data-app-page="explore"] .ai-mfab { right: 15px; bottom: calc(var(--app-tab-h, 84px) + 216px); }
+body[data-app-page="explore"] .ai-mfab {
+  right: 14px;
+  bottom: calc(var(--app-tab-h, 84px) + 124px);
+  z-index: 125;
+}
+body[data-app-page="explore"].ex-card-open .ai-mfab {
+  bottom: calc(var(--app-tab-h, 84px) + 290px);
+}
 
 /* ----------------------------- backdrop ----------------------------- */
 .ai-mchat-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 95;
+  z-index: 998;
   background: rgba(2, 8, 5, .62);
-  backdrop-filter: blur(3px);
+  backdrop-filter: blur(4px);
   animation: aiMchatFade .22s ease both;
 }
 @keyframes aiMchatFade { from { opacity: 0; } to { opacity: 1; } }
 
 body.ai-mchat-lock { overflow: hidden; }
 
+/* When AI chat is open, hide the bottom menu so user can type comfortably */
+body.ai-mchat-lock .app-tabbar,
+.app-tabbar.is-hidden {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transform: translate(-50%, 200%) !important;
+}
+
 /* ----------------------------- sheet popup ----------------------------- */
 .ai-mchat {
   position: fixed;
   left: 50%;
   bottom: 0;
-  z-index: 96;
+  z-index: 999;
   width: min(100%, 460px);
-  height: min(80dvh, 660px);
+  height: min(85dvh, 680px);
   display: flex;
   flex-direction: column;
   transform: translate(-50%, 105%);

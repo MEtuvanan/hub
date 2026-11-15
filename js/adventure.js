@@ -8,6 +8,7 @@ import { initARMap } from './ar-map.js';
 import { fetchPlaces } from './mobile-data.js';
 import { getProfile } from './auth.js';
 import { openBossPrompt } from './boss-sheet.js';
+import { initAIPlannerModal } from './ai-planner-modal.js';
 import {
   MAX_TEAM, RARITIES, bossModel, characterById, getProgress, getTeam,
   listBosses, playerLevel, skillById, subscribe,
@@ -220,6 +221,7 @@ async function boot() {
   subscribe(() => refresh());
   window.addEventListener('tc-tokens', renderTeam);
   window.addEventListener('tc-game-changed', refresh);
+  initAIPlannerModal();
 }
 
 document.addEventListener('DOMContentLoaded', boot);

@@ -3109,9 +3109,8 @@ select:disabled,
   border-radius: 50% !important;
 }
 
-/* Keep the floating AI button clear of full-width action bars. */
+/* Keep the floating AI button clear of full-width action bars on deck pages. */
 body[data-app-page="quests"] .ai-mfab,
-body[data-app-page="search"] .ai-mfab,
-body[data-app-page="explore"] .ai-mfab {
+body[data-app-page="search"] .ai-mfab {
   display: none !important;
 }
