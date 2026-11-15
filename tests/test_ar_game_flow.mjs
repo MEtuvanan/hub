@@ -35,8 +35,14 @@ assert(chars.length >= 4, 'Should have default characters');
 console.log('✅ Default characters loaded:', chars.length);
 
 const bosses = listBosses();
-assert(bosses.length >= 5, 'Should have default location bosses');
-console.log('✅ Default bosses loaded:', bosses.length);
+assert.strictEqual(bosses.length, 1, 'Map should feature a single boss encounter');
+assert.strictEqual(bosses[0].id, 'boss-wat-arun', 'Remaining boss should be the Wat Arun guardian');
+assert(bosses[0].modelUrl.endsWith('.glb'), 'Boss should ship with a 3D model');
+console.log('✅ Single boss loaded with 3D model:', bosses[0].id, bosses[0].modelUrl);
+
+const ray = characterById('char-ray');
+assert(ray.modelUrl.endsWith('.glb'), 'Starter character should ship with a 3D model');
+console.log('✅ Starter hero 3D model:', ray.modelUrl);
 
 const skills = listSkills();
 assert(skills.length >= 8, 'Should have default skills');

@@ -48,9 +48,13 @@ const DEFAULT_SKILLS = [
   { id: 'boss-wave', name: 'คลื่นพิโรธ', kind: 'damage', power: 2.1, cost: 0, icon: 'sun', desc: 'ระเบิดคลื่นพลังใส่ทุกคนในทีม' },
 ];
 
+const STARTER_CHARACTER_ID = 'char-ray';
+const STARTER_CHARACTER_MODEL = '/assets/models/hero-ray.glb';
+
 const DEFAULT_CHARACTERS = [
   {
-    id: 'char-ray', name: 'นักสำรวจ — เรย์', image: '/assets/img/ray.png', rarity: 'epic',
+    id: STARTER_CHARACTER_ID, name: 'นักสำรวจ — เรย์', image: '/assets/img/ray.png', rarity: 'epic',
+    modelUrl: STARTER_CHARACTER_MODEL,
     color: '#2F6FED', role: 'นักสำรวจ', hp: 320, atk: 48, def: 26, spd: 22,
     skillId: 'solar-flare', desc: 'นักสำรวจหนุ่มชุดน้ำเงิน-ขาว พร้อมกล้องส่องทางไกล',
   },
@@ -71,36 +75,18 @@ const DEFAULT_CHARACTERS = [
   },
 ];
 
+// The map now features a single boss encounter: the Wat Arun guardian.
+// Retired bosses are trimmed from existing saves by trimToSingleBoss().
+const SINGLE_BOSS_ID = 'boss-wat-arun';
+const SINGLE_BOSS_MIGRATION = 'tc_game_bosses_single_v1';
+
 const DEFAULT_BOSSES = [
   {
-    id: 'boss-wat-arun', name: 'ยักษ์วัดแจ้ง', placeId: 'demo-wat-arun', placeName: 'วัดอรุณราชวราราม',
+    id: SINGLE_BOSS_ID, name: 'ยักษ์วัดแจ้ง', placeId: 'demo-wat-arun', placeName: 'วัดอรุณราชวราราม',
     lat: 13.7437, lng: 100.4889, level: 5, hp: 540, atk: 52, def: 30, spd: 18,
     model: 'guardian', rarity: 'epic', reward: 120, skillId: 'boss-slam',
+    is3d: true, modelUrl: '/assets/models/boss-wat-arun.glb',
     desc: 'ยักษ์เฝ้าพระปรางค์ เรืองแสงทองยามค่ำคืน',
-  },
-  {
-    id: 'boss-yaowarat', name: 'มังกรเยาวราช', placeId: 'demo-yaowarat', placeName: 'ถนนเยาวราช',
-    lat: 13.7398, lng: 100.51, level: 7, hp: 620, atk: 60, def: 26, spd: 24,
-    model: 'shadow', rarity: 'legendary', reward: 180, skillId: 'boss-wave',
-    desc: 'มังกรไฟที่ตื่นขึ้นเมื่อแสงนีออนสว่าง',
-  },
-  {
-    id: 'boss-doi-suthep', name: 'เจ้าเขาดอยสุเทพ', placeId: 'demo-doi-suthep', placeName: 'ดอยสุเทพ',
-    lat: 18.8049, lng: 98.9216, level: 9, hp: 720, atk: 66, def: 34, spd: 20,
-    model: 'sorceress', rarity: 'legendary', reward: 240, skillId: 'boss-wave',
-    desc: 'ภูตแห่งขุนเขาที่ทดสอบนักเดินทาง',
-  },
-  {
-    id: 'boss-ayutthaya', name: 'อสูรอยุธยา', placeId: 'demo-ayutthaya', placeName: 'อุทยานประวัติศาสตร์อยุธยา',
-    lat: 14.3532, lng: 100.5685, level: 6, hp: 580, atk: 55, def: 32, spd: 19,
-    model: 'guardian', rarity: 'epic', reward: 150, skillId: 'boss-roar',
-    desc: 'อสูรหินที่ตื่นขึ้นใต้ซากปรักหักพัง',
-  },
-  {
-    id: 'boss-patong', name: 'นาคแห่งป่าตอง', placeId: 'demo-patong', placeName: 'หาดป่าตอง',
-    lat: 7.8965, lng: 98.2966, level: 8, hp: 680, atk: 62, def: 28, spd: 25,
-    model: 'wanderer', rarity: 'legendary', reward: 210, skillId: 'boss-wave',
-    desc: 'นาคทะเลที่ปกป้องแนวปะการัง',
   },
 ];
 
@@ -117,12 +103,38 @@ function read(key, fallback) {
 }
 
 function write(key, value) {
-  try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* ignore */ }
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch {
+    // Quota exceeded — the caller must know, otherwise the admin UI claims a
+    // save that never happened (e.g. a base64 3D model too large to store).
+    window.dispatchEvent(new CustomEvent('tc-storage-full', { detail: { key } }));
+    return false;
+  }
   window.dispatchEvent(new CustomEvent('tc-game-changed', { detail: { key } }));
+  return true;
 }
 
 function slug(prefix) {
   return `${prefix}-${Date.now().toString(36)}${Math.random().toString(36).slice(2, 5)}`;
+}
+
+// One-time cleanup: keep only the Wat Arun boss in saves created before the map
+// was reduced to a single encounter, and attach the built-in 3D model.
+function trimToSingleBoss() {
+  try {
+    if (localStorage.getItem(SINGLE_BOSS_MIGRATION) === '1') return;
+    localStorage.setItem(SINGLE_BOSS_MIGRATION, '1');
+    const stored = read(KEYS.bosses, null);
+    if (!Array.isArray(stored) || !stored.length) return;
+    const kept = stored.find(b => b.id === SINGLE_BOSS_ID) || DEFAULT_BOSSES[0];
+    if (stored.length === 1 && kept.modelUrl) return;
+    write(KEYS.bosses, [{
+      ...kept,
+      is3d: true,
+      modelUrl: kept.modelUrl || DEFAULT_BOSSES[0].modelUrl,
+    }]);
+  } catch { /* storage unavailable */ }
 }
 
 /* -------------------------------- skills -------------------------------- */
@@ -150,7 +162,9 @@ export function deleteSkill(id) {
 
 /* ------------------------------ characters ------------------------------ */
 export function listCharacters() {
-  return read(KEYS.characters, DEFAULT_CHARACTERS);
+  // Older saves predate the 3D hero model, so give the starter character one.
+  return read(KEYS.characters, DEFAULT_CHARACTERS).map(c =>
+    c.id === STARTER_CHARACTER_ID && !c.modelUrl ? { ...c, modelUrl: STARTER_CHARACTER_MODEL } : c);
 }
 
 export function characterById(id) {
@@ -187,6 +201,7 @@ export function grantCharacter(id) {
 
 /* -------------------------------- bosses -------------------------------- */
 export function listBosses() {
+  trimToSingleBoss();
   return read(KEYS.bosses, DEFAULT_BOSSES);
 }
 
@@ -209,7 +224,9 @@ export function saveBoss(input) {
   };
   const i = rows.findIndex(b => b.id === id);
   if (i >= 0) rows[i] = row; else rows.push(row);
-  write(KEYS.bosses, rows);
+  if (!write(KEYS.bosses, rows)) {
+    throw new Error('บันทึกบอสไม่สำเร็จ — พื้นที่จัดเก็บในเบราว์เซอร์เต็ม กรุณาใส่ URL โมเดล 3D แทนการอัปโหลดไฟล์');
+  }
   return row;
 }
 

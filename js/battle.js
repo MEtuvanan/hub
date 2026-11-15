@@ -9,6 +9,7 @@
 
 import { esc } from './ui.js';
 import { icon } from './icons.js';
+import { isLocalModelRef, resolveBossModelUrl } from './boss-model-store.js';
 import {
   MAX_TEAM, RARITIES, bossById, bossDefeated, bossModel, characterById,
   getTeam, getProgress, recordBossWin, skillById,
@@ -66,7 +67,7 @@ function calcBossCP(boss) {
  * Open a Pokémon Go raid style turn-based boss battle.
  * @param {{boss?: object, bossId?: string, place?: object, onFinish?: Function}} options
  */
-export function openBattle(options = {}) {
+export async function openBattle(options = {}) {
   ensureCss();
   ensureModelViewer();
   document.getElementById('tcBattle')?.remove();
@@ -78,6 +79,10 @@ export function openBattle(options = {}) {
   }
   const placeName = options.place?.name || boss.placeName || 'สถานที่ท้าประลอง';
   const model = bossModel(boss.model);
+  // Models uploaded through the admin console live in IndexedDB; resolve the
+  // stored file to an object URL before rendering <model-viewer>.
+  const modelUrl = boss.modelUrl ? await resolveBossModelUrl(boss.modelUrl) : '';
+  const objectModelUrls = isLocalModelRef(boss.modelUrl) && modelUrl ? [modelUrl] : [];
   const bSkill = skillById(boss.skillId) || skillById('boss-slam');
   const firstClear = !bossDefeated(boss.id);
 
@@ -91,6 +96,16 @@ export function openBattle(options = {}) {
   }));
 
   if (!roster.length) return null;
+
+  // Resolve each character's model once so render() can stay synchronous.
+  for (const unit of roster) {
+    unit.modelUrl = '';
+    if (!unit.char.modelUrl) continue;
+    try {
+      unit.modelUrl = await resolveBossModelUrl(unit.char.modelUrl);
+      if (isLocalModelRef(unit.char.modelUrl) && unit.modelUrl) objectModelUrls.push(unit.modelUrl);
+    } catch { unit.modelUrl = ''; }
+  }
 
   const state = {
     boss,
@@ -263,16 +278,19 @@ export function openBattle(options = {}) {
           <!-- BOSS 3D MODEL / SPRITE (CENTER/UPPER) -->
           <div class="btl__boss ${state.bossHp <= 0 ? 'is-down' : ''}">
             <div class="btl__boss-aura" style="--glow:${model.tint}"></div>
-            ${boss.modelUrl ? `
-              <model-viewer src="${esc(boss.modelUrl)}"
+            ${modelUrl ? `
+              <model-viewer src="${esc(modelUrl)}"
+                poster="${esc(model.image)}"
                 auto-rotate
                 rotation-per-second="24deg"
                 camera-controls
                 shadow-intensity="1.5"
                 interaction-prompt="none"
+                data-btl-boss-model
                 style="width:230px;height:240px;background:transparent;outline:none;"
                 class="btl__boss-3d-model"
               ></model-viewer>
+              <img src="${esc(model.image)}" alt="${esc(boss.name)}" draggable="false" data-btl-boss-fallback hidden>
             ` : `
               <div class="btl__boss-3d-stage">
                 <span class="btl__3d-badge">3D MODEL READY</span>
@@ -290,7 +308,21 @@ export function openBattle(options = {}) {
           <!-- PLAYER HERO (FOREGROUND / REAR PERSPECTIVE) -->
           <div class="btl__hero ${unit && unit.hp <= 0 ? 'is-down' : ''}" style="--char:${unit?.char.color || '#0F8A5F'}">
             <div class="btl__hero-media">
-              <img src="${esc(unit?.char.image || '')}" alt="${esc(unit?.char.name || '')}" draggable="false">
+              ${unit?.modelUrl ? `
+                <model-viewer src="${esc(unit.modelUrl)}"
+                  poster="${esc(unit.char.image || '')}"
+                  auto-rotate
+                  rotation-per-second="14deg"
+                  camera-controls
+                  shadow-intensity="1.2"
+                  interaction-prompt="none"
+                  data-btl-hero-model
+                  class="btl__hero-3d-model"
+                ></model-viewer>
+                <img src="${esc(unit.char.image || '')}" alt="${esc(unit.char.name || '')}" draggable="false" data-btl-hero-fallback hidden>
+              ` : `
+                <img src="${esc(unit?.char.image || '')}" alt="${esc(unit?.char.name || '')}" draggable="false">
+              `}
               <span class="btl__hero-shadow" aria-hidden="true"></span>
             </div>
           </div>
@@ -445,6 +477,27 @@ export function openBattle(options = {}) {
         switchTo(idx);
       });
     });
+
+    // If a 3D model cannot load (bad URL, unsupported file, blocked viewer
+    // script) fall back to the character/boss artwork instead of empty space.
+    [['[data-btl-boss-model]', '[data-btl-boss-fallback]'],
+      ['[data-btl-hero-model]', '[data-btl-hero-fallback]']].forEach(([modelSel, fallbackSel]) => {
+      dlg.querySelectorAll(modelSel).forEach(mv => {
+        mv.addEventListener('error', () => showModelFallback(mv, fallbackSel));
+        setTimeout(() => {
+          if (!dlg.isConnected || !mv.isConnected) return;
+          if (typeof customElements === 'undefined' || !customElements.get('model-viewer')) {
+            showModelFallback(mv, fallbackSel);
+          }
+        }, 8000);
+      });
+    });
+  }
+
+  function showModelFallback(mv, selector) {
+    const fallback = dlg.querySelector(selector);
+    if (fallback) fallback.hidden = false;
+    mv.remove();
   }
 
   function spendEnergy(unit, cost = 2) {
@@ -622,6 +675,9 @@ export function openBattle(options = {}) {
   dlg.addEventListener('close', () => {
     stopTimer();
     dlg.remove();
+    if (typeof URL !== 'undefined' && URL.revokeObjectURL) {
+      objectModelUrls.forEach(url => URL.revokeObjectURL(url));
+    }
     document.documentElement.classList.remove('btl-open');
   });
 

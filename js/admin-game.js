@@ -10,6 +10,7 @@ import {
   grantCharacter, isOwned, listBosses, listCharacters, listSkills, resetGameData,
   saveBoss, saveCharacter, saveSkill,
 } from './game-data.js';
+import { saveBossModelFile } from './boss-model-store.js';
 
 const ICONS = [
   'flame', 'sun', 'heart', 'shield', 'star', 'volume', 'quest', 'coin',
@@ -55,6 +56,52 @@ const num = (name, value, step = 1, min = 0, max = 99999) =>
 
 const text = (name, value, placeholder = '') =>
   `<input class="ag-input" type="text" name="${name}" value="${esc(value ?? '')}" placeholder="${esc(placeholder)}" maxlength="120" required>`;
+
+const MODEL_MAX_BYTES = 15 * 1024 * 1024;
+
+function readAsDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = ev => resolve(ev.target.result);
+    reader.onerror = () => reject(new Error('อ่านไฟล์ไม่สำเร็จ'));
+    reader.readAsDataURL(file);
+  });
+}
+
+/**
+ * Upload a .glb / .gltf file to Supabase Storage and return a public URL.
+ * Models must live in storage: a base64 data URL is far bigger than the ~5 MB
+ * localStorage quota, so an inlined model is silently dropped when saving and
+ * the battle arena keeps showing the 2D sprite instead of the 3D model.
+ */
+async function uploadBossModel(file) {
+  if (file.size > MODEL_MAX_BYTES) {
+    throw new Error(`ไฟล์ใหญ่เกิน ${Math.round(MODEL_MAX_BYTES / 1048576)} MB — กรุณาบีบอัดโมเดลก่อนอัปโหลด`);
+  }
+  const ext = (file.name.split('.').pop() || 'glb').toLowerCase().replace(/[^a-z0-9]/g, '') || 'glb';
+  const path = `models/bosses/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+  try {
+    const { supabase } = await import('./supabase.js');
+    const { error } = await supabase.storage.from('store-assets').upload(path, file, {
+      upsert: true,
+      contentType: ext === 'gltf' ? 'model/gltf+json' : 'model/gltf-binary',
+    });
+    if (error) throw error;
+    const publicUrl = supabase.storage.from('store-assets').getPublicUrl(path)?.data?.publicUrl;
+    if (!publicUrl) throw new Error('ไม่ได้รับ URL ของโมเดลจาก Storage');
+    return publicUrl;
+  } catch (err) {
+    // Offline/demo fallback: a small model can be inlined as a data URL, larger
+    // ones go to IndexedDB (localStorage is far too small to hold them).
+    try {
+      if (file.size > 0 && file.size <= 1.5 * 1024 * 1024) return await readAsDataUrl(file);
+      return await saveBossModelFile(file);
+    } catch (storeErr) {
+      console.warn('[admin-game] model upload failed:', err, storeErr);
+      throw new Error('อัปโหลดโมเดลไม่สำเร็จ — ใช้ URL โมเดลที่โฮสต์ไว้แทน');
+    }
+  }
+}
 
 function rarityOptions(current) {
   return RARITY_KEYS.map(k =>
@@ -464,23 +511,22 @@ function bindForm() {
   // 3D Model File Upload handler (.glb / .gltf)
   const uploadInput = form.querySelector('#agModelUpload');
   if (uploadInput) {
-    uploadInput.addEventListener('change', e => {
+    uploadInput.addEventListener('change', async e => {
       const file = e.target.files?.[0];
       if (!file) return;
       const status = form.querySelector('#agUploadStatus');
       const urlInput = form.querySelector('[name="modelUrl"]');
-      if (status) status.textContent = `กำลังโหลดไฟล์ ${file.name}...`;
-
-      const reader = new FileReader();
-      reader.onload = ev => {
-        if (urlInput) urlInput.value = ev.target.result;
+      if (status) status.textContent = `กำลังอัปโหลด ${file.name} (${(file.size / 1048576).toFixed(1)} MB)...`;
+      try {
+        const url = await uploadBossModel(file);
+        if (urlInput) urlInput.value = url;
         if (status) status.textContent = `✓ อัปโหลดสำเร็จ: ${file.name} พร้อมแสดงผล 3D`;
         toast(`อัปโหลดโมเดล 3D (${file.name}) เรียบร้อย`);
-      };
-      reader.onerror = () => {
-        if (status) status.textContent = '❌ โหลดไฟล์ไม่สำเร็จ';
-      };
-      reader.readAsDataURL(file);
+      } catch (err) {
+        console.warn('[admin-game] model upload failed:', err);
+        if (status) status.textContent = `❌ ${err?.message || 'อัปโหลดโมเดลไม่สำเร็จ'}`;
+        toast(err?.message || 'อัปโหลดโมเดลไม่สำเร็จ');
+      }
     });
   }
 
@@ -507,27 +553,33 @@ function bindForm() {
     } else if (state.tab === 'bosses') {
       if (!String(data.name || '').trim()) return toast('ใส่ชื่อบอสก่อน');
       const place = places.find(p => p.id === data.placeId);
-      saveBoss({
-        id: data.id || undefined,
-        name: String(data.name).trim(),
-        placeId: data.placeId || '',
-        placeName: place?.name || 'สถานที่',
-        lat: Number(data.lat),
-        lng: Number(data.lng),
-        level: Number(data.level) || 1,
-        hp: Number(data.hp) || 500,
-        atk: Number(data.atk) || 50,
-        def: Number(data.def) || 25,
-        spd: Number(data.spd) || 20,
-        model: data.model,
-        modelUrl: String(data.modelUrl || '').trim(),
-        is3d: true,
-        rarity: data.rarity,
-        reward: Number(data.reward) || 100,
-        skillId: data.skillId,
-        desc: String(data.desc || '').trim(),
-      });
-      toast('บันทึกบอสแล้ว — หมุดจะปรากฏบนแผนที่');
+      try {
+        saveBoss({
+          id: data.id || undefined,
+          name: String(data.name).trim(),
+          placeId: data.placeId || '',
+          placeName: place?.name || 'สถานที่',
+          lat: Number(data.lat),
+          lng: Number(data.lng),
+          level: Number(data.level) || 1,
+          hp: Number(data.hp) || 500,
+          atk: Number(data.atk) || 50,
+          def: Number(data.def) || 25,
+          spd: Number(data.spd) || 20,
+          model: data.model,
+          modelUrl: String(data.modelUrl || '').trim(),
+          is3d: true,
+          rarity: data.rarity,
+          reward: Number(data.reward) || 100,
+          skillId: data.skillId,
+          desc: String(data.desc || '').trim(),
+        });
+        toast('บันทึกบอสแล้ว — หมุดจะปรากฏบนแผนที่');
+      } catch (err) {
+        console.warn('[admin-game] saveBoss failed:', err);
+        toast(err?.message || 'บันทึกบอสไม่สำเร็จ');
+        return;
+      }
     } else {
       if (!String(data.name || '').trim()) return toast('ใส่ชื่อสกิลก่อน');
       saveSkill({
