@@ -251,120 +251,166 @@
   position: absolute;
   top: 0;
   left: 50%;
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   transform: translateX(-50%) translateZ(4px);
   border-radius: 48% 48% 44% 44%;
   background: var(--doll-skin, #f2c49b);
-  box-shadow: inset -4px -4px 8px rgba(116, 63, 20, .18), 0 3px 0 rgba(0, 0, 0, .08);
+  box-shadow:
+    inset -5px -5px 9px rgba(116, 63, 20, .16),
+    inset 4px 5px 8px rgba(255, 255, 255, .26),
+    0 3px 0 rgba(0, 0, 0, .08);
   z-index: 4;
 }
 .doll__face { position: absolute; inset: 0; }
 .doll__face .eye {
   position: absolute;
   top: 15px;
-  width: 3.6px;
-  height: 5px;
+  width: 4.6px;
+  height: 6.4px;
   border-radius: 3px;
   background: #241811;
+  overflow: hidden;
 }
-.doll__face .eye--l { left: 10px; }
-.doll__face .eye--r { right: 10px; }
+.doll__face .eye::after {
+  content: '';
+  position: absolute;
+  top: .8px;
+  left: .8px;
+  width: 2.2px;
+  height: 2.2px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .85);
+}
+.doll__face .eye--l { left: 9px; }
+.doll__face .eye--r { right: 9px; }
 .doll__face .mouth {
   position: absolute;
   left: 50%;
-  top: 23px;
-  width: 7px;
-  height: 3.5px;
+  top: 24px;
+  width: 6px;
+  height: 3px;
   transform: translateX(-50%);
-  border-radius: 0 0 7px 7px;
+  border-radius: 0 0 6px 6px;
   border-bottom: 1.6px solid #9b5d48;
 }
 .doll__face .blush {
   position: absolute;
-  top: 20px;
-  width: 5px;
+  top: 21px;
+  width: 5.5px;
   height: 3px;
   border-radius: 50%;
-  background: rgba(240, 116, 97, .35);
+  background: rgba(240, 116, 97, .32);
+  filter: blur(.4px);
 }
-.doll__face .blush--l { left: 5px; }
-.doll__face .blush--r { right: 5px; }
+.doll__face .blush--l { left: 4px; }
+.doll__face .blush--r { right: 4px; }
 
-/* hair variants */
+/* hair variants (bangs clip-path kept point-symmetric around the face) */
 .doll__hair {
   position: absolute;
-  inset: -3px -2px auto -2px;
-  height: 19px;
-  border-radius: 50% 50% 36% 36%;
+  inset: -4px -3px auto -3px;
+  height: 20px;
+  border-radius: 50% 50% 40% 40%;
   background: var(--doll-hair, #2b1a13);
   z-index: 1;
-  box-shadow: inset -3px -3px 6px rgba(0, 0, 0, .25);
+  box-shadow:
+    inset -4px -4px 7px rgba(0, 0, 0, .25),
+    inset 3px 3px 5px rgba(255, 255, 255, .12);
 }
 .doll__hair::after {
   content: '';
   position: absolute;
-  left: 2px;
-  right: 2px;
-  bottom: -5px;
-  height: 8px;
-  border-radius: 0 0 8px 8px;
+  left: 1px;
+  right: 1px;
+  bottom: -6px;
+  height: 9px;
+  border-radius: 0 0 9px 9px;
   background: inherit;
-  clip-path: polygon(0 0, 8% 100%, 20% 30%, 32% 100%, 45% 25%, 58% 100%, 72% 28%, 85% 100%, 100% 0);
+  clip-path: polygon(0 0, 12% 100%, 24% 32%, 37% 100%, 50% 30%, 63% 100%, 76% 32%, 88% 100%, 100% 0);
 }
-[data-hair="bob"] .doll__hair { height: 27px; border-radius: 50% 50% 42% 42%; }
-[data-hair="bob"] .doll__hair::after { height: 12px; clip-path: none; border-radius: 0 0 9px 9px; }
-[data-hair="ponytail"] .doll__hair::before {
+[data-hair="bob"] .doll__hair { height: 28px; border-radius: 50% 50% 44% 44%; }
+[data-hair="bob"] .doll__hair::after { height: 13px; bottom: -7px; clip-path: none; border-radius: 0 0 10px 10px; }
+[data-hair="wizard"] .doll__hair { height: 30px; border-radius: 50% 50% 32% 32%; }
+[data-hair="wizard"] .doll__hair::after {
+  height: 24px;
+  bottom: -17px;
+  left: -2px;
+  right: -2px;
+  clip-path: none;
+  border-radius: 4px 4px 12px 12px;
+  box-shadow: inset -3px -4px 7px rgba(0, 0, 0, .22);
+}
+
+/* twin ponytails — one element, two mirrored tails (symmetric) */
+.doll__pony { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+[data-hair="ponytail"] .doll__pony::before,
+[data-hair="ponytail"] .doll__pony::after {
   content: '';
   position: absolute;
-  right: -7px;
-  top: 4px;
-  width: 10px;
-  height: 26px;
-  border-radius: 6px;
-  background: inherit;
-  transform: rotate(12deg);
+  top: 5px;
+  width: 9px;
+  height: 25px;
+  border-radius: 6px 6px 8px 8px;
+  background: var(--doll-hair, #2b1a13);
+  box-shadow: inset -2px -3px 5px rgba(0, 0, 0, .28), inset 1px 2px 3px rgba(255, 255, 255, .14);
 }
-[data-hair="wizard"] .doll__hair { height: 34px; border-radius: 50% 50% 30% 30%; }
-[data-hair="wizard"] .doll__hair::after { height: 22px; clip-path: none; border-radius: 0 0 12px 12px; }
+[data-hair="ponytail"] .doll__pony::before { left: -7px; transform: rotate(9deg); }
+[data-hair="ponytail"] .doll__pony::after { right: -7px; transform: rotate(-9deg); }
 
 /* hat variants */
 .doll__hat { position: absolute; inset: 0; z-index: 5; }
 [data-hat="cap"] .doll__hat::before {
   content: '';
   position: absolute;
-  top: -7px;
+  top: -8px;
   left: 50%;
-  width: 32px;
+  width: 34px;
   height: 15px;
   transform: translateX(-50%);
-  border-radius: 16px 16px 3px 3px;
+  border-radius: 17px 17px 4px 4px;
   background: var(--doll-hat, #f2a81d);
-  box-shadow: inset -3px -2px 5px rgba(0, 0, 0, .18);
+  box-shadow:
+    inset -4px -3px 6px rgba(0, 0, 0, .18),
+    inset 3px 3px 5px rgba(255, 255, 255, .22);
 }
 [data-hat="cap"] .doll__hat::after {
   content: '';
   position: absolute;
-  top: 6px;
+  top: 5px;
   left: 50%;
-  width: 22px;
+  width: 24px;
   height: 5px;
-  transform: translateX(-30%);
-  border-radius: 0 6px 6px 4px;
+  transform: translateX(-50%);
+  border-radius: 0 0 7px 7px;
   background: var(--doll-hat, #f2a81d);
   filter: brightness(.86);
 }
 [data-hat="beanie"] .doll__hat::before {
   content: '';
   position: absolute;
-  top: -9px;
+  top: -10px;
   left: 50%;
-  width: 29px;
+  width: 30px;
   height: 17px;
   transform: translateX(-50%);
-  border-radius: 50% 50% 5px 5px;
+  border-radius: 50% 50% 6px 6px;
   background: var(--doll-hat, #f2a81d);
-  box-shadow: inset -3px -2px 5px rgba(0, 0, 0, .15);
+  box-shadow:
+    inset -3px -2px 5px rgba(0, 0, 0, .15),
+    inset 3px 2px 4px rgba(255, 255, 255, .18);
+}
+[data-hat="beanie"] .doll__hat::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 50%;
+  width: 30px;
+  height: 6px;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--doll-hat, #f2a81d) 78%, #fff);
+  box-shadow: inset 0 -1px 2px rgba(0, 0, 0, .12);
 }
 [data-hat="wizard"] .doll__hat::before {
   content: '';
@@ -373,8 +419,10 @@
   left: 50%;
   width: 34px;
   height: 36px;
-  transform: translateX(-50%) rotate(-4deg);
-  background: var(--doll-hat, #f2a81d);
+  transform: translateX(-50%);
+  background:
+    linear-gradient(105deg, rgba(255, 255, 255, .22), transparent 42%),
+    var(--doll-hat, #f2a81d);
   clip-path: polygon(50% 0, 100% 100%, 0 100%);
   filter: drop-shadow(0 2px 2px rgba(0, 0, 0, .2));
 }
@@ -406,65 +454,129 @@
 /* torso */
 .doll__torso {
   position: absolute;
-  top: 31px;
+  top: 33px;
   left: 50%;
-  width: 33px;
-  height: 37px;
+  width: 32px;
+  height: 35px;
   transform: translateX(-50%) translateZ(2px);
   z-index: 3;
 }
 .doll__top {
   position: absolute;
   inset: 0;
-  border-radius: 10px 10px 9px 9px;
+  border-radius: 11px 11px 8px 8px;
   background:
-    linear-gradient(120deg, rgba(255, 255, 255, .22), transparent 45%),
+    linear-gradient(120deg, rgba(255, 255, 255, .24), transparent 45%),
     var(--doll-top, #2f6fed);
-  box-shadow: inset -5px -3px 8px rgba(0, 0, 0, .18);
+  box-shadow:
+    inset -5px -4px 8px rgba(0, 0, 0, .2),
+    inset 3px 3px 6px rgba(255, 255, 255, .12);
+  z-index: 1;
 }
 [data-top="jacket"] .doll__top::before {
   content: '';
   position: absolute;
   left: 50%;
   top: 3px;
-  bottom: 4px;
-  width: 2px;
+  bottom: 3px;
+  width: 2.5px;
   transform: translateX(-50%);
-  background: rgba(0, 0, 0, .22);
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--doll-top, #2f6fed) 62%, #fff);
 }
 [data-top="jacket"] .doll__top::after {
   content: '';
   position: absolute;
   left: 50%;
   top: 0;
-  width: 17px;
-  height: 12px;
+  width: 24px;
+  height: 11px;
   transform: translateX(-50%);
-  background: color-mix(in srgb, var(--doll-top, #2f6fed) 70%, #fff);
-  clip-path: polygon(0 0, 50% 78%, 100% 0, 82% 100%, 50% 86%, 18% 100%);
+  background: color-mix(in srgb, var(--doll-top, #2f6fed) 72%, #fff);
+  clip-path: polygon(0 0, 38% 100%, 50% 40%, 62% 100%, 100% 0);
+}
+[data-top="hoodie"] .doll__top::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  width: 30px;
+  height: 10px;
+  transform: translateX(-50%);
+  border-radius: 8px 8px 4px 4px;
+  background: color-mix(in srgb, var(--doll-top, #2f6fed) 82%, #000);
+  box-shadow: inset -3px -2px 4px rgba(0, 0, 0, .25);
 }
 [data-top="hoodie"] .doll__top::after {
   content: '';
   position: absolute;
   left: 50%;
-  bottom: 5px;
-  width: 15px;
-  height: 8px;
+  bottom: 4px;
+  width: 18px;
+  height: 9px;
   transform: translateX(-50%);
   border-radius: 3px;
   background: rgba(0, 0, 0, .16);
+  box-shadow: inset 0 2px 2px rgba(255, 255, 255, .08);
 }
 [data-top="dress"] .doll__top {
-  bottom: -10px;
-  border-radius: 9px 9px 4px 4px;
-  clip-path: polygon(13% 0, 87% 0, 100% 100%, 0 100%);
+  top: -2px;
+  bottom: -14px;
+  border-radius: 12px 12px 4px 4px;
+  clip-path: polygon(16% 0, 84% 0, 100% 100%, 0 100%);
 }
+[data-top="dress"] .doll__top::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 22px;
+  width: 26px;
+  height: 4px;
+  transform: translateX(-50%);
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--doll-top, #e8564a) 55%, #fff);
+}
+[data-top="dress"] .doll__top::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4px;
+  background: color-mix(in srgb, var(--doll-top, #e8564a) 78%, #fff);
+}
+/* with a long dress, the skirt layer is hidden underneath anyway */
+[data-top="dress"][data-bottom="skirt"] .doll__legs::before { display: none; }
+[data-top="dress"][data-bottom="skirt"] .doll__legs::after { display: none; }
 [data-top="armor"] .doll__top {
   background:
-    linear-gradient(120deg, rgba(255, 255, 255, .38), transparent 42%),
-    linear-gradient(180deg, #d9dcff, var(--doll-top, #7c4dff) 70%);
-  border-radius: 8px;
-  box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, .35), inset -5px -3px 8px rgba(0, 0, 0, .18);
+    linear-gradient(120deg, rgba(255, 255, 255, .4), transparent 42%),
+    linear-gradient(180deg, #eceaff, var(--doll-top, #7c4dff) 72%);
+  border-radius: 9px;
+  box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, .4), inset -5px -4px 8px rgba(0, 0, 0, .2);
+}
+[data-top="armor"] .doll__top::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 3px;
+  bottom: 4px;
+  width: 3px;
+  transform: translateX(-50%);
+  border-radius: 2px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, .65), rgba(255, 255, 255, .12));
+}
+[data-top="armor"] .doll__top::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 13px;
+  width: 8px;
+  height: 8px;
+  transform: translateX(-50%) rotate(45deg);
+  border-radius: 2px;
+  background: linear-gradient(135deg, #ffe27a, #f2a81d);
+  box-shadow: 0 0 6px rgba(242, 168, 29, .8), inset 0 0 2px rgba(255, 255, 255, .8);
 }
 [data-top="armor"] .doll__torso::before,
 [data-top="armor"] .doll__torso::after {
@@ -474,7 +586,8 @@
   width: 14px;
   height: 13px;
   border-radius: 7px 7px 4px 4px;
-  background: linear-gradient(180deg, #e8eaff, var(--doll-top, #7c4dff));
+  background: linear-gradient(180deg, #f0f0ff, var(--doll-top, #7c4dff));
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .35), inset -2px -2px 4px rgba(0, 0, 0, .14);
   z-index: 4;
 }
 [data-top="armor"] .doll__torso::before { left: -7px; }
@@ -483,49 +596,60 @@
 /* arms */
 .doll__arm {
   position: absolute;
-  top: 4px;
-  width: 10px;
-  height: 30px;
+  top: 3px;
+  width: 9.5px;
+  height: 31px;
   border-radius: 6px;
   background: var(--doll-top, #2f6fed);
   transform-origin: 50% 4px;
   z-index: 2;
-  box-shadow: inset -2px -2px 4px rgba(0, 0, 0, .16);
+  box-shadow: inset -2px -2px 4px rgba(0, 0, 0, .18);
+}
+.doll__arm::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 6px;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, .22);
 }
 .doll__arm::after {
   content: '';
   position: absolute;
-  bottom: -4px;
-  left: 0;
+  bottom: -5px;
+  left: -.25px;
   width: 10px;
-  height: 9px;
+  height: 9.5px;
   border-radius: 50%;
   background: var(--doll-skin, #f2c49b);
+  box-shadow: inset -2px -2px 3px rgba(116, 63, 20, .18);
 }
-.doll__arm--l { left: -6px; }
-.doll__arm--r { right: -6px; }
+.doll__arm--l { left: -6.5px; }
+.doll__arm--r { right: -6.5px; }
 
 /* legs */
 .doll__legs {
   position: absolute;
-  top: 65px;
+  top: 64px;
   left: 50%;
-  width: 25px;
-  height: 34px;
+  width: 26px;
+  height: 35px;
   transform: translateX(-50%);
   display: flex;
   justify-content: center;
-  gap: 5px;
+  gap: 6px;
   z-index: 2;
 }
 .doll__leg {
   position: relative;
   width: 10px;
-  height: 30px;
-  border-radius: 4px 4px 3px 3px;
+  height: 31px;
+  border-radius: 5px 5px 3px 3px;
   background: var(--doll-bottom, #25324a);
   transform-origin: 50% 2px;
-  box-shadow: inset -2px -2px 4px rgba(0, 0, 0, .18);
+  box-shadow: inset -2px -2px 4px rgba(0, 0, 0, .2);
 }
 .doll__leg::after {
   content: '';
@@ -538,30 +662,44 @@
   background: var(--doll-shoe, #4a2f1b);
   box-shadow: inset -2px -1px 3px rgba(0, 0, 0, .25);
 }
-[data-bottom="shorts"] .doll__leg { border-radius: 4px; height: 20px; }
+[data-bottom="shorts"] .doll__leg { border-radius: 5px 5px 3px 3px; height: 21px; }
 [data-bottom="shorts"] .doll__leg::before {
   content: '';
   position: absolute;
-  top: 18px;
+  top: 19px;
   left: 1px;
   width: 8px;
   height: 12px;
   border-radius: 3px;
   background: var(--doll-skin, #f2c49b);
+  box-shadow: inset -1px -1px 2px rgba(116, 63, 20, .12);
 }
 [data-bottom="skirt"] .doll__leg { height: 22px; }
 [data-bottom="skirt"] .doll__legs::before {
   content: '';
   position: absolute;
-  top: -5px;
+  top: -6px;
   left: 50%;
-  width: 36px;
+  width: 38px;
   height: 20px;
   transform: translateX(-50%);
-  border-radius: 4px 4px 12px 12px;
+  border-radius: 5px 5px 12px 12px;
   background: var(--doll-bottom, #25324a);
-  clip-path: polygon(12% 0, 88% 0, 100% 100%, 0 100%);
+  /* symmetric pleated hem */
+  clip-path: polygon(14% 0, 86% 0, 100% 100%, 92% 76%, 84% 100%, 76% 76%, 68% 100%, 60% 76%, 50% 100%, 40% 76%, 32% 100%, 24% 76%, 16% 100%, 8% 76%, 0 100%);
   box-shadow: inset -4px -2px 6px rgba(0, 0, 0, .16);
+}
+[data-bottom="skirt"] .doll__legs::after {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  width: 30px;
+  height: 2.5px;
+  transform: translateX(-50%);
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--doll-bottom, #25324a) 68%, #fff);
+  opacity: .85;
 }
 [data-bottom="robe"] .doll__leg { width: 12px; height: 32px; }
 [data-bottom="robe"] .doll__legs::before {
@@ -573,26 +711,47 @@
   height: 30px;
   transform: translateX(-50%);
   border-radius: 6px 6px 14px 14px;
-  background: var(--doll-bottom, #25324a);
+  background:
+    linear-gradient(120deg, rgba(255, 255, 255, .12), transparent 45%),
+    var(--doll-bottom, #25324a);
   clip-path: polygon(10% 0, 90% 0, 100% 100%, 0 100%);
+  box-shadow: inset -4px -2px 6px rgba(0, 0, 0, .18);
 }
-[data-shoes="boots"] .doll__leg::after { height: 12px; bottom: -7px; border-radius: 4px 5px 2px 4px; }
-[data-shoes="sneaker"] .doll__leg::after { height: 7px; border-radius: 3px 7px 4px 4px; background: #fff; box-shadow: inset 0 -2px 0 var(--doll-shoe, #4a2f1b); }
-[data-shoes="sandal"] .doll__leg::after { height: 4px; bottom: -2px; border-radius: 3px; }
+[data-shoes="boots"] .doll__leg::after {
+  height: 13px;
+  bottom: -8px;
+  border-radius: 4px 5px 2px 4px;
+  box-shadow: inset 0 3px 0 rgba(255, 255, 255, .18), inset -2px -1px 3px rgba(0, 0, 0, .3);
+}
+[data-shoes="sneaker"] .doll__leg::after {
+  height: 8px;
+  bottom: -4px;
+  border-radius: 3px 6px 4px 4px;
+  background: color-mix(in srgb, var(--doll-shoe, #4a2f1b) 12%, #fff);
+  box-shadow: inset 0 -2.5px 0 var(--doll-shoe, #4a2f1b), inset 1px 1px 2px rgba(255, 255, 255, .6);
+}
+[data-shoes="sandal"] .doll__leg::after {
+  height: 5px;
+  bottom: -3px;
+  border-radius: 3px 3px 2px 2px;
+  background: var(--doll-shoe, #4a2f1b);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, .16), inset -1px -1px 2px rgba(0, 0, 0, .25);
+}
 
-/* accessory */
+/* accessory — held/worn items aligned to the character's proportions */
 .doll__accessory {
   position: absolute;
-  right: -16px;
-  top: 12px;
+  right: -14px;
+  top: 16px;
   z-index: 6;
-  font-size: 15px;
+  font-size: 14px;
+  line-height: 1;
   filter: drop-shadow(0 2px 3px rgba(0, 0, 0, .35));
 }
-[data-accessory="backpack"] .doll__accessory { right: auto; left: -15px; top: 5px; }
-[data-accessory="map"] .doll__accessory { right: -14px; top: 20px; }
-[data-accessory="sword"] .doll__accessory { right: -15px; top: 2px; }
-[data-accessory="camera"] .doll__accessory { right: -13px; top: 17px; }
+[data-accessory="backpack"] .doll__accessory { right: auto; left: -14px; top: 6px; transform: scaleX(-1); }
+[data-accessory="map"] .doll__accessory { right: -13px; top: 21px; transform: rotate(-8deg); }
+[data-accessory="sword"] .doll__accessory { right: -13px; top: 0; transform: rotate(14deg); }
+[data-accessory="camera"] .doll__accessory { right: -12px; top: 18px; }
 
 /* walk + idle animation */
 .ar-avatar.is-walking .doll__leg--l { animation: dollLegL .38s ease-in-out infinite; }
@@ -602,6 +761,8 @@
 .ar-avatar.is-walking .doll {
   animation: dollBob .38s ease-in-out infinite;
 }
+.ar-avatar.is-walking [data-hair="ponytail"] .doll__pony::before { animation: dollTailL .38s ease-in-out infinite; }
+.ar-avatar.is-walking [data-hair="ponytail"] .doll__pony::after { animation: dollTailR .38s ease-in-out infinite; }
 .ar-avatar:not(.is-walking) .doll {
   animation: dollIdle 3.2s ease-in-out infinite;
 }
@@ -611,6 +772,8 @@
 @keyframes dollLegR { 0%, 100% { transform: rotate(-24deg); } 50% { transform: rotate(24deg); } }
 @keyframes dollArmL { 0%, 100% { transform: rotate(-26deg); } 50% { transform: rotate(26deg); } }
 @keyframes dollArmR { 0%, 100% { transform: rotate(26deg); } 50% { transform: rotate(-26deg); } }
+@keyframes dollTailL { 0%, 100% { transform: rotate(9deg); } 50% { transform: rotate(22deg); } }
+@keyframes dollTailR { 0%, 100% { transform: rotate(-9deg); } 50% { transform: rotate(-22deg); } }
 @keyframes dollBob { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-3px); } }
 @keyframes dollIdle { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-2px); } }
 
@@ -831,7 +994,6 @@
   background:
     radial-gradient(120% 70% at 50% 0%, rgba(243, 182, 31, .10), transparent 62%),
     linear-gradient(180deg, rgba(255, 255, 255, .10), rgba(15, 138, 95, .07));
-  mix-blend-mode: multiply;
 }
 .ar-map__offline {
   position: absolute;

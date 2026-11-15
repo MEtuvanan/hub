@@ -3,6 +3,8 @@
    Loaded after base.css on every *-mobile page.
    ========================================================================== */
 
+@import url('/css/components/ai-mobile-chat.css');
+
 :root {
   --app-ink: #07130f;
   --app-ink-2: #0b2119;

@@ -87,23 +87,55 @@ export function setMarkers(map, state, places, onSelect, { fit = true } = {}) {
   if (map._isLeaflet) {
     state.markers?.forEach(m => m.remove());
     state.markers = places.map(p => {
+      const hasBoss = !!p.boss;
+      const pinColor = hasBoss ? 'linear-gradient(135deg, #E040FB, #6200EA)' : 'linear-gradient(135deg, #00A86B, #0B251B)';
+      const pinIcon = hasBoss ? '⚔️' : '';
+      const pinShadow = hasBoss ? '0 0 16px rgba(224,64,251,0.7)' : '0 4px 12px rgba(0,0,0,0.3)';
       const pin = L.divIcon({
         className: 'custom-leaflet-marker',
-        html: `<div style="background:linear-gradient(135deg, #00A86B, #0B251B);width:30px;height:30px;border-radius:50%;border:2.5px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,0.3);display:grid;place-items:center;color:#fff;font-size:14px;cursor:pointer;"></div>`,
-        iconSize: [30, 30],
-        iconAnchor: [15, 15],
-        popupAnchor: [0, -15]
+        html: `<div style="background:${pinColor};width:32px;height:32px;border-radius:50%;border:2.5px solid #fff;box-shadow:${pinShadow};display:grid;place-items:center;color:#fff;font-size:14px;cursor:pointer;">${pinIcon}</div>`,
+        iconSize: [32, 32],
+        iconAnchor: [16, 16],
+        popupAnchor: [0, -16]
       });
       const m = L.marker([Number(p.lat), Number(p.lng)], { icon: pin, title: p.name }).addTo(map);
       const popupHtml = `
-        <div style="font-family:inherit;min-width:160px;padding:2px 0;">
+        <div style="font-family:inherit;min-width:170px;padding:2px 0;">
           <strong style="font-size:13px;display:block;margin-bottom:4px;color:#1a202c;">${p.name}</strong>
-          <div style="display:flex;gap:6px;margin-top:6px;">
+          ${hasBoss ? `<div style="font-size:11px;color:#7B1FA2;font-weight:700;margin-bottom:6px;">⚔️ บอส: ${p.boss.name} (Lv.${p.boss.level})</div>` : ''}
+          <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;">
             <a href="/place.html?id=${encodeURIComponent(p.id)}" style="display:inline-block;padding:3px 8px;background:#e2e8f0;color:#2d3748;border-radius:4px;font-size:11px;text-decoration:none;font-weight:600;">ดูข้อมูล</a>
             <a href="/navigate.html?lat=${p.lat}&lng=${p.lng}&name=${encodeURIComponent(p.name)}&id=${encodeURIComponent(p.id)}" style="display:inline-block;padding:3px 8px;background:#00A86B;color:#fff;border-radius:4px;font-size:11px;text-decoration:none;font-weight:600;">นำทาง</a>
+            ${hasBoss ? `<button type="button" class="btn-popup-boss" data-boss-id="${p.boss.id}" data-place-id="${p.id}" style="display:inline-block;padding:4px 8px;background:linear-gradient(135deg,#D500F9,#7C4DFF);color:#fff;border:none;border-radius:4px;font-size:11px;font-weight:700;cursor:pointer;">ท้าบอส</button>` : ''}
           </div>
         </div>
       `;
+      m.bindPopup(popupHtml);
+      m.on('popupopen', () => {
+        const btn = document.querySelector(`.btn-popup-boss[data-boss-id="${p.boss?.id}"]`);
+        if (btn) {
+          btn.onclick = () => {
+            window.dispatchEvent(new CustomEvent('tc-open-boss-battle', { detail: { boss: p.boss, place: p } }));
+          };
+        }
+      });
+      m.on('click', () => {
+        m.openPopup();
+        if (typeof onSelect === 'function') onSelect(p);
+      });
+      return m;
+    });
+
+    if (fit && places.length) {
+      if (places.length === 1) {
+        map.setView([Number(places[0].lat), Number(places[0].lng)], 14);
+      } else {
+        const bounds = L.latLngBounds(places.map(p => [Number(p.lat), Number(p.lng)]));
+        map.fitBounds(bounds, { padding: [48, 48] });
+      }
+    }
+    return;
+  }
       m.bindPopup(popupHtml);
       m.on('click', () => {
         m.openPopup();

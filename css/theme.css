@@ -1,30 +1,29 @@
-/* ==========================================================================
-   Travel & Challenge — Adventure Explorer & AR Map Theme (v5)
-   Tactile exploration aesthetic: warm off-white canvas (#F7F6F2), deep slate
-   text (#18221E), crisp 1.5px borders (#1E2923), 4px-8px sharp corners,
-   subtle animated topographic map pattern, and Expedition Orange (#FF5A1F)
-   hover highlights. Loaded LAST on every page to re-skin all views cleanly.
+﻿/* ==========================================================================
+   Travel & Challenge โ€” Liquid Glass Theme (v6)
+   Minimal white / green / yellow, soft translucent glass surfaces, airy
+   shadows and large rounded corners. Loaded LAST on every page to re-skin
+   all views cleanly.
    ========================================================================== */
 
 :root {
   color-scheme: light;
 
-  /* Adventure Explorer & AR Map Palette */
-  --ink: #18221E;
+  /* Palette */
+  --ink: #10231C;
   --ink-soft: #2B3D34;
-  --muted: #556B60;
-  --line: #1E2923;
-  --line-strong: #1E2923;
-  --line-subtle: rgba(30, 41, 35, 0.16);
+  --muted: #6B7C74;
+  --line: rgba(16, 64, 43, .12);
+  --line-strong: rgba(16, 64, 43, .18);
+  --line-subtle: rgba(16, 64, 43, .10);
 
-  /* Adventure Accents */
-  --canvas: #F7F6F2;
+  /* Accents */
+  --canvas: #F7FBF9;
   --surface: #FFFFFF;
-  --border-crisp: #1E2923;
-  --orange: #FF5A1F;
-  --orange-hover: #E04810;
-  --orange-soft: #FFF1EB;
-  --orange-glow: rgba(255, 90, 31, 0.35);
+  --border-crisp: rgba(16, 64, 43, .12);
+  --orange: #EFB21B;
+  --orange-hover: #D99C08;
+  --orange-soft: #FFF7DF;
+  --orange-glow: rgba(239, 178, 27, .32);
 
   --green: #0F8A5F;
   --green-deep: #0A6B49;
@@ -36,26 +35,26 @@
   --danger: #C4483A;
   --danger-soft: #FCEDEA;
 
-  --glass: #FFFFFF;
-  --glass-strong: #FFFFFF;
-  --glass-soft: #F7F6F2;
-  --glass-border: #1E2923;
+  --glass: rgba(255, 255, 255, .82);
+  --glass-strong: rgba(255, 255, 255, .94);
+  --glass-soft: #F5FAF7;
+  --glass-border: rgba(16, 64, 43, .10);
   
-  /* Tactical Shadows (crisp offset instead of blurry shadows) */
-  --shadow-1: 2px 2px 0 #1E2923;
-  --shadow-2: 3px 3px 0 #1E2923;
-  --shadow-soft: 2px 2px 0 #1E2923;
-  --shadow-medium: 3px 3px 0 #1E2923;
-  --shadow-strong: 4px 4px 0 #1E2923;
+  /* Soft glass shadows */
+  --shadow-1: 0 8px 22px -16px rgba(16, 64, 43, .42);
+  --shadow-2: 0 16px 38px -24px rgba(16, 64, 43, .48);
+  --shadow-soft: 0 6px 18px -14px rgba(16, 64, 43, .35);
+  --shadow-medium: 0 14px 32px -22px rgba(16, 64, 43, .45);
+  --shadow-strong: 0 22px 48px -28px rgba(16, 64, 43, .5);
   --shadow-glow: none;
 
-  /* Sharp-to-slightly-rounded corners (4px to 8px) */
-  --radius-glass: 6px;
-  --radius-small: 4px;
-  --radius-medium: 6px;
-  --radius-large: 8px;
-  --app-radius: 6px;
-  --app-radius-lg: 8px;
+  /* Generous, liquid corners */
+  --radius-glass: 18px;
+  --radius-small: 10px;
+  --radius-medium: 14px;
+  --radius-large: 20px;
+  --app-radius: 14px;
+  --app-radius-lg: 20px;
 
   /* Typography */
   --font-mono: 'JetBrains Mono', 'Fira Code', 'SFMono-Regular', Menlo, Monaco, Consolas, monospace;
@@ -77,11 +76,11 @@
   --color-text: var(--ink);
   --color-text-muted: var(--muted);
   --color-text-light: #7E9187;
-  --color-border: #1E2923;
+  --color-border: rgba(16, 64, 43, .12);
   --color-border-hover: var(--orange);
   --color-surface: #FFFFFF;
-  --color-surface-soft: #F7F6F2;
-  --color-surface-alt: #EFECE6;
+  --color-surface-soft: #F5FAF7;
+  --color-surface-alt: #EAF4EE;
 
   /* mobile shell overrides */
   --app-ink: var(--ink);
@@ -97,14 +96,14 @@
   --app-paper: #FFFFFF;
   --app-text: var(--ink);
   --app-muted: var(--muted);
-  --app-line: #1E2923;
+  --app-line: rgba(16, 64, 43, .12);
   --app-line-gold: rgba(243, 182, 31, .5);
   --app-danger: var(--danger);
   --app-blue: #2E7DB2;
   --app-violet: #7C5CC4;
   --app-tab-h: 80px;
   --app-shadow: var(--shadow-2);
-  --app-glow: 2px 2px 0 #1E2923;
+  --app-glow: 0 10px 26px -20px rgba(16, 64, 43, .5);
   --app-font-head: 'IBM Plex Sans Thai', 'Noto Sans Thai', system-ui, sans-serif;
   --app-font-body: 'IBM Plex Sans Thai', 'Noto Sans Thai', system-ui, sans-serif;
 }
@@ -148,9 +147,9 @@ body.app-phone {
 }
 @media (min-width: 520px) {
   body.app-phone {
-    border: 1.5px solid #1E2923 !important;
+    border: 1px solid rgba(16, 64, 43, .12) !important;
     border-radius: 8px !important;
-    box-shadow: 4px 4px 0 #1E2923 !important;
+    box-shadow: 0 24px 60px -30px rgba(16, 64, 43, .45) !important;
   }
 }
 
@@ -224,7 +223,7 @@ h1, h2, h3, h4 { font-family: var(--font-head); color: var(--ink); letter-spacin
 .app-profile-pill:hover {
   transform: translateY(-2px) !important;
   border-color: var(--orange) !important;
-  box-shadow: 3px 3px 0 var(--orange) !important;
+  box-shadow: 0 12px 28px -18px var(--orange-glow) !important;
 }
 .app-profile-avatar {
   background: var(--green-soft) !important;
@@ -252,7 +251,7 @@ h1, h2, h3, h4 { font-family: var(--font-head); color: var(--ink); letter-spacin
 .app-token-chip:hover {
   transform: translateY(-2px) !important;
   border-color: var(--orange) !important;
-  box-shadow: 3px 3px 0 var(--orange) !important;
+  box-shadow: 0 12px 28px -18px var(--orange-glow) !important;
 }
 .app-token-chip .ic { color: var(--gold-deep); }
 .app-star-btn {
@@ -266,16 +265,16 @@ h1, h2, h3, h4 { font-family: var(--font-head); color: var(--ink); letter-spacin
 .app-star-btn:hover {
   transform: translateY(-2px) !important;
   border-color: var(--orange) !important;
-  box-shadow: 3px 3px 0 var(--orange) !important;
+  box-shadow: 0 12px 28px -18px var(--orange-glow) !important;
 }
 .app-star-btn svg { fill: currentColor; }
 .app-star-btn.has-reward {
   border-color: var(--orange) !important;
   animation: none;
-  box-shadow: 3px 3px 0 var(--orange) !important;
+  box-shadow: 0 12px 28px -18px var(--orange-glow) !important;
 }
 
-/* Bottom tabs — five equal targets, search sits on the same baseline */
+/* Bottom tabs โ€” five equal targets, search sits on the same baseline */
 .app-tabbar {
   width: min(440px, calc(100% - 24px));
   height: 70px;
@@ -371,12 +370,12 @@ h1, h2, h3, h4 { font-family: var(--font-head); color: var(--ink); letter-spacin
 .btn:hover {
   transform: translateY(-2px) !important;
   border-color: var(--orange) !important;
-  box-shadow: 3px 3px 0 var(--orange) !important;
+  box-shadow: 0 12px 28px -18px var(--orange-glow) !important;
 }
 .g-btn:active,
 .btn:active {
   transform: translateY(1px) !important;
-  box-shadow: 1px 1px 0 var(--orange) !important;
+  box-shadow: 0 12px 28px -18px var(--orange-glow) !important;
 }
 .g-btn * { color: inherit !important; }
 
@@ -391,7 +390,7 @@ h1, h2, h3, h4 { font-family: var(--font-head); color: var(--ink); letter-spacin
 .btn-primary:hover {
   background: var(--green-deep) !important;
   border-color: var(--orange) !important;
-  box-shadow: 3px 3px 0 var(--orange) !important;
+  box-shadow: 0 12px 28px -18px var(--orange-glow) !important;
 }
 .g-btn--ghost {
   background: #FFFFFF !important;
@@ -401,7 +400,7 @@ h1, h2, h3, h4 { font-family: var(--font-head); color: var(--ink); letter-spacin
 }
 .g-btn--ghost:hover {
   border-color: var(--orange) !important;
-  box-shadow: 3px 3px 0 var(--orange) !important;
+  box-shadow: 0 12px 28px -18px var(--orange-glow) !important;
 }
 .g-btn--dark {
   background: var(--ink) !important;
@@ -412,7 +411,7 @@ h1, h2, h3, h4 { font-family: var(--font-head); color: var(--ink); letter-spacin
 .g-btn--dark:hover {
   background: #000000 !important;
   border-color: var(--orange) !important;
-  box-shadow: 3px 3px 0 var(--orange) !important;
+  box-shadow: 0 12px 28px -18px var(--orange-glow) !important;
 }
 .g-btn--danger {
   background: var(--danger-soft) !important;
@@ -422,7 +421,7 @@ h1, h2, h3, h4 { font-family: var(--font-head); color: var(--ink); letter-spacin
 }
 .g-btn--danger:hover {
   border-color: var(--orange) !important;
-  box-shadow: 3px 3px 0 var(--orange) !important;
+  box-shadow: 0 12px 28px -18px var(--orange-glow) !important;
 }
 .g-btn--sm { border-radius: var(--radius-small) !important; }
 .g-icon-btn {
@@ -436,7 +435,7 @@ h1, h2, h3, h4 { font-family: var(--font-head); color: var(--ink); letter-spacin
 .g-icon-btn:hover {
   transform: translateY(-2px) !important;
   border-color: var(--orange) !important;
-  box-shadow: 3px 3px 0 var(--orange) !important;
+  box-shadow: 0 12px 28px -18px var(--orange-glow) !important;
 }
 
 .g-card {
@@ -449,7 +448,7 @@ h1, h2, h3, h4 { font-family: var(--font-head); color: var(--ink); letter-spacin
 .g-card:hover {
   transform: translateY(-2px) !important;
   border-color: var(--orange) !important;
-  box-shadow: 4px 4px 0 var(--orange) !important;
+  box-shadow: 0 12px 28px -18px var(--orange-glow) !important;
 }
 .g-card--gold {
   background: #FFFFFF !important;
@@ -505,7 +504,7 @@ body.app-phone input, body.app-phone textarea, body.app-phone select {
 body.app-phone input::placeholder, body.app-phone textarea::placeholder { color: #7E9187 !important; }
 .g-input:focus, .g-field input:focus, .g-field textarea:focus {
   border-color: var(--orange) !important;
-  box-shadow: 2px 2px 0 var(--orange) !important;
+  box-shadow: 0 12px 28px -18px var(--orange-glow) !important;
   outline: none;
 }
 .g-searchbar,
@@ -522,7 +521,7 @@ body.app-phone input::placeholder, body.app-phone textarea::placeholder { color:
 .search-input-wrap:focus-within {
   background: #FFFFFF !important;
   border-color: var(--orange) !important;
-  box-shadow: 3px 3px 0 var(--orange) !important;
+  box-shadow: 0 12px 28px -18px var(--orange-glow) !important;
 }
 .sm-filter-btn {
   height: 40px !important;
@@ -539,7 +538,7 @@ body.app-phone input::placeholder, body.app-phone textarea::placeholder { color:
 .sm-filter-btn:hover {
   transform: translateY(-2px) !important;
   border-color: var(--orange) !important;
-  box-shadow: 3px 3px 0 var(--orange) !important;
+  box-shadow: 0 12px 28px -18px var(--orange-glow) !important;
 }
 .sm-filter-btn.has-filters {
   background: var(--gold-soft) !important;
@@ -798,6 +797,12 @@ footer, .site-footer, #site-footer {
 .footer-brand p {
   color: var(--muted) !important;
 }
+.footer-brand .brand {
+  color: var(--ink) !important;
+}
+.footer-brand .brand span:not(.brand-badge) {
+  color: var(--gold-deep) !important;
+}
 .footer-links strong {
   color: var(--ink) !important;
 }
@@ -853,9 +858,34 @@ footer, .site-footer, #site-footer {
   box-shadow: var(--shadow-2);
   background: #EDF4F0;
 }
-.hm-hero-map .ar-weather { display: inline-flex; }
+.hm-hero-map .ar-weather { display: none !important; }
 .hm-hero-map .ar-hint { display: none; }
 .hm-hero-map .ar-avatar { transform: translate(-50%, -100%) scale(.94); }
+/* Quiet the place pins: small white dots read as map furniture, not buttons. */
+.hm-hero-map .ar-pin__beacon {
+  width: 26px;
+  height: 26px;
+  font-size: 12px;
+  border-width: 1.5px;
+  border-color: #FFFFFF;
+  background: rgba(255, 255, 255, .95) !important;
+  color: var(--green-deep);
+  box-shadow: 0 8px 18px -12px rgba(16, 64, 43, .8), 0 0 0 3px rgba(255, 255, 255, .4);
+}
+.hm-hero-map .ar-pin__beacon::before,
+.hm-hero-map .ar-pin__beacon::after { display: none; }
+.hm-hero-map .ar-pin__label { display: none !important; }
+.hm-hero-map .ar-vignette { box-shadow: none !important; }
+/* Boss pins stay the focal point, just scaled for the card. */
+.hm-hero-map .ar-boss-pin__face { width: 44px; height: 44px; }
+.hm-hero-map .ar-boss-pin__halo { width: 62px; height: 62px; top: -9px; }
+.hm-hero-map .ar-boss-pin__label {
+  padding: 3px 8px;
+  border-radius: 8px;
+  max-width: 116px;
+}
+.hm-hero-map .ar-boss-pin__label b { font-size: 9.5px; max-width: 104px; }
+.hm-hero-map .ar-boss-pin__label small { font-size: 8px; }
 .hm-hero-hud {
   order: 2;
   position: static !important;
@@ -891,6 +921,32 @@ footer, .site-footer, #site-footer {
 .ar-controls { gap: 8px; }
 .ar-ctrl { width: 46px; height: 46px; }
 .ar-ctrl .ic { width: 18px; height: 18px; }
+/* Phone maps: smaller, quieter control pills and no floating pin labels. */
+body.app-phone .ar-ctrl {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, .92) !important;
+  border: 1px solid rgba(16, 64, 43, .12) !important;
+  border-radius: 50% !important;
+  color: var(--green-deep) !important;
+  box-shadow: 0 10px 22px -14px rgba(16, 64, 43, .55) !important;
+  backdrop-filter: blur(14px) saturate(150%);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+}
+body.app-phone .ar-ctrl .ic { width: 16px; height: 16px; }
+body.app-phone .ar-ctrl.is-on {
+  background: var(--green) !important;
+  border-color: var(--green) !important;
+  color: #FFFFFF !important;
+}
+body.app-phone .ar-pin__label,
+body.app-phone .ar-pin.is-near .ar-pin__label {
+  display: none !important;
+}
+body.app-phone:not(.app-home) .ar-avatar {
+  transform: translate(-50%, -100%) scale(.82);
+  transform-origin: 50% 100%;
+}
 .ex-map .ar-controls { bottom: calc(var(--app-tab-h) + 186px) !important; }
 .ar-hint { animation: arHintFade .8s ease 6s forwards; }
 @keyframes arHintFade { to { opacity: 0; visibility: hidden; } }
@@ -1157,11 +1213,11 @@ footer, .site-footer, #site-footer {
 .swipe-action:hover {
   transform: translateY(-2px) !important;
   border-color: var(--orange) !important;
-  box-shadow: 3px 3px 0 var(--orange) !important;
+  box-shadow: 0 12px 28px -18px var(--orange-glow) !important;
 }
 .swipe-action:active {
   transform: translateY(1px) !important;
-  box-shadow: 1px 1px 0 var(--orange) !important;
+  box-shadow: 0 12px 28px -18px var(--orange-glow) !important;
 }
 
 .swipe-action--undo {
@@ -1201,7 +1257,7 @@ footer, .site-footer, #site-footer {
 .swipe-action--like:hover {
   background: var(--green-deep) !important;
   border-color: var(--orange) !important;
-  box-shadow: 3px 3px 0 var(--orange) !important;
+  box-shadow: 0 12px 28px -18px var(--orange-glow) !important;
 }
 .swipe-action--like .ic {
   width: 28px !important;
@@ -1375,7 +1431,7 @@ footer, .site-footer, #site-footer {
 .pf-menu__row:hover {
   transform: translateY(-2px) !important;
   border-color: var(--orange) !important;
-  box-shadow: 3px 3px 0 var(--orange) !important;
+  box-shadow: 0 12px 28px -18px var(--orange-glow) !important;
 }
 
 /* Exploration pills & filters */
@@ -1403,7 +1459,7 @@ footer, .site-footer, #site-footer {
   transform: translateY(-2px) !important;
   background: #FFFFFF !important;
   border-color: var(--orange) !important;
-  box-shadow: 2px 2px 0 var(--orange) !important;
+  box-shadow: 0 12px 28px -18px var(--orange-glow) !important;
   color: var(--ink) !important;
 }
 
@@ -1417,7 +1473,7 @@ footer, .site-footer, #site-footer {
   background: var(--gold-soft) !important;
   border-color: var(--orange) !important;
   color: var(--ink) !important;
-  box-shadow: 2px 2px 0 var(--orange) !important;
+  box-shadow: 0 12px 28px -18px var(--orange-glow) !important;
   font-weight: 700 !important;
 }
 
@@ -1427,7 +1483,7 @@ footer, .site-footer, #site-footer {
   border: 1.5px solid var(--border-crisp) !important;
   border-radius: var(--radius-small) !important;
   color: var(--ink) !important;
-  box-shadow: 1px 1px 0 var(--border-crisp) !important;
+  box-shadow: 0 8px 20px -16px rgba(16, 64, 43, .45) !important;
   font-family: var(--font-mono) !important;
   font-weight: 700 !important;
 }
@@ -1443,7 +1499,7 @@ footer, .site-footer, #site-footer {
 .qm-reset:hover {
   transform: translateY(-2px) !important;
   border-color: var(--orange) !important;
-  box-shadow: 2px 2px 0 var(--orange) !important;
+  box-shadow: 0 12px 28px -18px var(--orange-glow) !important;
 }
   box-shadow: var(--shadow-1) !important;
 }
@@ -1646,7 +1702,7 @@ dialog.app-sheet .dialog-bar strong {
   color: var(--muted) !important;
 }
 
-/* Place Details (Mobile & Desktop) — High Contrast & Liquid Glass */
+/* Place Details (Mobile & Desktop) โ€” High Contrast & Liquid Glass */
 .pm-summary {
   color: var(--ink) !important;
   font-size: 14px !important;
@@ -2424,7 +2480,7 @@ dialog.app-sheet .dialog-bar strong {
 .gps-btn:hover {
   transform: translateY(-2px) !important;
   border-color: var(--orange) !important;
-  box-shadow: 3px 3px 0 var(--orange) !important;
+  box-shadow: 0 12px 28px -18px var(--orange-glow) !important;
 }
 .gps-btn-primary {
   background: var(--green) !important;
@@ -2457,7 +2513,7 @@ dialog.app-sheet .dialog-bar strong {
 }
 
 /* ==========================================================================
-   Place Mobile Hero Section — Crisp White Typography Over Photo
+   Place Mobile Hero Section โ€” Crisp White Typography Over Photo
    Overrides all global element rules so photo hero text is NEVER black or dim
    ========================================================================== */
 body.app-phone .pm-hero__scrim {
@@ -2609,7 +2665,6 @@ body.app-phone .pm-hero #pmVerified svg {
 
 /* 2. Corner Crosshairs & Adventure Card Framing */
 .quest-card,
-.ex-card,
 .place-about-card,
 .highlight-card,
 .sh-pack,
@@ -2620,7 +2675,6 @@ body.app-phone .pm-hero #pmVerified svg {
 }
 
 .quest-card::before,
-.ex-card::before,
 .place-about-card::before,
 .highlight-card::before,
 .sh-pack::before,
@@ -2818,7 +2872,7 @@ body.app-phone .pm-hero #pmVerified svg {
 .gps-btn:hover {
   transform: translateY(-2px) !important;
   border-color: var(--orange) !important;
-  box-shadow: 3px 3px 0 var(--orange) !important;
+  box-shadow: 0 12px 28px -18px var(--orange-glow) !important;
 }
 
 .swipe-card:hover {
@@ -2831,7 +2885,7 @@ body.app-phone .pm-hero #pmVerified svg {
 .swipe-action:active,
 .gps-btn:active {
   transform: translateY(1px) !important;
-  box-shadow: 1px 1px 0 var(--orange) !important;
+  box-shadow: 0 12px 28px -18px var(--orange-glow) !important;
 }
 
 /* 6. Clean Tactical Offsets (Replacing Heavy Blurry Drop Shadows) */
@@ -2908,13 +2962,13 @@ body.app-phone .pm-hero #pmVerified svg {
 .sm-choice:hover {
   transform: translateY(-1px) !important;
   border-color: var(--orange) !important;
-  box-shadow: 2px 2px 0 var(--orange) !important;
+  box-shadow: 0 12px 28px -18px var(--orange-glow) !important;
 }
 .sm-choice.is-active {
   background: var(--gold-soft) !important;
   border-color: var(--orange) !important;
   color: var(--ink) !important;
-  box-shadow: 2px 2px 0 var(--orange) !important;
+  box-shadow: 0 12px 28px -18px var(--orange-glow) !important;
   font-weight: 700 !important;
 }
 
@@ -2961,3 +3015,103 @@ select:disabled,
 
 
 
+
+/* ------------------------------ AR boss pins ------------------------------ */
+.ar-bosses { position: absolute; inset: 0; z-index: 22; pointer-events: none; }
+.ar-boss-pin {
+  position: absolute;
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  padding: 0;
+  border: 0;
+  background: none;
+  transform: translate(-50%, -100%);
+  pointer-events: auto;
+  cursor: pointer;
+}
+.ar-boss-pin__halo {
+  position: absolute;
+  top: -10px;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 1.5px solid color-mix(in srgb, var(--boss-color, #C4483A) 60%, transparent);
+  opacity: .5;
+  animation: arBossRing 2.8s ease-out infinite;
+}
+@keyframes arBossRing {
+  0% { transform: scale(.72); opacity: .55; }
+  70% { transform: scale(1.12); opacity: 0; }
+  100% { transform: scale(1.12); opacity: 0; }
+}
+.ar-boss-pin__face {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: end center;
+  overflow: hidden;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 2px solid #FFFFFF;
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--boss-color, #C4483A) 34%, transparent),
+    0 10px 24px -12px rgba(16, 35, 28, .6);
+}
+.ar-boss-pin__face img {
+  width: 118%;
+  height: 118%;
+  object-fit: contain;
+  object-position: bottom;
+  filter: drop-shadow(0 4px 6px rgba(16, 35, 28, .18));
+}
+.ar-boss-pin__label {
+  display: grid;
+  justify-items: center;
+  gap: 1px;
+  padding: 4px 9px;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, .92);
+  border: 1px solid rgba(16, 64, 43, .12);
+  box-shadow: 0 8px 20px -14px rgba(16, 64, 43, .5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  max-width: 144px;
+}
+.ar-boss-pin__label b {
+  font-size: 10px;
+  font-weight: 700;
+  color: #10231C !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 128px;
+}
+.ar-boss-pin__label small {
+  font-size: 8.5px;
+  color: color-mix(in srgb, var(--boss-color, #C4483A) 80%, #10231C) !important;
+}
+.ar-boss-pin.is-defeated { opacity: .6; }
+.ar-boss-pin.is-defeated .ar-boss-pin__face img { filter: grayscale(1); }
+.ar-boss-pin.is-near .ar-boss-pin__face {
+  box-shadow: 0 0 0 4px rgba(15, 138, 95, .32), 0 12px 26px -12px rgba(16, 35, 28, .6);
+}
+.ar-boss-pin.is-near .ar-boss-pin__halo { border-color: #0F8A5F; }
+
+/* ==========================================================================
+   Liquid glass finishing touches
+   ========================================================================== */
+
+/* Circular swipe-deck actions on the phone deck pages. */
+.swipe-action,
+.swipe-actions .g-icon-btn {
+  border-radius: 50% !important;
+}
+
+/* Keep the floating AI button clear of full-width action bars. */
+body[data-app-page="quests"] .ai-mfab,
+body[data-app-page="search"] .ai-mfab,
+body[data-app-page="explore"] .ai-mfab {
+  display: none !important;
+}

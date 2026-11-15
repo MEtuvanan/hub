@@ -9,6 +9,8 @@ import {
 import {
   getDisplayName, levelInfo, getTokens, openQuestSheet, formatNum,
 } from './mobile-app.js';
+import { getProgress, listBosses } from './game-data.js';
+import { openBossPrompt } from './boss-sheet.js';
 
 const $ = id => document.getElementById(id);
 const STAR_KEY = 'tc_mobile_star_days';
@@ -196,8 +198,8 @@ async function boot() {
 
   const hero = $('homeMap');
   if (hero) {
-    // Keep the hero map at street level around Bangkok: pick the seven nearest
-    // places so a stray far-away pin cannot zoom the map out to the whole region.
+    // Keep the hero map at street level around Bangkok: pick the nearest
+    // boss places so a stray far-away pin cannot zoom out to the whole region.
     const origin = { lat: 13.7563, lng: 100.5018 };
     const ranked = places
       .filter(p => Number.isFinite(p.lat) && Number.isFinite(p.lng))
@@ -206,19 +208,44 @@ async function boot() {
         d: Math.hypot((p.lat - origin.lat) * 111, (p.lng - origin.lng) * 108),
       }))
       .sort((a, b) => a.d - b.d);
-    const local = ranked.filter(x => x.d < 32).slice(0, 7).map(x => x.p);
-    const heroPlaces = local.length >= 3 ? local : ranked.slice(0, 7).map(x => x.p);
+    const localRanked = ranked.filter(x => x.d < 32);
+    const defeated = getProgress().defeated;
+    const allBosses = listBosses();
+    const localIds = new Set(localRanked.map(x => x.p.id));
+    const bossPlaces = places
+      .filter(p => allBosses.some(b => b.placeId === p.id) && localIds.has(p.id))
+      .slice(0, 3);
+    const heroIds = new Set(bossPlaces.map(p => p.id));
+    const heroBosses = allBosses
+      .filter(b => heroIds.has(b.placeId))
+      .map(b => ({ ...b, defeated: defeated.includes(b.id) }));
+    // Start the avatar in the middle of the cluster so the character and the
+    // boss pins share the card instead of sitting on opposite corners.
+    const cluster = bossPlaces;
+    const center = cluster.length
+      ? {
+        lat: cluster.reduce((sum, p) => sum + Number(p.lat), 0) / cluster.length,
+        lng: cluster.reduce((sum, p) => sum + Number(p.lng), 0) / cluster.length,
+      }
+      : undefined;
 
     map = initARMap(hero, {
-      places: heroPlaces,
+      places: [],
+      bosses: heroBosses,
       interactive: false,
       autoWalk: true,
       showPins: true,
       fitPlaces: true,
       focus: { x: 0, y: 0.1 },
+      center,
       zoom: 15,
       onPlaceClick: place => {
         location.href = `/place-mobile.html?id=${encodeURIComponent(place.id)}`;
+      },
+      onBossClick: boss => {
+        openBossPrompt(boss, {
+          place: places.find(p => p.id === boss.placeId) || null,
+        });
       },
       onArrive: place => {
         const chip = hero.querySelector('[data-ar-name]');

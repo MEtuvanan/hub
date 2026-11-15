@@ -5,6 +5,7 @@
 import { icon, iconFor } from './icons.js';
 import { toast } from './ui.js';
 import { esc } from './ui.js';
+import { initMobileAIChat } from './ai-mobile-chat.js';
 import {
   readJSON, writeJSON,
   COMPLETED_QUESTS_KEY, completedQuests,
@@ -208,6 +209,7 @@ function moreHTML() {
         <a class="app-more-item" href="/journal-mobile.html" data-tone="gold"><span class="app-more-ico">${icon('journal', 21)}</span>ไดอารี่</a>
         <a class="app-more-item" href="/calendar-mobile.html" data-tone="gold"><span class="app-more-ico">${icon('calendar', 21)}</span>ปฏิทิน</a>
         <a class="app-more-item" href="/collection-mobile.html" data-tone="violet"><span class="app-more-ico">${icon('trophy', 21)}</span>คอลเลกชัน</a>
+        <a class="app-more-item" href="/team-mobile.html" data-tone="mint"><span class="app-more-ico">${icon('shield', 21)}</span>ทีม & บอส</a>
         <a class="app-more-item" href="/topup-mobile.html" data-tone="gold"><span class="app-more-ico">${icon('coin', 21)}</span>เติมโทเคน</a>
         <a class="app-more-item" href="/partner-mobile.html" data-tone="red"><span class="app-more-ico">${icon('building', 21)}</span>ร้านค้า/พาร์ทเนอร์</a>
         <a class="app-more-item" href="/help-mobile.html" data-tone="mint"><span class="app-more-ico">${icon('book', 21)}</span>คู่มือใช้งาน</a>
@@ -808,6 +810,7 @@ export function initMobileApp() {
       </dialog>`);
   }
   bindEvents();
+  initMobileAIChat();
   updateStarButton();
   updateTokenUI();
   loadAuth();

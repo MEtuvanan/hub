@@ -16,7 +16,7 @@ import { loadAiCatalog, buildTravelAiSystemPrompt, groundItinerary } from './ai-
 import { esc, toast } from './ui.js';
 
 // Markdown parser
-function parseMarkdown(md = '') {
+export function parseMarkdown(md = '') {
   if (!md) return '';
   let html = esc(md);
 
@@ -75,6 +75,77 @@ function parseMarkdown(md = '') {
   }).join('');
 
   return html;
+}
+
+/**
+ * callTravelAI — shared AI call used by both the desktop explore dock and the
+ * mobile popup chat. Tries the direct Groq key first, then falls back to the
+ * Supabase Edge Function.
+ */
+export async function callTravelAI(userPrompt, history = []) {
+  const catalog = await loadAiCatalog().catch(() => []);
+  const systemPrompt = buildTravelAiSystemPrompt(catalog);
+
+  const apiMessages = [
+    { role: 'system', content: systemPrompt },
+    ...history.slice(-4),
+    { role: 'user', content: userPrompt }
+  ];
+
+  if (AI_CONFIG?.apiKey) {
+    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${AI_CONFIG.apiKey}`
+      },
+      body: JSON.stringify({
+        model: AI_CONFIG.model || 'openai/gpt-oss-120b',
+        messages: apiMessages,
+        temperature: 0.4,
+        max_tokens: 1500
+      })
+    });
+
+    if (res.ok) {
+      const json = await res.json();
+      return json.choices?.[0]?.message?.content || '';
+    }
+  }
+
+  // Fallback: Edge Function
+  const { data: { session } } = await supabase.auth.getSession();
+  const res = await fetch(AI_PLANNER_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${session?.access_token || ''}`,
+      'apikey': SUPABASE_ANON_KEY
+    },
+    body: JSON.stringify({
+      prompt: userPrompt,
+      history: history.slice(-6).map(m => ({ role: m.role, content: m.content }))
+    })
+  });
+  if (res.ok) {
+    const data = await res.json();
+    return typeof data === 'string' ? data : (data.reply || data.content || JSON.stringify(data));
+  }
+
+  throw new Error('ไม่สามารถติดต่อ AI ได้ในขณะนี้');
+}
+
+/** extractItineraryBlock — split a fenced ```json:itinerary block out of a reply. */
+export function extractItineraryBlock(fullText = '', catalog = []) {
+  const match = fullText.match(/```json:itinerary\s*([\s\S]*?)\s*```/);
+  if (!match) return { cleanText: fullText, itinerary: null };
+  const cleanText = fullText.replace(/```json:itinerary\s*[\s\S]*?\s*```/, '').trim();
+  try {
+    const itinerary = groundItinerary(JSON.parse(match[1]), catalog);
+    return { cleanText, itinerary };
+  } catch (_) {
+    return { cleanText: fullText, itinerary: null };
+  }
 }
 
 export class ExploreAIChatbot {
@@ -298,68 +369,11 @@ export class ExploreAIChatbot {
   }
 
   async callAI(userPrompt) {
-    if (!this.catalog.length) await this.initCatalog();
-    const systemPrompt = buildTravelAiSystemPrompt(this.catalog);
-
-    const apiMessages = [
-      { role: 'system', content: systemPrompt },
-      ...this.messages.slice(-4),
-      { role: 'user', content: userPrompt }
-    ];
-
-    if (AI_CONFIG?.apiKey) {
-      const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${AI_CONFIG.apiKey}`
-        },
-        body: JSON.stringify({
-          model: AI_CONFIG.model || 'openai/gpt-oss-120b',
-          messages: apiMessages,
-          temperature: 0.4,
-          max_tokens: 1500
-        })
-      });
-
-      if (res.ok) {
-        const json = await res.json();
-        return json.choices?.[0]?.message?.content || '';
-      }
-    }
-
-    // Fallback: Edge Function
-    const { data: { session } } = await supabase.auth.getSession();
-    const res = await fetch(AI_PLANNER_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${session?.access_token || ''}`,
-        'apikey': SUPABASE_ANON_KEY
-      },
-      body: JSON.stringify({
-        prompt: userPrompt,
-        history: this.messages.slice(-6).map(m => ({ role: m.role, content: m.content }))
-      })
-    });
-    if (res.ok) {
-      const data = await res.json();
-      return typeof data === 'string' ? data : (data.reply || data.content || JSON.stringify(data));
-    }
-
-    throw new Error('ไม่สามารถติดต่อ AI ได้ในขณะนี้');
+    return callTravelAI(userPrompt, this.messages);
   }
 
   extractItinerary(fullText = '') {
-    const match = fullText.match(/```json:itinerary\s*([\s\S]*?)\s*```/);
-    if (!match) return { cleanText: fullText, itinerary: null };
-    const cleanText = fullText.replace(/```json:itinerary\s*[\s\S]*?\s*```/, '').trim();
-    try {
-      const itinerary = groundItinerary(JSON.parse(match[1]), this.catalog);
-      return { cleanText, itinerary };
-    } catch (_) {
-      return { cleanText: fullText, itinerary: null };
-    }
+    return extractItineraryBlock(fullText, this.catalog);
   }
 
   appendUserMsg(text) {

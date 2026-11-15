@@ -13,6 +13,7 @@
 <link rel="stylesheet" href="/css/mobile.css">
 <link rel="stylesheet" href="/css/pages/home.css">
 <link rel="stylesheet" href="/css/pages/quests.css?v=3">
+<link rel="stylesheet" href="/css/pages/quests-deck.css">
   <link rel="stylesheet" href="/css/theme.css">
 </head>
 <body data-protected="true">
@@ -29,6 +30,7 @@
       <h1 id="quests-title">เควสท์ &amp; ภารกิจถ่ายรูปเช็คอิน</h1>
       <p class="lead" id="quests-subtitle">พิชิตเควสท์ท่องเที่ยวจริงทั่วไทย ถ่ายรูปเช็คอินตามจุดแลนด์มาร์กสำคัญเพื่อยืนยันภารกิจ รับเหรียญโทเคน และปลดล็อกตัวละครสะสมสุดพิเศษ!</p>
       <div style="margin-top:0.85rem;display:flex;gap:0.5rem;flex-wrap:wrap;">
+        <button class="btn btn-small" type="button" id="btn-quest-deck" style="background:linear-gradient(135deg,#00A86B,#007A4D);color:#fff;font-weight:700;box-shadow:0 4px 12px rgba(0,168,107,0.35);border:none;cursor:pointer;"><svg class="ic" width="16" height="16" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-quest"></use></svg> 🎴 โหมดปัดการ์ดเควสท์ (Swipe Mode)</button>
         <a href="/help.html#quests" class="btn btn-small" style="background:rgba(255,255,255,0.2);color:#fff;border:1px solid rgba(255,255,255,0.4);backdrop-filter:blur(8px);text-decoration:none;"><svg class="ic" width="16" height="16" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-book"></use></svg> วิธีทำเควสท์ &amp; ถ่ายรูปเช็คอิน</a>
       </div>
     </div>
@@ -57,7 +59,7 @@
       <!-- Campaign 1: สำรวจเมืองแห่งการค้นพบ (เรย์) -->
       <article class="card campaign-card campaign-ray">
         <div class="campaign-media">
-          <img src="/assets/img/Wat Arun (Temple of Dawn).webp" alt="สำรวจเมืองแห่งการค้นพบ" loading="lazy" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=800&auto=format&fit=crop&q=80'">
+          <img src="https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=800&auto=format&fit=crop&q=80" alt="สำรวจเมืองแห่งการค้นพบ" loading="lazy">
           <div class="campaign-media-overlay">
             <span class="campaign-tokens-badge"><svg class="ic" width="16" height="16" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-coin"></use></svg> +150 Tokens</span>
             <span class="campaign-char-badge-tag"><svg class="ic" width="14" height="14" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-gift"></use></svg> แจกตัวละครฟรี</span>
@@ -209,7 +211,23 @@
 </dialog>
 
 <footer id="site-footer"></footer>
+
+<dialog id="questDeckDialog" class="qd-deck-dialog" aria-labelledby="qdDeckTitle">
+  <div class="qd-deck-bar">
+    <div>
+      <strong id="qdDeckTitle">ปัดการ์ดเควสท์</strong>
+      <span id="qdDeckProgress">0 / 0</span>
+    </div>
+    <button type="button" class="qd-deck-close" id="qdDeckClose" aria-label="ปิด">
+      <svg class="ic" width="16" height="16" aria-hidden="true"><use href="/assets/icons/sprite.svg#i-close"></use></svg>
+    </button>
+  </div>
+  <p class="qd-deck-hint">ปัดซ้ายเพื่อข้าม · ปัดขวาเพื่อบันทึก · แตะปุ่มตรงกลางเพื่อดูรายละเอียดเควสท์</p>
+  <div id="questDeckMount"></div>
+</dialog>
+
 <script type="module" src="/js/app.js"></script>
 <script type="module" src="/js/quests-page.js?v=gps1"></script>
+<script type="module" src="/js/quests-deck.js"></script>
 </body>
 </html>

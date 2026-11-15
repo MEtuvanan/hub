@@ -80,13 +80,14 @@ async function getCharacters() {
 }
 
 async function load() {
+  const safe = (thenable, fallback) => Promise.resolve(thenable).catch(() => fallback);
   const [dbChars, ownedRes, achRes, mineRes, txRes, balRes] = await Promise.all([
     getCharacters(),
-    supabase.from('user_characters').select('character_id, acquired_at').catch(() => ({ data: [] })),
-    supabase.from('achievements').select('id, title, description, token_reward').order('title').catch(() => ({ data: [] })),
-    supabase.from('user_achievements').select('achievement_id, unlocked_at').catch(() => ({ data: [] })),
-    supabase.from('token_transactions').select('amount, source_type, created_at').order('created_at', { ascending: false }).limit(50).catch(() => ({ data: [] })),
-    supabase.rpc('my_token_balance').catch(() => ({ data: 0 })),
+    safe(supabase.from('user_characters').select('character_id, acquired_at'), { data: [] }),
+    safe(supabase.from('achievements').select('id, title, description, token_reward').order('title'), { data: [] }),
+    safe(supabase.from('user_achievements').select('achievement_id, unlocked_at'), { data: [] }),
+    safe(supabase.from('token_transactions').select('amount, source_type, created_at').order('created_at', { ascending: false }).limit(50), { data: [] }),
+    safe(supabase.rpc('my_token_balance'), { data: 0 }),
   ]);
 
   // Combine DB characters with extra characters so Ray, Maya, Zael, Luna are always available

@@ -5,6 +5,8 @@ import { esc, debounce, stateEmpty } from './ui.js';
 import { requireAuth } from './auth.js';
 import { initAIPlannerModal } from './ai-planner-modal.js';
 import { iconFor } from './icons.js';
+import { listBosses, bossModel } from './game-data.js';
+import { openBattle } from './battle.js';
 
 const $ = id => document.getElementById(id);
 const state = { map: null, markers: [] };
@@ -20,6 +22,9 @@ const CAT_TH = {
 
 
 
+let bosses = [];
+let playerMarker = null;
+
 function renderList(places) {
   const catMap = new Map((options?.categories || []).map(c => [c.id, CAT_TH[c.id] || c.name]));
   const provMap = new Map((options?.provinces || []).map(p => [p.id, p.name_th || p.name_en]));
@@ -34,6 +39,7 @@ function renderList(places) {
     const summary = p.summary_display || p.summary || '';
     const cover = p.cover_image_display || p.place_images?.[0]?.url || 'https://images.unsplash.com/photo-1508009603885-50cf7c579365?w=400&auto=format&fit=crop&q=80';
     const highlights = (p.highlights_display || []).slice(0, 3);
+    const boss = p.boss;
 
     return `
     <li data-id="${esc(p.id)}" style="display:flex;gap:14px;align-items:flex-start;">
@@ -44,11 +50,12 @@ function renderList(places) {
         <h2 style="font-size:1.15rem;margin:0 0 4px;line-height:1.3;">
           <a href="/place.html?id=${encodeURIComponent(p.id)}" style="color:#0F172A;text-decoration:none;">${esc(title)}</a>
         </h2>
-        <div class="badges" style="margin-bottom:6px;">
+        <div class="badges" style="margin-bottom:6px;flex-wrap:wrap;gap:4px;">
           <span class="badge badge-muted">${esc(catName)}</span>
           <span class="badge badge-muted">${esc(locName)}</span>
           ${indicators.quests.has(p.id) ? '<span class="badge" style="background:#DCFCE7;color:#166534;">มีเควสท์</span>' : ''}
           ${indicators.campaigns.has(p.id) ? '<span class="badge" style="background:#FEF3C7;color:#92400E;">แคมเปญ</span>' : ''}
+          ${boss ? `<span class="badge" style="background:linear-gradient(135deg,#F3E5F5,#EDE7F6);color:#6A1B9A;border:1px solid #CE93D8;font-weight:700;">⚔️ บอส: ${esc(boss.name)} (Lv.${boss.level})</span>` : ''}
           ${boostBadge(p)}
         </div>
         <p class="meta" style="color:#475569;font-size:0.86rem;line-height:1.5;margin:0 0 8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">
@@ -59,13 +66,23 @@ function renderList(places) {
             ${highlights.map(h => `<span style="font-size:0.75rem;background:#F1F5F9;color:#334155;padding:2px 8px;border-radius:4px;border:1px solid #E2E8F0;display:inline-flex;align-items:center;gap:4px;">${iconFor(h.icon, 13)} ${esc(h.title)}</span>`).join('')}
           </div>
         ` : ''}
-        <div style="display:flex;gap:8px;align-items:center;">
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
           <a href="/place.html?id=${encodeURIComponent(p.id)}" class="btn btn-secondary" style="font-size:0.82rem;padding:5px 12px;text-decoration:none;">รายละเอียด</a>
           <a href="/navigate.html?lat=${p.lat}&lng=${p.lng}&name=${encodeURIComponent(title)}&id=${encodeURIComponent(p.id)}" class="btn" style="font-size:0.82rem;padding:5px 12px;background:linear-gradient(135deg,#00A86B,#007A4D);color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:4px;">นำทาง GPS</a>
+          ${boss ? `<button type="button" class="btn" data-btn-boss="${esc(boss.id)}" data-place-id="${esc(p.id)}" style="font-size:0.82rem;padding:5px 12px;background:linear-gradient(135deg,#AB47BC,#7B1FA2);color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:700;display:inline-flex;align-items:center;gap:4px;">⚔️ ท้าบอส</button>` : ''}
         </div>
       </div>
     </li>`;
   }).join('');
+
+  // Bind boss challenge buttons in list
+  $('list').querySelectorAll('[data-btn-boss]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const boss = bosses.find(b => b.id === btn.dataset.btnBoss);
+      const place = places.find(p => p.id === btn.dataset.placeId);
+      if (boss) openBattle({ boss, place });
+    });
+  });
 }
 
 function select(p) {
@@ -79,7 +96,12 @@ function select(p) {
 async function refresh() {
   $('status').textContent = 'Loading…';
   try {
+    bosses = listBosses();
     const raw = await listPlaces({ search: $('search').value });
+    // Associate each place with boss if assigned
+    raw.forEach(p => {
+      p.boss = bosses.find(b => b.placeId === p.id) || null;
+    });
     // AI จัดอันดับ: ดันสถานที่ที่เพิ่มใหม่ (อายุ ≤ 7 วัน) ขึ้นหน้าแรกสุดของลิสต์
     const places = rankPlaces(raw, p => ({
       quests: indicators.quests.has(p.id) ? 1 : 0,
@@ -98,6 +120,27 @@ async function refresh() {
     $('list').innerHTML = '';
     $('status').textContent = `Could not load destinations: ${e?.message || e?.error_description || JSON.stringify(e)}`;
   }
+}
+
+function initPlayerGpsAvatar() {
+  if (!navigator.geolocation) return;
+  navigator.geolocation.watchPosition(pos => {
+    const { latitude, longitude } = pos.coords;
+    if (!state.map) return;
+    if (state.map._isLeaflet && window.L) {
+      if (!playerMarker) {
+        const pin = L.divIcon({
+          className: 'pc-gps-avatar-pin',
+          html: `<div style="position:relative;width:40px;height:40px;border-radius:50%;background:#00E676;border:3px solid #FFFFFF;box-shadow:0 0 20px rgba(0,230,118,0.9);display:grid;place-items:center;cursor:pointer;"><img src="/assets/img/ray.png" alt="คุณ" style="width:28px;height:28px;object-fit:cover;border-radius:50%;"><div style="position:absolute;inset:-6px;border-radius:50%;border:2px dashed #00E676;animation:spin 6s linear infinite;pointer-events:none;"></div></div>`,
+          iconSize: [40, 40],
+          iconAnchor: [20, 20],
+        });
+        playerMarker = L.marker([latitude, longitude], { icon: pin, zIndexOffset: 2000, title: 'ตำแหน่งของคุณ (GPS)' }).addTo(state.map);
+      } else {
+        playerMarker.setLatLng([latitude, longitude]);
+      }
+    }
+  }, err => console.log('PC GPS unavailable/denied:', err?.message), { enableHighAccuracy: true });
 }
 
 async function init() {
@@ -145,6 +188,10 @@ async function init() {
   }
 
   refresh();
+  initPlayerGpsAvatar();
+  window.addEventListener('tc-open-boss-battle', e => {
+    if (e.detail?.boss) openBattle({ boss: e.detail.boss, place: e.detail.place });
+  });
   initAIPlannerModal();
 }
 init();

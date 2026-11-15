@@ -4,6 +4,7 @@
 import { loadOutfit } from './mobile-data.js';
 import { icon, iconFor } from './icons.js';
 import { esc } from './ui.js';
+import { bossModel } from './game-data.js';
 
 const DEFAULT_CENTER = { lat: 13.7563, lng: 100.5018 }; // Bangkok
 const DEFAULT_ZOOM = 16;
@@ -89,6 +90,7 @@ function avatarHTML() {
         <div class="doll-shadow"></div>
         <div class="doll">
           <div class="doll__head">
+            <div class="doll__pony"></div>
             <div class="doll__face"><i class="eye eye--l"></i><i class="eye eye--r"></i><i class="mouth"></i><i class="blush blush--l"></i><i class="blush blush--r"></i></div>
             <div class="doll__hair"></div>
             <div class="doll__hat"></div>
@@ -140,6 +142,7 @@ function applyOutfit(root, outfit) {
 /* -------------------------------- the map ---------------------------------- */
 export function initARMap(container, {
   places = [],
+  bosses = [],
   interactive = true,
   compact = false,
   autoWalk = false,
@@ -147,10 +150,13 @@ export function initARMap(container, {
   fitPlaces = false,
   focus = { x: 0, y: 0 },
   center = null,
+  startAt = null,
   zoom = DEFAULT_ZOOM,
   onPlaceClick = null,
   onArrive = null,
   onMove = null,
+  onBossClick = null,
+  followGps = false,
 } = {}) {
   if (!container) return null;
   container.classList.add('ar-world', compact ? 'ar-world--compact' : 'ar-world--full');
@@ -159,12 +165,14 @@ export function initARMap(container, {
     <div class="ar-map" data-map></div>
     <div class="ar-map__tint" aria-hidden="true"></div>
     <div class="ar-pins" data-pins></div>
+    <div class="ar-bosses" data-boss-pins></div>
     <div class="ar-weather">${icon('sun', 14)}<span>28°</span><span class="ar-weather__live">AR LIVE</span></div>
     ${avatarHTML()}
     ${interactive ? `
       <div class="ar-joystick" data-joystick aria-label="จอยสติ๊กเดิน"><span class="ar-joystick__ring"></span><span class="ar-joystick__knob" data-knob></span></div>
       <div class="ar-controls">
         <button class="ar-ctrl" type="button" data-sprint title="วิ่ง" aria-label="วิ่ง">${icon('flame', 17)}</button>
+        <button class="ar-ctrl" type="button" data-gps title="เดินตาม GPS" aria-label="เดินตาม GPS">${icon('gps', 17)}</button>
         <button class="ar-ctrl" type="button" data-recenter title="กลับจุดเริ่ม" aria-label="กลับจุดเริ่ม">${icon('gps', 17)}</button>
       </div>
       <div class="ar-hint">ลากแผนที่ หรือใช้จอยสติ๊กเพื่อเดิน</div>
@@ -173,16 +181,23 @@ export function initARMap(container, {
 
   const mapEl = container.querySelector('[data-map]');
   const pinsEl = container.querySelector('[data-pins]');
+  const bossPinsEl = container.querySelector('[data-boss-pins]');
   const avatar = container.querySelector('#arAvatar');
   const joystick = container.querySelector('[data-joystick]');
   const knob = container.querySelector('[data-knob]');
   const sprintBtn = container.querySelector('[data-sprint]');
   const recenterBtn = container.querySelector('[data-recenter]');
+  const gpsBtn = container.querySelector('[data-gps]');
+  const hintEl = container.querySelector('.ar-hint');
 
   applyOutfit(container, loadOutfit());
 
-  const startLat = Number.isFinite(center?.lat) ? Number(center.lat) : (places[0]?.lat ? Number(places[0].lat) : DEFAULT_CENTER.lat);
-  const startLng = Number.isFinite(center?.lng) ? Number(center.lng) : (places[0]?.lng ? Number(places[0].lng) : DEFAULT_CENTER.lng);
+  const startLat = Number.isFinite(startAt?.lat)
+    ? Number(startAt.lat)
+    : (Number.isFinite(center?.lat) ? Number(center.lat) : (places[0]?.lat ? Number(places[0].lat) : DEFAULT_CENTER.lat));
+  const startLng = Number.isFinite(startAt?.lng)
+    ? Number(startAt.lng)
+    : (Number.isFinite(center?.lng) ? Number(center.lng) : (places[0]?.lng ? Number(places[0].lng) : DEFAULT_CENTER.lng));
   const start = { lat: startLat, lng: startLng };
 
   const state = {
@@ -206,6 +221,10 @@ export function initARMap(container, {
     raf: 0,
     last: 0,
     pins: [],
+    bosses: [],
+    bossPins: [],
+    gpsWatch: null,
+    gpsOn: false,
   };
 
   /* pins ---------------------------------------------------------------- */
@@ -241,6 +260,89 @@ export function initARMap(container, {
     } else {
       pinsEl.innerHTML = '';
     }
+  }
+
+  /* ------------------------------- bosses ------------------------------- */
+  function bossPinMarkup(boss) {
+    const model = bossModel(boss.model);
+    const defeated = !!boss.defeated;
+    return `<button class="ar-boss-pin ${defeated ? 'is-defeated' : ''}" type="button"
+      data-boss-id="${esc(boss.id)}" style="--boss-color:${model.tint}" aria-label="บอส ${esc(boss.name)}">
+      <span class="ar-boss-pin__halo" aria-hidden="true"></span>
+      <span class="ar-boss-pin__face"><img src="${esc(model.image)}" alt="" loading="lazy"></span>
+      <span class="ar-boss-pin__label">
+        <b>${esc(boss.name)}</b>
+        <small>Lv.${Number(boss.level || 1)}${defeated ? ' · พิชิตแล้ว' : ' · ท้าสู้'}</small>
+      </span>
+    </button>`;
+  }
+
+  function bindBosses() {
+    state.bossPins.forEach(pin => {
+      pin.el = bossPinsEl.querySelector(`[data-boss-id="${CSS.escape(String(pin.boss.id))}"]`);
+      pin.el?.addEventListener('click', e => {
+        e.stopPropagation();
+        e.preventDefault();
+        setTarget(pin.boss.lat, pin.boss.lng, null);
+        onBossClick?.(pin.boss, pin);
+      });
+    });
+  }
+
+  function buildBosses(list) {
+    state.bosses = list || [];
+    state.bossPins = state.bosses
+      .filter(b => Number.isFinite(Number(b.lat)) && Number.isFinite(Number(b.lng)))
+      .map(boss => ({
+        boss: { ...boss, lat: Number(boss.lat), lng: Number(boss.lng) },
+        el: null,
+      }));
+    bossPinsEl.innerHTML = state.bossPins.map(p => bossPinMarkup(p.boss)).join('');
+    bindBosses();
+  }
+
+  /* --------------------------------- GPS -------------------------------- */
+  function startGps() {
+    if (state.gpsOn || !navigator.geolocation) {
+      if (!navigator.geolocation && hintEl) hintEl.textContent = 'อุปกรณ์นี้ไม่รองรับ GPS';
+      return;
+    }
+    state.gpsOn = true;
+    gpsBtn?.classList.add('is-on');
+    if (hintEl) hintEl.textContent = 'กำลังค้นหาสัญญาณ GPS…';
+    state.gpsWatch = navigator.geolocation.watchPosition(
+      pos => {
+        const { latitude, longitude } = pos.coords;
+        state.player = { lat: latitude, lng: longitude };
+        state.follow = true;
+        state.target = null;
+        if (hintEl) hintEl.textContent = `เดินตาม GPS · แม่นยำ ±${Math.round(pos.coords.accuracy || 0)} ม.`;
+      },
+      err => {
+        state.gpsOn = false;
+        gpsBtn?.classList.remove('is-on');
+        if (hintEl) {
+          hintEl.textContent = err.code === 1
+            ? 'ยังไม่ได้อนุญาตตำแหน่ง — เปิด GPS แล้วลองอีกครั้ง'
+            : 'หาสัญญาณ GPS ไม่ได้ ใช้จอยสติ๊กเดินแทนได้';
+        }
+      },
+      { enableHighAccuracy: true, maximumAge: 4000, timeout: 12000 },
+    );
+  }
+
+  function stopGps() {
+    state.gpsOn = false;
+    gpsBtn?.classList.remove('is-on');
+    if (state.gpsWatch != null) {
+      try { navigator.geolocation.clearWatch(state.gpsWatch); } catch { /* ignore */ }
+      state.gpsWatch = null;
+    }
+    if (hintEl) hintEl.textContent = 'ลากแผนที่ หรือใช้จอยสติ๊กเพื่อเดิน';
+  }
+
+  function toggleGps() {
+    if (state.gpsOn) stopGps(); else startGps();
   }
 
   function setTarget(lat, lng, place = null) {
@@ -316,9 +418,17 @@ export function initARMap(container, {
     }
 
     if (!state.walking && autoWalk && !state.target && Math.random() < 0.006) {
-      const angle = Math.random() * Math.PI * 2;
-      const radius = 20 + Math.random() * 90;
-      state.target = offsetLatLng(state.player, Math.sin(angle) * radius, Math.cos(angle) * radius);
+      // Keep the idle wander close to where the avatar started so it never
+      // strolls off the small hero card or drags the camera away from the pins.
+      const dLat = (state.player.lat - state.home.lat) * 111320;
+      const dLng = (state.player.lng - state.home.lng) * 111320 * Math.cos(state.player.lat * Math.PI / 180);
+      if (Math.hypot(dLat, dLng) > 220) {
+        state.target = { ...state.home };
+      } else {
+        const angle = Math.random() * Math.PI * 2;
+        const radius = 20 + Math.random() * 90;
+        state.target = offsetLatLng(state.player, Math.sin(angle) * radius, Math.cos(angle) * radius);
+      }
     }
 
     if (state.follow) followPlayer();
@@ -376,6 +486,24 @@ export function initARMap(container, {
         el.classList.toggle('is-near', near);
         const small = el.querySelector('[data-pin-dist]');
         if (small) small.textContent = formatDistance(distance);
+      } catch {
+        el.style.display = 'none';
+      }
+    });
+
+    state.bossPins.forEach(pin => {
+      const el = pin.el;
+      if (!el) return;
+      try {
+        const p = map.latLngToContainerPoint([pin.boss.lat, pin.boss.lng]);
+        if (!p) { el.style.display = 'none'; return; }
+        const visible = p.x > -110 && p.x < state.vw + 110 && p.y > -95 && p.y < state.vh + 95;
+        el.style.display = visible ? '' : 'none';
+        if (!visible) return;
+        el.style.left = `${p.x}px`;
+        el.style.top = `${p.y}px`;
+        const distance = haversine(state.player, { lat: pin.boss.lat, lng: pin.boss.lng });
+        el.classList.toggle('is-near', distance < 500);
       } catch {
         el.style.display = 'none';
       }
@@ -449,7 +577,10 @@ export function initARMap(container, {
     map.on('resize', render);
 
     if (fitPlaces) {
-      const bounds = boundsOf(state.pins.map(p => p.place));
+      const bounds = boundsOf([
+        ...state.pins.map(p => p.place),
+        ...state.bosses.filter(b => Number.isFinite(Number(b.lat)) && Number.isFinite(Number(b.lng))),
+      ]);
       if (bounds) {
         map.fitBounds([[bounds.south, bounds.west], [bounds.north, bounds.east]], { padding: [48, 48], maxZoom: 16 });
       }
@@ -546,7 +677,10 @@ export function initARMap(container, {
   resize();
 
   buildPins(places);
+  buildBosses(bosses);
+  gpsBtn?.addEventListener('click', toggleGps);
   mount();
+  if (followGps) setTimeout(startGps, 900);
 
   container.__arMap = { state, map: () => state.lMap };
 
@@ -555,6 +689,7 @@ export function initARMap(container, {
       state.destroyed = true;
       cancelAnimationFrame(state.raf);
       ro.disconnect();
+      stopGps();
       if (interactive) {
         document.removeEventListener('keydown', onKeyDown);
         document.removeEventListener('keyup', onKeyUp);
@@ -573,6 +708,13 @@ export function initARMap(container, {
       }
       render();
     },
+    setBosses(next) {
+      buildBosses(next);
+      render();
+    },
+    startGps,
+    stopGps,
+    isGpsActive() { return state.gpsOn; },
     setOutfit(outfit) {
       applyOutfit(container, outfit);
     },

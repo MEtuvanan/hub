@@ -8,6 +8,7 @@ const NAV = [
   ['/quests.html',     'nav_quests',     '/quests',     'quest'],
   ['/planner.html',    'nav_planner',    '/planner',    'ai'],
   ['/collection.html', 'nav_collection', '/collection', 'star'],
+  ['/team.html',       'nav_team',       '/team',       'shield'],
   ['/journal.html',    'nav_journal',    '/journal',    'journal'],
   ['/partner.html',    'nav_partner',    '/partner',    'store'],
   ['/help.html',       'nav_help',       '/help',       'book'],

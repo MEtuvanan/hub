@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+  if (matchMedia('(max-width: 767px)').matches && !/[?&]desktop=1/.test(location.search)) {
+    location.replace('/team-mobile.html' + location.search + location.hash);
+  }
+</script>
+<title>ทีมนักสำรวจ & บอส — Travel and Challenge</title>
+<meta name="description" content="จัดทีมตัวละคร ตั้งสกิล และท้าบอสประจำสถานที่แบบเทิร์นเบส">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/desktop.css">
+<link rel="stylesheet" href="/css/mobile.css">
+<link rel="stylesheet" href="/css/pages/team.css">
+<link rel="stylesheet" href="/css/pages/battle.css">
+<link rel="stylesheet" href="/css/theme.css">
+</head>
+<body>
+<nav id="site-nav" aria-label="Main"></nav>
+
+<main class="section" style="padding-top:2rem">
+  <div class="container">
+    <div id="teamRoot"></div>
+  </div>
+</main>
+
+<script type="module" src="/js/app.js"></script>
+<script type="module">
+  import { initTeamPage } from '/js/team-page.js';
+  initTeamPage();
+</script>
+</body>
+</html>

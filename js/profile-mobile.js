@@ -1,7 +1,7 @@
 // profile-mobile.js — explorer avatar, wardrobe/dress-up, stats, and account menu.
 
 import { esc, toast } from './ui.js';
-import { icon, iconFor } from './icons.js';
+import { icon, iconFor, EMOJI_ICON } from './icons.js';
 import {
   CHARACTERS, OUTFIT_OPTIONS, PRESETS, DEFAULT_OUTFIT,
   loadOutfit, saveOutfit, completedQuests, favoritePlaces,
@@ -34,6 +34,7 @@ function dollHTML() {
     <div class="doll-shadow"></div>
     <div class="doll">
       <div class="doll__head">
+        <div class="doll__pony"></div>
         <div class="doll__face"><i class="eye eye--l"></i><i class="eye eye--r"></i><i class="mouth"></i><i class="blush blush--l"></i><i class="blush blush--r"></i></div>
         <div class="doll__hair"></div>
         <div class="doll__hat"></div>
@@ -135,7 +136,7 @@ function renderOptions() {
   const options = OUTFIT_OPTIONS[t.options] || [];
   box.innerHTML = options.map(opt => `
     <button class="pf-option ${outfit[t.options] === opt.id ? 'is-active' : ''}" type="button" data-popt="${esc(opt.id)}">
-      <span class="emoji">${iconFor(opt.emoji, 15)}</span>${esc(opt.label || opt.id)}
+      <span class="emoji">${icon(opt.icon || EMOJI_ICON[opt.emoji] || 'star', 15)}</span>${esc(opt.label || opt.id)}
     </button>`).join('');
   box.querySelectorAll('[data-popt]').forEach(btn => {
     btn.addEventListener('click', () => {
