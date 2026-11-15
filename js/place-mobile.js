@@ -8,6 +8,8 @@ import {
   completedQuests, favoritePlaces, toggleFavoritePlace,
 } from './mobile-data.js';
 import { openQuestSheet } from './mobile-app.js';
+import { bossesForPlace } from './game-data.js';
+import { openBossPrompt } from './boss-sheet.js';
 
 const $ = id => document.getElementById(id);
 
@@ -185,6 +187,27 @@ function renderPlace() {
 
   const go = $('pmGo');
   if (go) go.href = `/navigate-mobile.html?name=${encodeURIComponent(place.name)}&lat=${place.lat || ''}&lng=${place.lng || ''}&id=${encodeURIComponent(place.id)}`;
+
+  // Boss challenge button
+  const bossBtn = $('pmBossBtn');
+  if (bossBtn) {
+    const localBosses = bossesForPlace(place.id);
+    const localBoss = localBosses[0] || null;
+    if (localBoss) {
+      bossBtn.hidden = false;
+      bossBtn.innerHTML = `⚔️ ท้าบอส: ${esc(localBoss.name)} (Lv.${Number(localBoss.level || 1)})`;
+      bossBtn.onclick = () => {
+        openBossPrompt(localBoss, {
+          place,
+          onFinish: result => {
+            if (result?.win) toast('ชนะบอสประจำสถานที่เรียบร้อย!');
+          },
+        });
+      };
+    } else {
+      bossBtn.hidden = true;
+    }
+  }
 
   const coords = $('pmCoords');
   if (coords) coords.innerHTML = `${icon('gps', 12)} ${Number(place.lat || 0).toFixed(4)}, ${Number(place.lng || 0).toFixed(4)}`;

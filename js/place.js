@@ -5,6 +5,8 @@ import { supabase } from './supabase.js';
 import { esc, isUuid } from './ui.js';
 import { requireAuth } from './auth.js';
 import { icon, iconFor } from './icons.js';
+import { bossesForPlace } from './game-data.js';
+import { openBattle } from './battle.js';
 
 const $ = id => document.getElementById(id);
 const id = new URLSearchParams(location.search).get('id');
@@ -122,6 +124,20 @@ async function init() {
   const btnNav = $('btn-nav');
   if (btnNav) {
     btnNav.href = `/navigate.html?lat=${p.lat}&lng=${p.lng}&name=${encodeURIComponent(nameTh)}&id=${encodeURIComponent(p.id)}`;
+  }
+
+  // Boss Battle Button — show when this place has an assigned boss
+  const btnBoss = $('btn-boss');
+  if (btnBoss) {
+    const placeBosses = bossesForPlace(p.id);
+    const boss = placeBosses[0] || null;
+    if (boss) {
+      btnBoss.hidden = false;
+      btnBoss.textContent = `⚔️ ท้าบอส: ${boss.name} (Lv.${boss.level || 1})`;
+      btnBoss.addEventListener('click', () => openBattle({ boss, place: p }));
+    } else {
+      btnBoss.hidden = true;
+    }
   }
 
   // Quests Here
